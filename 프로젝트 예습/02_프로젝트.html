@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>원일가게 키오스크</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      background: #fff8ec;
+      color: #3f3026;
+      font-family: Arial, sans-serif;
+    }
+
+    button {
+      border: 0;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 24px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 28px;
+      padding: 26px 30px;
+      border-radius: 26px;
+      background: linear-gradient(135deg, #fff3c4, #ffe4b5);
+      color: #3f3026;
+      box-shadow: 0 16px 36px rgba(188, 132, 54, 0.18);
+    }
+
+    .header h1 {
+      margin-bottom: 8px;
+      font-size: 34px;
+    }
+
+    .header p {
+      color: #7a5a3b;
+      font-size: 16px;
+    }
+
+    .badge {
+      min-width: 126px;
+      padding: 14px 18px;
+      border-radius: 999px;
+      background: #ffffff;
+      color: #b45309;
+      font-size: 18px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .kiosk {
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 24px;
+    }
+
+    .panel {
+      border-radius: 24px;
+      background: #ffffff;
+      box-shadow: 0 14px 30px rgba(188, 132, 54, 0.14);
+    }
+
+    .menu-panel {
+      padding: 24px;
+    }
+
+    .category-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .category-btn {
+      padding: 12px 18px;
+      border-radius: 999px;
+      background: #fff0d6;
+      color: #7a4a1f;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .category-btn.active {
+      background: #f59e0b;
+      color: #ffffff;
+    }
+
+    .menu-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .menu-card {
+      display: flex;
+      min-height: 210px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px;
+      border: 1px solid #f3ddbd;
+      border-radius: 20px;
+      background: #fffdf8;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 22px rgba(188, 132, 54, 0.18);
+    }
+
+    .drink-icon {
+      width: 58px;
+      height: 58px;
+      margin-bottom: 14px;
+      border-radius: 18px;
+      background: #fff0c2;
+      color: #b45309;
+      font-size: 30px;
+      line-height: 58px;
+      text-align: center;
+    }
+
+    .menu-card h3 {
+      margin-bottom: 8px;
+      font-size: 20px;
+    }
+
+    .menu-card p {
+      min-height: 42px;
+      color: #85684e;
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .menu-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .price {
+      color: #b45309;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .add-btn {
+      padding: 10px 14px;
+      border-radius: 12px;
+      background: #f59e0b;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .cart-panel {
+      position: sticky;
+      top: 24px;
+      align-self: start;
+      overflow: hidden;
+    }
+
+    .cart-header {
+      padding: 22px 24px;
+      background: #fff0d6;
+      color: #3f3026;
+    }
+
+    .cart-header h2 {
+      margin-bottom: 6px;
+      font-size: 24px;
+    }
+
+    .cart-header p {
+      color: #85684e;
+      font-size: 14px;
+    }
+
+    .cart-list {
+      min-height: 270px;
+      max-height: 360px;
+      overflow-y: auto;
+      padding: 18px;
+    }
+
+    .empty-cart {
+      display: flex;
+      height: 230px;
+      align-items: center;
+      justify-content: center;
+      border: 2px dashed #f3ddbd;
+      border-radius: 18px;
+      color: #9a7a5c;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid #f5e3c8;
+    }
+
+    .cart-item:last-child {
+      border-bottom: 0;
+    }
+
+    .cart-item h3 {
+      margin-bottom: 6px;
+      font-size: 16px;
+    }
+
+    .cart-item p {
+      color: #9a7a5c;
+      font-size: 14px;
+    }
+
+    .quantity-control {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .quantity-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #fff0d6;
+      color: #b45309;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .quantity {
+      min-width: 20px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .cart-footer {
+      padding: 20px 24px 24px;
+      border-top: 1px solid #f3ddbd;
+      background: #fffdf8;
+    }
+
+    .total-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    .order-btn,
+    .reset-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .order-btn {
+      margin-bottom: 10px;
+      background: #f59e0b;
+      color: #ffffff;
+    }
+
+    .order-btn:disabled {
+      background: #e7d8c6;
+      cursor: not-allowed;
+    }
+
+    .reset-btn {
+      background: #fff0d6;
+      color: #7a4a1f;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 30px;
+      display: none;
+      min-width: 280px;
+      padding: 16px 22px;
+      border-radius: 999px;
+      background: #f59e0b;
+      color: #ffffff;
+      font-weight: 700;
+      text-align: center;
+      transform: translateX(-50%);
+      box-shadow: 0 12px 24px rgba(188, 132, 54, 0.25);
+    }
+
+    .toast.show {
+      display: block;
+    }
+
+    @media (max-width: 980px) {
+      .kiosk {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-panel {
+        position: static;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .menu-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="header">
+      <div>
+        <h1>Bean House Kiosk</h1>
+        <p>원하는 메뉴를 고르고 장바구니에서 수량을 조절해 보세요.</p>
+      </div>
+      <div class="badge">OPEN 08:00</div>
+    </header>
+
+    <section class="kiosk">
+      <div class="panel menu-panel">
+        <div class="category-list" id="categoryList"></div>
+        <div class="menu-grid" id="menuGrid"></div>
+      </div>
+
+      <aside class="panel cart-panel">
+        <div class="cart-header">
+          <h2>주문 내역</h2>
+          <p>선택한 메뉴와 총 금액을 확인하세요.</p>
+        </div>
+
+        <div class="cart-list" id="cartList"></div>
+
+        <div class="cart-footer">
+          <div class="total-row">
+            <span>총 결제 금액</span>
+            <strong id="totalPrice">0원</strong>
+          </div>
+          <button class="order-btn" id="orderBtn" type="button" disabled>주문하기</button>
+          <button class="reset-btn" id="resetBtn" type="button">전체 취소</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="toast" id="toast">주문이 완료되었습니다.</div>
+
+  <script>
+    // 1. 메뉴 데이터: 화면에 보여 줄 내용은 배열 하나에서 관리합니다.
+    const categories = ["전체", "커피", "논커피", "디저트"];
+    const menus = [
+      { id: 1, category: "커피", name: "아메리카노", description: "고소하고 깔끔한 기본 커피", price: 3500, icon: "☕" },
+      { id: 2, category: "커피", name: "카페라떼", description: "에스프레소와 부드러운 우유", price: 4500, icon: "🥛" },
+      { id: 3, category: "커피", name: "바닐라라떼", description: "달콤한 바닐라 향이 나는 라떼", price: 5000, icon: "🍯" },
+      { id: 4, category: "논커피", name: "초코라떼", description: "진한 초콜릿과 우유의 조합", price: 4800, icon: "🍫" },
+      { id: 5, category: "논커피", name: "딸기 에이드", description: "상큼한 딸기와 탄산 음료", price: 5200, icon: "🍓" },
+      { id: 6, category: "논커피", name: "녹차라떼", description: "쌉싸름하고 부드러운 녹차 음료", price: 5000, icon: "🍵" },
+      { id: 7, category: "디저트", name: "치즈 케이크", description: "진하고 촉촉한 인기 디저트", price: 6200, icon: "🍰" },
+      { id: 8, category: "디저트", name: "초코 쿠키", description: "커피와 잘 어울리는 달콤한 쿠키", price: 2800, icon: "🍪" },
+      { id: 9, category: "디저트", name: "크루아상", description: "버터 향이 좋은 바삭한 빵", price: 3900, icon: "🥐" }
+    ];
+
+    // 2. 상태: 사용자가 고른 카테고리와 장바구니 내용입니다.
+    let selectedCategory = "전체";
+    let cart = [];
+
+    // 3. 자주 쓰는 HTML 요소를 변수에 담아 두면 코드가 짧아집니다.
+    const $ = (selector) => document.querySelector(selector);
+    const categoryList = $("#categoryList");
+    const menuGrid = $("#menuGrid");
+    const cartList = $("#cartList");
+    const totalPrice = $("#totalPrice");
+    const orderBtn = $("#orderBtn");
+    const resetBtn = $("#resetBtn");
+    const toast = $("#toast");
+
+    const formatPrice = (price) => price.toLocaleString("ko-KR") + "원";
+
+    function renderCategories() {
+      categoryList.innerHTML = categories.map((category) => `
+        <button class="category-btn${category === selectedCategory ? " active" : ""}" type="button" data-category="${category}">
+          ${category}
+        </button>
+      `).join("");
+    }
+
+    function renderMenus() {
+      // "전체"면 모든 메뉴를, 아니면 선택한 카테고리의 메뉴만 보여 줍니다.
+      const visibleMenus = selectedCategory === "전체"
+        ? menus
+        : menus.filter((menu) => menu.category === selectedCategory);
+
+      menuGrid.innerHTML = visibleMenus.map((menu) => `
+        <article class="menu-card">
+          <div>
+            <div class="drink-icon">${menu.icon}</div>
+            <h3>${menu.name}</h3>
+            <p>${menu.description}</p>
+          </div>
+          <div class="menu-bottom">
+            <span class="price">${formatPrice(menu.price)}</span>
+            <button class="add-btn" type="button" data-id="${menu.id}">담기</button>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderCart() {
+      cartList.innerHTML = cart.length === 0
+        ? `
+          <div class="empty-cart">
+            아직 선택한 메뉴가 없습니다.<br>
+            왼쪽 메뉴에서 음료를 담아 주세요.
+          </div>
+        `
+        : cart.map((item) => `
+          <div class="cart-item">
+            <div>
+              <h3>${item.name}</h3>
+              <p>${formatPrice(item.price)} × ${item.quantity}</p>
+            </div>
+            <div class="quantity-control">
+              <button class="quantity-btn" type="button" data-action="decrease" data-id="${item.id}">-</button>
+              <span class="quantity">${item.quantity}</span>
+              <button class="quantity-btn" type="button" data-action="increase" data-id="${item.id}">+</button>
+            </div>
+          </div>
+        `).join("");
+
+      const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+      totalPrice.textContent = formatPrice(total);
+      orderBtn.disabled = cart.length === 0;
+    }
+
+    function renderAll() {
+      renderCategories();
+      renderMenus();
+      renderCart();
+    }
+
+    function addToCart(menuId) {
+      const selectedMenu = menus.find((menu) => menu.id === menuId);
+      const cartItem = cart.find((item) => item.id === menuId);
+
+      if (cartItem) {
+        cartItem.quantity += 1;
+      } else {
+        cart.push({
+          id: selectedMenu.id,
+          name: selectedMenu.name,
+          price: selectedMenu.price,
+          quantity: 1
+        });
+      }
+
+      renderCart();
+    }
+
+    function changeQuantity(menuId, action) {
+      const cartItem = cart.find((item) => item.id === menuId);
+      if (!cartItem) return;
+
+      cartItem.quantity += action === "increase" ? 1 : -1;
+      cart = cart.filter((item) => item.quantity > 0);
+
+      renderCart();
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+
+      setTimeout(() => toast.classList.remove("show"), 1800);
+    }
+
+    // 4. 이벤트 위임: 버튼마다 이벤트를 달지 않고, 부모 요소에서 클릭을 처리합니다.
+    categoryList.addEventListener("click", (event) => {
+      const button = event.target.closest(".category-btn");
+      if (!button) return;
+
+      selectedCategory = button.dataset.category;
+      renderCategories();
+      renderMenus();
+    });
+
+    menuGrid.addEventListener("click", (event) => {
+      const button = event.target.closest(".add-btn");
+      if (!button) return;
+
+      addToCart(Number(button.dataset.id));
+    });
+
+    cartList.addEventListener("click", (event) => {
+      const button = event.target.closest(".quantity-btn");
+      if (!button) return;
+
+      changeQuantity(Number(button.dataset.id), button.dataset.action);
+    });
+
+    resetBtn.addEventListener("click", () => {
+      cart = [];
+      renderCart();
+      showToast("주문이 모두 취소되었습니다.");
+    });
+
+    orderBtn.addEventListener("click", () => {
+      if (cart.length === 0) return;
+
+      cart = [];
+      renderCart();
+      showToast("주문이 완료되었습니다. 잠시만 기다려 주세요!");
+    });
+
+    renderAll();
+  </script>
+</body>
+</html>

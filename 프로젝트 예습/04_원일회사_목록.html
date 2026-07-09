@@ -1,0 +1,1805 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>원일도서 목록</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #f7f7f7;
+      color: #222222;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+      font-size: 13px;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    button {
+      border: 0;
+      background: none;
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    .sticky-header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    }
+
+    .top-line {
+      border-bottom: 1px solid #e5e5e5;
+      background: #ffffff;
+    }
+
+    .top-line-inner,
+    .header,
+    .nav,
+    .page {
+      width: 1080px;
+      margin: 0 auto;
+    }
+
+    .top-line-inner {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 10px 0;
+      color: #777777;
+      font-size: 12px;
+    }
+
+    .user-menu {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      list-style: none;
+    }
+
+    .user-menu a {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 76px;
+      height: 30px;
+      padding: 0 12px;
+      border: 1px solid #dddddd;
+      border-radius: 15px;
+      background: #ffffff;
+      color: #555555;
+      font-weight: 800;
+    }
+
+    .user-menu a:hover {
+      border-color: #0b8f3a;
+      color: #0b8f3a;
+    }
+
+    .user-menu a:focus-visible {
+      outline: 2px solid #0b8f3a;
+      outline-offset: 2px;
+    }
+
+    .user-menu .join-button {
+      border-color: #e60012;
+      background: #e60012;
+      color: #ffffff;
+    }
+
+    .user-menu .join-button:hover {
+      border-color: #c90010;
+      background: #c90010;
+      color: #ffffff;
+    }
+
+    .header-wrap {
+      background: #ffffff;
+    }
+
+    .header {
+      display: grid;
+      grid-template-columns: 210px 1fr 210px;
+      align-items: center;
+      gap: 24px;
+      padding: 24px 0 20px;
+    }
+
+    .logo {
+      color: #0b8f3a;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      display: block;
+      color: #e60012;
+      font-size: 12px;
+      letter-spacing: 1px;
+    }
+
+    .search-box {
+      display: flex;
+      overflow: hidden;
+      height: 46px;
+      border: 3px solid #0b8f3a;
+      background: #ffffff;
+    }
+
+    .search-box select {
+      width: 110px;
+      border: 0;
+      border-right: 1px solid #dddddd;
+      padding-left: 12px;
+      color: #555555;
+      font-weight: 700;
+    }
+
+    .search-box input {
+      flex: 1;
+      min-width: 0;
+      border: 0;
+      padding: 0 14px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .search-box button {
+      width: 74px;
+      background: #0b8f3a;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .quick-box {
+      padding: 14px;
+      border: 1px solid #dddddd;
+      background: #fbfbfb;
+      color: #666666;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .nav-wrap {
+      border-top: 1px solid #eeeeee;
+      border-bottom: 2px solid #e60012;
+      background: #ffffff;
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      height: 46px;
+    }
+
+    .category-all {
+      width: 170px;
+      height: 46px;
+      background: #e60012;
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 800;
+      line-height: 46px;
+      text-align: center;
+    }
+
+    .nav a {
+      padding: 0 22px;
+      color: #222222;
+      font-size: 15px;
+      font-weight: 800;
+    }
+
+    .page {
+      display: grid;
+      grid-template-columns: 190px 1fr 94px;
+      gap: 22px;
+      padding: 22px 0 50px;
+    }
+
+    aside {
+      position: sticky;
+      top: 230px;
+      align-self: start;
+    }
+
+    .side-menu,
+    .content-panel,
+    .benefit-card {
+      border: 1px solid #dddddd;
+      background: #ffffff;
+    }
+
+    .side-title {
+      padding: 15px;
+      border-bottom: 2px solid #333333;
+      color: #111111;
+      font-size: 17px;
+      font-weight: 900;
+    }
+
+    .side-menu ul {
+      list-style: none;
+    }
+
+    .side-menu a {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 1px solid #eeeeee;
+      color: #555555;
+      font-weight: 700;
+    }
+
+    .side-menu a span {
+      color: #999999;
+      font-size: 11px;
+    }
+
+    .benefit-card {
+      margin-top: 14px;
+      padding: 16px 14px;
+      color: #666666;
+      line-height: 1.65;
+    }
+
+    .benefit-card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #e60012;
+      font-size: 15px;
+    }
+
+    .right-banner {
+      position: sticky;
+      top: 230px;
+      align-self: start;
+      padding-top: 12px;
+    }
+
+    .recent-view-box {
+      overflow: hidden;
+      border-radius: 4px;
+      background: #ffffff;
+      text-align: center;
+    }
+
+    .recent-view-title {
+      padding: 10px 0;
+      border-radius: 4px 4px 0 0;
+      background: #636b6b;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .recent-view-list {
+      padding: 7px 0 10px;
+      list-style: none;
+    }
+
+    .recent-view-item {
+      margin-bottom: 6px;
+    }
+
+    .recent-thumb {
+      display: block;
+      width: 92px;
+      height: 100px;
+      border-radius: 4px;
+      background: #f5f5f5;
+      object-fit: cover;
+    }
+
+    .more-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 92px;
+      height: 31px;
+      margin: 0 auto;
+      border: 1px solid #dddddd;
+      border-radius: 3px;
+      background: #ffffff;
+      color: #222222;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .breadcrumb {
+      margin-bottom: 9px;
+      color: #777777;
+      font-size: 12px;
+    }
+
+    .content-panel {
+      min-width: 0;
+    }
+
+    .list-head {
+      padding: 22px 24px 18px;
+      border-bottom: 1px solid #dddddd;
+    }
+
+    .list-head h1 {
+      margin-bottom: 10px;
+      color: #111111;
+      font-size: 25px;
+    }
+
+    .list-head p {
+      color: #666666;
+      line-height: 1.55;
+    }
+
+    .filter-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      border-bottom: 2px solid #333333;
+      background: #fafafa;
+    }
+
+    .filter-left,
+    .filter-right {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .filter-bar select,
+    .filter-bar button {
+      height: 28px;
+      border: 1px solid #cfcfcf;
+      background: #ffffff;
+      color: #555555;
+      font-size: 12px;
+    }
+
+    .filter-bar select {
+      padding: 0 8px;
+    }
+
+    .filter-bar button {
+      padding: 0 10px;
+    }
+
+    .filter-bar button.active {
+      border-color: #0b8f3a;
+      background: #0b8f3a;
+      color: #ffffff;
+      font-weight: 900;
+    }
+
+    #bookList.image-view {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+      padding: 18px 24px 24px;
+      background: #ffffff;
+    }
+
+    #bookList.image-view .book-item {
+      display: block;
+      padding: 18px;
+      border: 1px solid #e1e1e1;
+      background: #ffffff;
+    }
+
+    #bookList.image-view .cover {
+      display: block;
+      width: 118px;
+      height: 168px;
+      margin: 0 auto 14px;
+    }
+
+    #bookList.image-view .book-title {
+      min-height: 50px;
+      font-size: 15px;
+    }
+
+    #bookList.image-view .desc {
+      min-height: 58px;
+    }
+
+    #bookList.image-view .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding-top: 12px;
+    }
+
+    #bookList.image-view .item-quantity {
+      width: 100%;
+      justify-content: flex-start;
+      margin-bottom: 0;
+    }
+
+    #bookList.image-view .actions > button {
+      flex: 1 1 86px;
+      margin-bottom: 0;
+    }
+
+    .no-result {
+      padding: 42px 24px;
+      border-bottom: 1px solid #e5e5e5;
+      background: #ffffff;
+      color: #777777;
+      line-height: 1.7;
+      text-align: center;
+    }
+
+    .book-item {
+      display: grid;
+      grid-template-columns: 118px 1fr 124px;
+      gap: 22px;
+      padding: 24px;
+      border-bottom: 1px solid #e5e5e5;
+      background: #ffffff;
+    }
+
+    .cover {
+      width: 104px;
+      height: 148px;
+      border: 1px solid #d5d5d5;
+      object-fit: cover;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.14);
+      cursor: pointer;
+    }
+
+    .cover:focus-visible {
+      outline: 3px solid #0b8f3a;
+      outline-offset: 3px;
+    }
+
+    .rank {
+      display: inline-block;
+      min-width: 28px;
+      margin-right: 6px;
+      padding: 4px 6px;
+      background: #e60012;
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 800;
+      text-align: center;
+    }
+
+    .badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 8px;
+    }
+
+    .badge {
+      padding: 3px 6px;
+      border: 1px solid #d7d7d7;
+      color: #666666;
+      font-size: 11px;
+    }
+
+    .badge.red {
+      border-color: #e60012;
+      background: #e60012;
+      color: #ffffff;
+    }
+
+    .book-title {
+      margin-bottom: 8px;
+      color: #111111;
+      font-size: 17px;
+      line-height: 1.45;
+    }
+
+    .meta,
+    .desc,
+    .review {
+      margin-bottom: 7px;
+      color: #666666;
+      line-height: 1.55;
+    }
+
+    .price {
+      margin-bottom: 8px;
+      color: #e60012;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    .price del {
+      margin-right: 7px;
+      color: #999999;
+      font-size: 12px;
+      font-weight: 400;
+    }
+
+    .stars {
+      color: #e60012;
+      letter-spacing: -1px;
+    }
+
+    .actions {
+      padding-top: 27px;
+    }
+
+    .actions a,
+    .actions button {
+      display: block;
+      width: 100%;
+      height: 32px;
+      margin-bottom: 6px;
+      border: 1px solid #cccccc;
+      background: #ffffff;
+      color: #555555;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 800;
+      line-height: 30px;
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .actions .buy {
+      border-color: #e60012;
+      background: #e60012;
+      color: #ffffff;
+    }
+
+    .actions .cart {
+      border-color: #0b8f3a;
+      color: #0b8f3a;
+    }
+
+    .actions .wish {
+      border-color: #f0a000;
+      color: #b36b00;
+    }
+
+    .item-quantity {
+      display: flex;
+      justify-content: flex-end;
+      gap: 5px;
+      margin-bottom: 8px;
+    }
+
+    .item-quantity button,
+    .item-quantity input {
+      width: 26px;
+      height: 24px;
+      margin-bottom: 0;
+      border: 1px solid #d5d5d5;
+      background: #ffffff;
+      color: #555555;
+      font-weight: 700;
+      line-height: 22px;
+      text-align: center;
+    }
+
+    .item-quantity input {
+      padding: 0;
+      font-size: 12px;
+    }
+
+    .commerce-lists {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      padding: 24px;
+      border-top: 1px solid #e5e5e5;
+      background: #ffffff;
+    }
+
+    .shop-panel {
+      border: 1px solid #d8d8d8;
+      background: #ffffff;
+    }
+
+    .shop-panel-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-bottom: 2px solid #0b8f3a;
+      background: #fbfbfb;
+    }
+
+    .shop-panel-head h2 {
+      color: #111111;
+      font-size: 15px;
+      font-weight: 900;
+    }
+
+    .shop-count {
+      color: #e60012;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .shop-list {
+      min-height: 110px;
+      padding: 12px 14px;
+      list-style: none;
+    }
+
+    .shop-item {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid #eeeeee;
+      line-height: 1.5;
+    }
+
+    .shop-item:last-child {
+      border-bottom: 0;
+    }
+
+    .shop-item-title {
+      color: #333333;
+      font-size: 12px;
+      font-weight: 800;
+    }
+
+    .shop-item-meta {
+      color: #777777;
+      font-size: 11px;
+    }
+
+    .shop-item-price {
+      color: #e60012;
+      font-size: 12px;
+      font-weight: 900;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .empty-message {
+      padding: 28px 0;
+      color: #888888;
+      font-size: 12px;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .panel-summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 14px;
+      border-top: 1px solid #eeeeee;
+      background: #fafafa;
+      color: #333333;
+      font-size: 12px;
+      font-weight: 900;
+    }
+
+    .panel-summary strong {
+      color: #e60012;
+      font-size: 15px;
+    }
+
+    .panel-actions {
+      display: flex;
+      gap: 8px;
+      padding: 0 14px 14px;
+    }
+
+    .panel-button {
+      flex: 1;
+      height: 32px;
+      border: 1px solid #0b8f3a;
+      background: #0b8f3a;
+      color: #ffffff;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    .panel-button.line {
+      background: #ffffff;
+      color: #0b8f3a;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 18px;
+      color: #0b8f3a;
+      font-weight: 800;
+    }
+
+    @media (max-width: 1120px) {
+      .top-line-inner,
+      .header,
+      .nav,
+      .page {
+        width: min(100% - 28px, 900px);
+      }
+
+      .header {
+        grid-template-columns: 1fr;
+      }
+
+      .quick-box {
+        text-align: left;
+      }
+
+      .page {
+        grid-template-columns: 1fr;
+      }
+
+      .right-banner {
+        display: none;
+      }
+    }
+
+    @media (max-width: 720px) {
+      .top-line-inner {
+        justify-content: center;
+      }
+
+      .user-menu {
+        justify-content: center;
+      }
+
+      .nav {
+        overflow-x: auto;
+      }
+
+      .category-all {
+        flex: 0 0 140px;
+      }
+
+      .nav a {
+        flex: 0 0 auto;
+      }
+
+      .filter-bar,
+      .book-item {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-bar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .book-item {
+        display: block;
+      }
+
+      .cover {
+        margin-bottom: 14px;
+      }
+
+      .actions {
+        padding-top: 10px;
+      }
+
+      #bookList.image-view {
+        grid-template-columns: 1fr;
+      }
+
+      .commerce-lists {
+        grid-template-columns: 1fr;
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="sticky-header">
+    <div class="top-line">
+      <div class="top-line-inner">
+        <ul class="user-menu" aria-label="회원 및 고객 메뉴">
+          <li><a href="#" data-service-window="login">로그인</a></li>
+          <li><a class="join-button" href="#" data-service-window="join">회원가입</a></li>
+          <li><a href="#" data-service-window="delivery">주문배송</a></li>
+          <li><a href="#" data-service-window="customer">고객센터</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <header class="header-wrap">
+      <div class="header">
+        <a class="logo" href="01_ 프로젝트.html">
+          KWI BOOKS
+          <span>WONIL BOOKSTORE</span>
+        </a>
+        <form class="search-box" id="bookSearchForm">
+          <select aria-label="검색 분류">
+            <option>통합검색</option>
+            <option>국내도서</option>
+            <option>외국도서</option>
+          </select>
+          <input id="bookSearchInput" type="search" placeholder="도서명, 저자, 출판사를 입력하세요">
+          <button id="bookSearchButton" type="submit">검색</button>
+        </form>
+        <div class="quick-box">
+          <strong>오늘의 혜택</strong><br>
+          무료배송 · 적립금 · 바로드림
+        </div>
+      </div>
+    </header>
+
+    <nav class="nav-wrap" aria-label="주요 메뉴">
+      <div class="nav">
+        <a class="category-all" href="#">전체 카테고리</a>
+        <a href="#">베스트셀러</a>
+        <a href="#">신간도서</a>
+        <a href="#">추천도서</a>
+        <a href="#">이벤트</a>
+        <a href="#">영업점 안내</a>
+      </div>
+    </nav>
+  </div>
+
+  <div class="page">
+    <aside>
+      <section class="side-menu" aria-label="도서 분류">
+        <h2 class="side-title">국내도서</h2>
+        <ul>
+          <li><a href="#">경제/경영 <span>142</span></a></li>
+          <li><a href="#">재테크/투자 <span>88</span></a></li>
+          <li><a href="#">주식/증권 <span>36</span></a></li>
+          <li><a href="#">자기계발 <span>74</span></a></li>
+          <li><a href="#">컴퓨터/IT <span>59</span></a></li>
+        </ul>
+      </section>
+
+      <section class="benefit-card">
+        <strong>원일문고  혜택</strong>
+        구매 금액별 사은품, 무료배송, 매장 픽업 서비스 가능합니다.
+      </section>
+    </aside>
+
+    <main>
+      <p class="breadcrumb">홈 &gt; 국내도서 &gt; 경제/경영 &gt; 주식/증권</p>
+      <section class="content-panel">
+        <div class="list-head">
+          <h1>주식 투자 추천 도서 목록</h1>
+          <p>공식 온라인 서점의 목록 화면처럼 검색, 정렬, 혜택, 구매 한 눈에 볼 수 있습니다.</p>
+        </div>
+
+        <div class="filter-bar">
+          <div class="filter-left">
+            <strong>총 <span id="bookResultCount">8</span>권</strong>
+            <select aria-label="정렬 방식">
+              <option>판매량순</option>
+              <option>신상품순</option>
+              <option>낮은가격순</option>
+            </select>
+            <select aria-label="보기 개수">
+              <option>20개씩 보기</option>
+              <option>40개씩 보기</option>
+            </select>
+          </div>
+          <div class="filter-right">
+            <button class="active" type="button" data-view-mode="list">리스트형</button>
+            <button type="button" data-view-mode="image">이미지형</button>
+          </div>
+        </div>
+
+        <div id="bookList"></div>
+
+        <section class="commerce-lists" aria-label="장바구니 및 위시리스트">
+          <div class="shop-panel">
+            <div class="shop-panel-head">
+              <h2>장바구니 목록</h2>
+              <span class="shop-count" id="cartCount">0권</span>
+            </div>
+            <ul class="shop-list" id="cartList"></ul>
+            <div class="panel-summary">
+              <span>주문 예상 금액</span>
+              <strong id="cartTotal">0원</strong>
+            </div>
+            <div class="panel-actions">
+              <button class="panel-button" type="button" id="cartOrderButton">바로구매</button>
+              <button class="panel-button line" type="button" id="cartClearButton">비우기</button>
+            </div>
+          </div>
+
+          <div class="shop-panel">
+            <div class="shop-panel-head">
+              <h2>위시리스트</h2>
+              <span class="shop-count" id="wishCount">0권</span>
+            </div>
+            <ul class="shop-list" id="wishList"></ul>
+            <div class="panel-actions">
+              <button class="panel-button" type="button" id="wishCartButton">선택상품 카트담기</button>
+              <button class="panel-button line" type="button" id="wishClearButton">비우기</button>
+            </div>
+          </div>
+        </section>
+      </section>
+      <a class="back-link" href="01_ 프로젝트.html">처음 페이지로 돌아가기</a>
+    </main>
+
+    <aside class="right-banner" aria-label="최근 본 상품">
+      <div class="recent-view-box">
+        <h2 class="recent-view-title">최근 본 상품</h2>
+        <ul class="recent-view-list">
+          <li class="recent-view-item">
+            <img class="recent-thumb js-book-image" src="book/8.png" data-book-number="8" alt="독하게 돈 공부 표지">
+          </li>
+          <li class="recent-view-item">
+            <img class="recent-thumb js-book-image" src="book/7.png" data-book-number="7" alt="현금흐름표 읽는 법 표지">
+          </li>
+          <li class="recent-view-item">
+            <img class="recent-thumb js-book-image" src="book/6.png" data-book-number="6" alt="주식시장의 돈은 피지컬 AI로 흐른다 표지">
+          </li>
+          <li class="recent-view-item">
+            <img class="recent-thumb js-book-image" src="book/5.png" data-book-number="5" alt="코스피 5000 주식의 시대 표지">
+          </li>
+        </ul>
+        <a class="more-btn" href="01_ 프로젝트.html">처음으로</a>
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const books = [
+      {
+        title: "주린이를 위한 친절한 주식공부",
+        author: "곽성빈",
+        publisher: "원일회사",
+        price: 16920,
+        originalPrice: 18000,
+        imageNumber: 1,
+        badges: ["오늘의책", "무료배송", "소득공제"],
+        desc: "초보 투자자가 계좌 개설부터 종목 선택까지 차근차근 익힐 수 있는 입문서입니다."
+      },
+      {
+        title: "할 수 있다 AI 주식 투자",
+        author: "머신러너",
+        publisher: "원일회사",
+        price: 20000,
+        originalPrice: 22500,
+        imageNumber: 2,
+        badges: ["베스트", "무료배송", "이벤트"],
+        desc: "AI 도구를 활용해 투자 아이디어를 정리하고 시장 흐름을 읽는 방법을 소개합니다."
+      },
+      {
+        title: "저는 주식투자가 처음인데요",
+        author: "강병욱",
+        publisher: "원일회사",
+        price: 15000,
+        originalPrice: 19800,
+        imageNumber: 3,
+        badges: ["신간", "무료배송", "소득공제"],
+        desc: "주식 용어, 차트, 재무제표의 기본기를 실전 예시로 설명하는 주식 공부 교과서입니다."
+      },
+      {
+        title: "처음 배우는 미국 주식 투자",
+        author: "한재승",
+        publisher: "원일회사",
+        price: 30000,
+        originalPrice: 34200,
+        imageNumber: 4,
+        badges: ["강력추천", "무료배송", "사은품"],
+        desc: "해외 주식 계좌 개설부터 환율, 세금, ETF 투자 전략까지 한 권에 담았습니다."
+      },
+      {
+        title: "코스피 5000 주식의 시대",
+        author: "강대원, 이민호, 라이프자산운용",
+        publisher: "원일회사",
+        price: 16000,
+        originalPrice: 19800,
+        imageNumber: 5,
+        badges: ["이벤트", "무료배송", "소득공제"],
+        desc: "한국 시장의 구조적 변화와 장기 투자 포인트를 분석한 경제 전망 도서입니다."
+      },
+      {
+        title: "내 인생의 첫 주식공부 - 주식투자를 처음 시작하는 사람들을 위한 쉽고 빠른 주식 입문서`",
+        author: "백영",
+        publisher: "원일회사",
+        price: 14250,
+        originalPrice: 15750,
+        imageNumber: 6,
+        badges: ["베스트", "무료배송", "소득공제"],
+        desc: "금융문맹을 벗어나고, 올바른 투자를 위한 주식 교과서와 같은 주식투자 입문서입니다."
+      },
+      {
+        title: "현금흐름표 읽는 법",
+        author: "이강연",
+        publisher: "원일회사",
+        price: 15000,
+        originalPrice: 18900,
+        imageNumber: 7,
+        badges: ["추천", "무료배송", "소득공제"],
+        desc: "기업의 현금 창출 능력을 읽고 좋은 회사를 고르는 재무제표 독해법을 알려줍니다."
+      },
+      {
+        title: "독하게 돈 공부",
+        author: "박소연",
+        publisher: "원일회사",
+        price: 18000,
+        originalPrice: 20700,
+        imageNumber: 8,
+        badges: ["MD추천", "무료배송", "쿠폰"],
+        desc: "직장인과 사회초년생을 위한 저축, 소비 관리, 장기 투자 습관 만들기 안내서입니다."
+      }
+    ];
+
+    const bookList = document.querySelector("#bookList");
+    const bookSearchForm = document.querySelector("#bookSearchForm");
+    const bookSearchInput = document.querySelector("#bookSearchInput");
+    const bookResultCount = document.querySelector("#bookResultCount");
+    const viewButtons = document.querySelectorAll("[data-view-mode]");
+    const cartList = document.querySelector("#cartList");
+    const wishList = document.querySelector("#wishList");
+    const cartCount = document.querySelector("#cartCount");
+    const wishCount = document.querySelector("#wishCount");
+    const cartTotal = document.querySelector("#cartTotal");
+    const cartOrderButton = document.querySelector("#cartOrderButton");
+    const cartClearButton = document.querySelector("#cartClearButton");
+    const wishCartButton = document.querySelector("#wishCartButton");
+    const wishClearButton = document.querySelector("#wishClearButton");
+    const cartItems = [];
+    const wishItems = [];
+    let currentViewMode = "list";
+    let searchKeyword = "";
+    const KAKAO_BOOK_API_URL = `${location.protocol === "file:" ? "http://localhost:8000" : ""}/api/kakao-books`;
+    const formatPrice = (price) => price.toLocaleString("ko-KR") + "원";
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function cleanKakaoText(value) {
+      return escapeHtml(String(value ?? "").replace(/<[^>]*>/g, ""));
+    }
+
+    function createWindowPage(title, content) {
+      return `
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>${title}</title>
+          <style>
+            * {
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+            }
+
+            body {
+              background: #f7f7f7;
+              color: #222222;
+              font-family: Arial, "Malgun Gothic", sans-serif;
+              font-size: 14px;
+            }
+
+            .window-wrap {
+              max-width: 720px;
+              margin: 0 auto;
+              padding: 26px;
+            }
+
+            .window-card {
+              overflow: hidden;
+              border: 1px solid #dddddd;
+              background: #ffffff;
+              box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+            }
+
+            .window-head {
+              padding: 22px 24px;
+              border-bottom: 3px solid #0b8f3a;
+            }
+
+            .window-head h1 {
+              color: #0b8f3a;
+              font-size: 24px;
+              font-weight: 900;
+            }
+
+            .window-head p {
+              margin-top: 8px;
+              color: #666666;
+              line-height: 1.6;
+            }
+
+            .window-body {
+              padding: 24px;
+            }
+
+            .form-row {
+              margin-bottom: 14px;
+            }
+
+            label {
+              display: block;
+              margin-bottom: 7px;
+              color: #333333;
+              font-weight: 800;
+            }
+
+            input,
+            select,
+            textarea {
+              width: 100%;
+              border: 1px solid #cccccc;
+              padding: 11px 12px;
+              font-family: inherit;
+              font-size: 14px;
+            }
+
+            textarea {
+              min-height: 90px;
+              resize: vertical;
+            }
+
+            .submit-button,
+            .line-button {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              min-height: 38px;
+              padding: 0 18px;
+              border: 1px solid #0b8f3a;
+              background: #0b8f3a;
+              color: #ffffff;
+              font-weight: 900;
+              text-decoration: none;
+              cursor: pointer;
+            }
+
+            .line-button {
+              background: #ffffff;
+              color: #0b8f3a;
+            }
+
+            .button-row {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              margin-top: 18px;
+            }
+
+            .notice-box,
+            .faq-item {
+              margin-bottom: 12px;
+              border: 1px solid #eeeeee;
+              padding: 14px;
+              background: #fbfbfb;
+              line-height: 1.7;
+            }
+
+            .notice-box strong,
+            .faq-item strong {
+              display: block;
+              margin-bottom: 5px;
+              color: #e60012;
+            }
+
+            .two-column {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 12px;
+            }
+
+            @media (max-width: 620px) {
+              .window-wrap {
+                padding: 14px;
+              }
+
+              .two-column {
+                grid-template-columns: 1fr;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          <div class="window-wrap">
+            <section class="window-card">
+              ${content}
+            </section>
+          </div>
+        </body>
+        </html>
+      `;
+    }
+
+    function getServiceWindowContent(type) {
+      const pages = {
+        login: {
+          title: "원일문고 로그인",
+          width: 460,
+          height: 560,
+          content: `
+            <div class="window-head">
+              <h1>로그인</h1>
+              <p>원일문고 회원으로 로그인하면 주문 조회와 혜택 확인을 할 수 있습니다.</p>
+            </div>
+            <div class="window-body">
+              <form onsubmit="alert('로그인 화면 예시입니다.'); return false;">
+                <div class="form-row">
+                  <label for="loginId">아이디</label>
+                  <input id="loginId" type="text" placeholder="아이디를 입력하세요" required>
+                </div>
+                <div class="form-row">
+                  <label for="loginPassword">비밀번호</label>
+                  <input id="loginPassword" type="password" placeholder="비밀번호를 입력하세요" required>
+                </div>
+                <div class="button-row">
+                  <button class="submit-button" type="submit">로그인</button>
+                  <a class="line-button" href="#">아이디/비밀번호 찾기</a>
+                </div>
+              </form>
+            </div>
+          `
+        },
+        join: {
+          title: "원일문고 회원가입",
+          width: 520,
+          height: 700,
+          content: `
+            <div class="window-head">
+              <h1>회원가입</h1>
+              <p>필수 정보를 입력하고 원일문고 회원 혜택을 시작해 보세요.</p>
+            </div>
+            <div class="window-body">
+              <form onsubmit="alert('회원가입 화면 예시입니다.'); return false;">
+                <div class="form-row">
+                  <label for="joinName">이름</label>
+                  <input id="joinName" type="text" placeholder="이름을 입력하세요" required>
+                </div>
+                <div class="form-row">
+                  <label for="joinId">아이디</label>
+                  <input id="joinId" type="text" placeholder="사용할 아이디를 입력하세요" required>
+                </div>
+                <div class="form-row">
+                  <label for="joinPassword">비밀번호</label>
+                  <input id="joinPassword" type="password" placeholder="비밀번호를 입력하세요" required>
+                </div>
+                <div class="form-row">
+                  <label for="joinEmail">이메일</label>
+                  <input id="joinEmail" type="email" placeholder="example@email.com" required>
+                </div>
+                <div class="form-row">
+                  <label for="joinPhone">휴대폰 번호</label>
+                  <input id="joinPhone" type="tel" placeholder="010-0000-0000">
+                </div>
+                <div class="button-row">
+                  <button class="submit-button" type="submit">회원가입 하기</button>
+                </div>
+              </form>
+            </div>
+          `
+        },
+        delivery: {
+          title: "원일문고 주문배송 조회",
+          width: 540,
+          height: 620,
+          content: `
+            <div class="window-head">
+              <h1>주문배송 조회</h1>
+              <p>주문번호와 휴대폰 번호를 입력하면 배송 상태를 확인할 수 있습니다.</p>
+            </div>
+            <div class="window-body">
+              <form onsubmit="alert('배송 조회 화면 예시입니다.'); return false;">
+                <div class="form-row">
+                  <label for="orderNumber">주문번호</label>
+                  <input id="orderNumber" type="text" placeholder="예: 20260708-0001" required>
+                </div>
+                <div class="form-row">
+                  <label for="orderPhone">주문자 휴대폰 번호</label>
+                  <input id="orderPhone" type="tel" placeholder="010-0000-0000" required>
+                </div>
+                <div class="button-row">
+                  <button class="submit-button" type="submit">배송 조회</button>
+                </div>
+              </form>
+              <div class="notice-box">
+                <strong>배송 안내</strong>
+                결제 완료 후 평균 1~2일 이내 출고되며, 도서 재고 상황에 따라 배송이 지연될 수 있습니다.
+              </div>
+            </div>
+          `
+        },
+        customer: {
+          title: "원일문고 고객센터",
+          width: 760,
+          height: 760,
+          content: `
+            <div class="window-head">
+              <h1>고객센터</h1>
+              <p>자주 묻는 질문, 1:1 문의, 주문/배송 안내를 해드립니다.</p>
+            </div>
+            <div class="window-body">
+              <div class="two-column">
+                <div class="notice-box">
+                  <strong>상담 전화</strong>
+                  1544-0000<br>평일 09:00 ~ 18:00
+                </div>
+                <div class="notice-box">
+                  <strong>빠른 메뉴</strong>
+                  주문조회 · 반품/교환 · 회원정보 · 적립금
+                </div>
+              </div>
+              <div class="faq-item">
+                <strong>Q. 주문한 책은 언제 받을 수 있나요?</strong>
+                보유 재고가 있으면 결제 완료 후 보통 1~2일 안에 출고됩니다.
+              </div>
+              <div class="faq-item">
+                <strong>Q. 반품이나 교환은 어떻게 하나요?</strong>
+                수령 후 7일 이내 고객센터 문의를 통해 접수할 수 있습니다.
+              </div>
+              <form onsubmit="alert('고객센터 문의 화면 예시입니다.'); return false;">
+                <div class="form-row">
+                  <label for="questionType">문의 분류</label>
+                  <select id="questionType">
+                    <option>주문/배송</option>
+                    <option>반품/교환</option>
+                    <option>회원/로그인</option>
+                    <option>기타 문의</option>
+                  </select>
+                </div>
+                <div class="form-row">
+                  <label for="questionText">문의 내용</label>
+                  <textarea id="questionText" placeholder="문의 내용을 입력하세요"></textarea>
+                </div>
+                <div class="button-row">
+                  <button class="submit-button" type="submit">1:1 문의하기</button>
+                </div>
+              </form>
+            </div>
+          `
+        }
+      };
+
+      return pages[type];
+    }
+
+    function openServiceWindow(type) {
+      const page = getServiceWindowContent(type);
+
+      if (!page) {
+        return;
+      }
+
+      const serviceWindow = window.open(
+        "",
+        `wonil-${type}`,
+        `width=${page.width},height=${page.height},left=120,top=80,scrollbars=yes,resizable=yes`
+      );
+
+      if (!serviceWindow) {
+        alert("팝업이 차단되었습니다. 브라우저의 팝업 차단을 해제해 주세요.");
+        return;
+      }
+
+      serviceWindow.document.open();
+      serviceWindow.document.write(createWindowPage(page.title, page.content));
+      serviceWindow.document.close();
+      serviceWindow.focus();
+    }
+
+    function createKakaoBookResultContent(book, documents) {
+      const resultItems = documents.length
+        ? documents.map((item) => {
+          const title = cleanKakaoText(item.title);
+          const authors = cleanKakaoText((item.authors || []).join(", "));
+          const publisher = cleanKakaoText(item.publisher);
+          const price = item.sale_price > 0 ? formatPrice(item.sale_price) : "가격 정보 없음";
+          const thumbnail = item.thumbnail
+            ? `<img src="${escapeHtml(item.thumbnail)}" alt="${title} 표지" style="width:82px;height:118px;border:1px solid #ddd;object-fit:cover;">`
+            : `<div style="display:grid;place-items:center;width:82px;height:118px;border:1px solid #ddd;background:#f5f5f5;color:#999;font-size:12px;">이미지 없음</div>`;
+          const link = item.url && item.url.startsWith("https://")
+            ? `<a class="line-button" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">카카오에서 보기</a>`
+            : "";
+
+          return `
+            <li style="display:grid;grid-template-columns:82px 1fr;gap:14px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #eee;">
+              ${thumbnail}
+              <div>
+                <strong style="display:block;margin-bottom:7px;color:#111;font-size:16px;">${title}</strong>
+                <p style="margin-bottom:5px;color:#666;line-height:1.6;">저자: ${authors || "정보 없음"}</p>
+                <p style="margin-bottom:5px;color:#666;line-height:1.6;">출판사: ${publisher || "정보 없음"}</p>
+                <p style="margin-bottom:10px;color:#e60012;font-weight:900;">${price}</p>
+                ${link}
+              </div>
+            </li>
+          `;
+        }).join("")
+        : `<li class="notice-box">카카오 책 검색 결과가 없습니다.</li>`;
+
+      return `
+        <div class="window-head">
+          <h1>카카오 책 검색 결과</h1>
+          <p>"${escapeHtml(book.title)}" 제목으로 카카오 책 API를 검색했습니다.</p>
+        </div>
+        <div class="window-body">
+          <ul style="list-style:none;">
+            ${resultItems}
+          </ul>
+        </div>
+      `;
+    }
+
+    async function openKakaoBookSearch(bookIndex) {
+      const book = books[bookIndex];
+
+      if (!book) {
+        return;
+      }
+
+      const kakaoWindow = window.open(
+        "",
+        `kakao-book-${bookIndex}`,
+        "width=760,height=720,left=140,top=70,scrollbars=yes,resizable=yes"
+      );
+
+      if (!kakaoWindow) {
+        alert("팝업이 차단되었습니다. 브라우저의 팝업 차단을 해제해 주세요.");
+        return;
+      }
+
+      kakaoWindow.document.open();
+      kakaoWindow.document.write(createWindowPage("카카오 책 검색 중", `
+        <div class="window-head">
+          <h1>카카오 책 검색 중</h1>
+          <p>"${escapeHtml(book.title)}" 정보를 카카오 API에서 불러오고 있습니다.</p>
+        </div>
+        <div class="window-body">
+          <div class="notice-box">잠시만 기다려 주세요.</div>
+        </div>
+      `));
+      kakaoWindow.document.close();
+      kakaoWindow.focus();
+
+      try {
+        const response = await fetch(
+          `${KAKAO_BOOK_API_URL}?query=${encodeURIComponent(book.title)}&author=${encodeURIComponent(book.author)}&size=5`
+        );
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.error || `카카오 API 요청 실패: ${response.status}`);
+        }
+
+        const data = await response.json();
+        kakaoWindow.document.open();
+        kakaoWindow.document.write(createWindowPage(
+          "카카오 책 검색 결과",
+          createKakaoBookResultContent(book, data.documents || [])
+        ));
+        kakaoWindow.document.close();
+      } catch (error) {
+        kakaoWindow.document.open();
+        kakaoWindow.document.write(createWindowPage("카카오 API 오류", `
+          <div class="window-head">
+            <h1>카카오 API 오류</h1>
+            <p>책 정보를 불러오지 못했습니다.</p>
+          </div>
+          <div class="window-body">
+            <div class="notice-box">${escapeHtml(error.message)}</div>
+          </div>
+        `));
+        kakaoWindow.document.close();
+      }
+    }
+
+    document.querySelectorAll("[data-service-window]").forEach((menu) => {
+      menu.addEventListener("click", (event) => {
+        event.preventDefault();
+        openServiceWindow(menu.dataset.serviceWindow);
+      });
+    });
+
+    function getImageCandidates(number) {
+      return [
+        `book/${number}.png`,
+        `book/${number}.jpg`,
+        `book/${number}.jpeg`,
+        `book/book${number}.png`,
+        `book/book${number}.jpg`,
+        `book/book${number}.jpeg`
+      ];
+    }
+
+    function applyImageFallbacks() {
+      document.querySelectorAll(".js-book-image").forEach((image) => {
+        const candidates = getImageCandidates(image.dataset.bookNumber);
+        let candidateIndex = candidates.indexOf(image.getAttribute("src"));
+
+        image.addEventListener("error", () => {
+          candidateIndex += 1;
+
+          if (candidateIndex < candidates.length) {
+            image.src = candidates[candidateIndex];
+          } else {
+            image.style.background = "#eeeeee";
+            image.alt = "도서 이미지를 찾을 수 없습니다";
+          }
+        });
+      });
+    }
+
+    function findItem(items, bookIndex) {
+      return items.find((item) => item.bookIndex === bookIndex);
+    }
+
+    function getBookQuantity(bookIndex) {
+      const quantityInput = document.querySelector(`[data-quantity-index="${bookIndex}"]`);
+      const quantity = Number.parseInt(quantityInput?.value, 10);
+
+      if (Number.isNaN(quantity) || quantity < 1) {
+        return 1;
+      }
+
+      return quantity;
+    }
+
+    function setBookQuantity(bookIndex, quantity) {
+      const quantityInput = document.querySelector(`[data-quantity-index="${bookIndex}"]`);
+
+      if (quantityInput) {
+        quantityInput.value = Math.max(1, quantity);
+      }
+    }
+
+    function addToCart(bookIndex, quantity) {
+      const cartItem = findItem(cartItems, bookIndex);
+
+      if (cartItem) {
+        cartItem.quantity += quantity;
+      } else {
+        cartItems.push({ bookIndex, quantity });
+      }
+
+      renderCommerceLists();
+    }
+
+    function addToWishlist(bookIndex) {
+      if (!findItem(wishItems, bookIndex)) {
+        wishItems.push({ bookIndex, quantity: 1 });
+      }
+
+      renderCommerceLists();
+    }
+
+    function createShopItem(item) {
+      const book = books[item.bookIndex];
+
+      return `
+        <li class="shop-item">
+          <div>
+            <p class="shop-item-title">${book.title}</p>
+            <p class="shop-item-meta">${book.publisher} · 수량 ${item.quantity}권</p>
+          </div>
+          <strong class="shop-item-price">${formatPrice(book.price * item.quantity)}</strong>
+        </li>
+      `;
+    }
+
+    function renderCommerceLists() {
+      const totalQuantity = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+      const totalPrice = cartItems.reduce((sum, item) => {
+        return sum + books[item.bookIndex].price * item.quantity;
+      }, 0);
+
+      cartList.innerHTML = cartItems.length
+        ? cartItems.map(createShopItem).join("")
+        : `<li class="empty-message">카트담기 버튼을 누르면<br>이곳에 장바구니 상품이 추가됩니다.</li>`;
+      wishList.innerHTML = wishItems.length
+        ? wishItems.map(createShopItem).join("")
+        : `<li class="empty-message">원일문고 위시리스트입니다.<br>관심 도서를 담아 나중에 확인하세요.</li>`;
+      cartCount.textContent = `${totalQuantity}권`;
+      wishCount.textContent = `${wishItems.length}권`;
+      cartTotal.textContent = formatPrice(totalPrice);
+    }
+
+    function renderBooks() {
+      const filteredBooks = getFilteredBooks();
+
+      bookList.classList.toggle("image-view", currentViewMode === "image");
+      bookList.classList.toggle("list-view", currentViewMode === "list");
+      bookResultCount.textContent = filteredBooks.length;
+
+      if (!filteredBooks.length) {
+        bookList.innerHTML = `
+          <div class="no-result">
+            검색한 도서를 찾을 수 없습니다.<br>
+            책 제목, 저자, 출판사, 설명, 배지를 다시 입력해 주세요.
+          </div>
+        `;
+        return;
+      }
+
+      bookList.innerHTML = filteredBooks.map(({ book, bookIndex }) => `
+        <article class="book-item">
+          <div>
+            <img class="cover js-book-image" src="book/${book.imageNumber}.png" data-book-number="${book.imageNumber}" data-kakao-book-index="${bookIndex}" tabindex="0" role="button" alt="${book.title} 표지">
+          </div>
+          <div>
+            <div class="badges">
+              ${book.badges.map((badge, badgeIndex) => `<span class="badge ${badgeIndex === 0 ? "red" : ""}">${badge}</span>`).join("")}
+            </div>
+            <h2 class="book-title"><span class="rank">${bookIndex + 1}</span>${book.title}</h2>
+            <p class="meta">${book.author} 저 | ${book.publisher} | 2026년 07월 출간</p>
+            <p class="price"><del>${formatPrice(book.originalPrice)}</del>${formatPrice(book.price)} <span>10% 할인</span></p>
+            <p class="review"><span class="stars">★★★★★</span> 회원리뷰 9.${bookIndex}점 | 판매지수 ${(12000 - bookIndex * 830).toLocaleString("ko-KR")}</p>
+            <p class="desc">${book.desc}</p>
+          </div>
+          <div class="actions">
+            <div class="item-quantity">
+              <button type="button" data-action="decrease" data-book-index="${bookIndex}">-</button>
+              <input type="text" value="1" data-quantity-index="${bookIndex}" aria-label="${book.title} 수량">
+              <button type="button" data-action="increase" data-book-index="${bookIndex}">+</button>
+            </div>
+            <button class="buy" type="button" data-action="buy" data-book-index="${bookIndex}">바로구매</button>
+            <button class="cart" type="button" data-action="cart" data-book-index="${bookIndex}">카트담기</button>
+            <button class="wish" type="button" data-action="wish" data-book-index="${bookIndex}">위시리스트</button>
+          </div>
+        </article>
+      `).join("");
+
+      applyImageFallbacks();
+    }
+
+    function getFilteredBooks() {
+      const keyword = searchKeyword.trim().toLowerCase();
+
+      if (!keyword) {
+        return books.map((book, bookIndex) => ({ book, bookIndex }));
+      }
+
+      return books
+        .map((book, bookIndex) => ({ book, bookIndex }))
+        .filter(({ book }) => {
+          return [
+            book.title,
+            book.author,
+            book.publisher,
+            book.desc,
+            ...book.badges
+          ].some((text) => text.toLowerCase().includes(keyword));
+        });
+    }
+
+    function updateSearchResults() {
+      searchKeyword = bookSearchInput.value;
+      renderBooks();
+    }
+
+    function changeViewMode(viewMode) {
+      currentViewMode = viewMode;
+      viewButtons.forEach((button) => {
+        button.classList.toggle("active", button.dataset.viewMode === viewMode);
+      });
+      renderBooks();
+    }
+
+    bookList.addEventListener("click", (event) => {
+      const kakaoImage = event.target.closest("[data-kakao-book-index]");
+
+      if (kakaoImage) {
+        openKakaoBookSearch(Number.parseInt(kakaoImage.dataset.kakaoBookIndex, 10));
+        return;
+      }
+
+      const button = event.target.closest("[data-action]");
+
+      if (!button) {
+        return;
+      }
+
+      const bookIndex = Number.parseInt(button.dataset.bookIndex, 10);
+      const book = books[bookIndex];
+
+      if (!book) {
+        return;
+      }
+
+      const quantity = getBookQuantity(bookIndex);
+
+      if (button.dataset.action === "increase") {
+        setBookQuantity(bookIndex, quantity + 1);
+        return;
+      }
+
+      if (button.dataset.action === "decrease") {
+        setBookQuantity(bookIndex, quantity - 1);
+        return;
+      }
+
+      if (button.dataset.action === "cart") {
+        addToCart(bookIndex, quantity);
+        alert(`"${book.title}" ${quantity}권이 장바구니에 담겼습니다.`);
+        return;
+      }
+
+      if (button.dataset.action === "buy") {
+        addToCart(bookIndex, quantity);
+        alert(`"${book.title}" ${quantity}권 바로구매 화면으로 이동합니다.\n장바구니 주문 예상 금액을 확인하세요.`);
+        return;
+      }
+
+      if (button.dataset.action === "wish") {
+        addToWishlist(bookIndex);
+        alert(`"${book.title}" 도서가 위시리스트에 담겼습니다.`);
+      }
+    });
+
+    bookList.addEventListener("keydown", (event) => {
+      const kakaoImage = event.target.closest("[data-kakao-book-index]");
+
+      if (!kakaoImage || !["Enter", " "].includes(event.key)) {
+        return;
+      }
+
+      event.preventDefault();
+      openKakaoBookSearch(Number.parseInt(kakaoImage.dataset.kakaoBookIndex, 10));
+    });
+
+    cartOrderButton.addEventListener("click", () => {
+      if (!cartItems.length) {
+        alert("장바구니에 담긴 도서가 없습니다.");
+        return;
+      }
+
+      alert(`총 ${cartCount.textContent}, ${cartTotal.textContent} 바로구매를 진행합니다.`);
+    });
+
+    cartClearButton.addEventListener("click", () => {
+      cartItems.length = 0;
+      renderCommerceLists();
+    });
+
+    wishCartButton.addEventListener("click", () => {
+      if (!wishItems.length) {
+        alert("위시리스트에 담긴 도서가 없습니다.");
+        return;
+      }
+
+      wishItems.forEach((item) => addToCart(item.bookIndex, item.quantity));
+      alert("위시리스트 도서를 장바구니에 담았습니다.");
+    });
+
+    wishClearButton.addEventListener("click", () => {
+      wishItems.length = 0;
+      renderCommerceLists();
+    });
+
+    viewButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        changeViewMode(button.dataset.viewMode);
+      });
+    });
+
+    bookSearchInput.addEventListener("input", updateSearchResults);
+    bookSearchForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      updateSearchResults();
+    });
+
+    renderBooks();
+    renderCommerceLists();
+  </script>
+</body>
+</html>
