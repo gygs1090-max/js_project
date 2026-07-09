@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>변수 스코프 충돌 테스트</title>
+</head>
+<body>
+<script>
+    var score = 10; // 전역 변수 score 선언
+
+    function changeScore(){
+        var score = 50; // 전역 변수와 이름이 같지만 독립된 '지역 변수' score 선언
+        document.write("함수 내부 score: " + score + "<br>"); // 50 출력
+    }
+
+    changeScore(); // 함수 실행
+
+    // 함수 안에서 score를 50으로 바꾸었어도, 바깥의 전역 변수 score는 여전히 10을 유지합니다.
+    document.write("함수 외부 score: " + score + "<br>"); // 10 출력</script>
+</body>
+</html>

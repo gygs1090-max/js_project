@@ -1,0 +1,12 @@
+/* 모든 기기 공통 또는 모바일 기본 스타일 */
+body { background-color: white; font-size: 14px; }
+
+/* 화면 너비가 768px 이상일 때 (태블릿) */
+@media screen and (min-width: 768px) {
+  body { background-color: lightblue; font-size: 16px; }
+}
+
+/* 화면 너비가 1024px 이상일 때 (데스크톱) */
+@media screen and (min-width: 1024px) {
+  body { background-color: lightgray; font-size: 18px; }
+}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS 그리드 레이아웃 (Grid Layout)</title>
+</head>
+
+<style>
+  /* 1. 부모 컨테이너 도면 설계 */
+  .grid-layout {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto 200px auto;
+    gap: 10px;
+    /* 직관적인 문자열 레이아웃 배치 */
+    grid-template-areas:
+      "header header header"
+      "sidebar content content"
+      "footer footer footer";
+  }
+
+  /* 2. 자식 요소 이름 매핑 */
+  header  { grid-area: header; background: red; }
+  aside   { grid-area: sidebar; background: blue; }
+  main    { grid-area: content; background: green; }
+  footer  { grid-area: footer; background: gray; }</style>
+
+<div class="grid-layout">
+  <header>헤더 영역 (3칸 차지)</header>
+  <aside>사이드바 (1칸)</aside>
+  <main>본문 영역 (2칸)</main>
+  <footer>푸터 영역 (3칸 차지)</footer>
+</div>

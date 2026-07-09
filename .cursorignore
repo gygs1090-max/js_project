@@ -1,0 +1,8 @@
+﻿weather/
+weather/**
+weather/.venv/
+weather/.venv/**
+.venv/
+.venv/**
+**/.venv/
+**/.venv/**

@@ -1,0 +1,4 @@
+p {
+  text-align: center; /* 텍스트 정렬 속성: 값 (가운데) */
+  color: blue;        /* 글자색 속성: 값 (파랑) */
+}

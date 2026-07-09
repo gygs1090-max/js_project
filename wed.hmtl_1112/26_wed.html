@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>플렉스 박스 레이아웃 실습</title>
+  <style>
+    /* 메뉴 전체를 감싸는 부모 컨테이너 */
+    .nav-container {
+      display: flex;                /* 플렉스 박스 선언 */
+      justify-content: space-between;/* 양쪽 끝 배치 후 중간 여백 고르게 분배 */
+      align-items: center;          /* 요소들을 세로축 기준으로 정중앙 배치 */
+      background-color: #ff00ea;
+      padding: 10px 20px;
+    }
+
+    .logo {
+      color: #fff;
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    /* 메뉴 항목을 묶는 리스트 부모 */
+    .menu-list {
+      display: flex;                /* 리스트 내부 항목도 가로 나열하기 위해 플렉스 선언 */
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    .menu-list li {
+      margin-left: 20px;
+    }
+
+    .menu-list li a {
+      color: #001aff;
+      text-decoration: none;
+    }
+
+    /* 반응형 테스트를 위해 미디어 쿼리와 연동 */
+    @media screen and (max-width: 600px) {
+      .nav-container {
+        flex-direction: column;     /* 모바일 화면에서는 요소를 세로로 나열 */
+        gap: 10px;                  /* 요소 간 수직 간격 지정 */
+      }
+      .menu-list {
+        width: 100%;
+        justify-content: center;    /* 모바일에서는 메뉴를 한가운데로 배치 */
+      }
+    }</style>
+</head>
+<body>
+
+    <nav class="nav-container">
+        <div class="logo">Vision AI</div>
+        <ul>
+            <li><a href="#">홈</a></li>
+            <li><a href="#">소개</a></li>
+            <li><a href="#">교육과정</a></li>
+            <li><a href="#">문의</a></li>
+        </ul>
+    </nav>
+
+</body>
+</html>

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>트레지션 및 애니메이션 종합 실습</title>
+    <style>
+        body {
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 50px;
+            padding-top: 50px;
+        }
+        /* [실습 1] 트랜지션을 활용한 호버 카드 컴포넌트 */
+        .card {
+            width: 250px;
+            height: 150px;
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-sizing: 0 4px 8px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            color: #333;
+            /* 0.4초 동안 모든 속성 변화를 자연스럽게 처리 */
+            transition: transform 0.4s ease-out; box-shadow: 0.4s ease-out, background-color 0.4s;
+            cursor: pointer;
+        }
+
+        /* 마우스 올렸을 때 복합 트랜스폼(위로 이동 + 우측 회전 + 크기 확대) 작동 */
+        .card:hover {
+            transform: translateY(-15px) rotateY(15deg) scale(1.05);
+            box-shadow: 0 20px 25px rgba(0,0,0,0.15);
+            background-color: #007bff;
+            color: #ffffff;
+        }
+
+         /* [실습 2] 애니메이션을 활용한 무한 바운스 공 오브젝트 */
+         .ball {
+            width: 60px;
+            height: 60px;
+            background-color: #ff3f3f;
+            border-radius: 50%;
+            /* 1.2초 주기로 등속 무한 왕복 바운스 애니메이션 실행 */
+            animation: jumpAndScale 1.2s ease-in-out infinite alternate;
+         }
+
+         /* 키프레임 설계: 상하 이동 및 낙하 시 찌그러지는 현실적인 물리 효과 연출 */
+         @keyframes jumpAndScale {
+            0% {
+                transform: translateY(0) scaleY(1); /* 시작: 지면 상태 */
+                background-color: #ff3f3f;
+            }
+            40% {
+                transform: translateY(-100px) scaleY(1); /* 공중 점프 */
+            }
+            90% {
+                transform: translateY(0) scaleY(1); /* 하강 밀착 직전 */
+            }
+            100% {
+                transform: translateY(10px) scaleY(0.85); /* 바닥 충돌 시 쿠션 효과 축소 왜곡 */
+
+                background-color: #ffd000;
+            }
+         }</style>
+    </head>
+    <body>
+
+        <aiv class="card">Hover Me! (3D Transform)</aiv>
+
+        <aiv class="ball">
+
+    </body>
+    </html>

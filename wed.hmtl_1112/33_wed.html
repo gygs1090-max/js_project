@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>박스모델</title>
+	<style>
+    .wrapper {
+      width: 800px;
+      margin: 10px auto;
+      padding: 20px;
+      border: 1px solid #ccc;      
+    }
+		.sidebar {
+			width: 150px;
+			height: 150px;
+			margin-right: 10px;
+		}
+		#left{
+			background:#ffd800;
+      float: left;
+		}
+		#right {
+			background: #0094ff;
+      float: right;
+		}
+		/* Do it! clear 속성을 사용해 플로팅 해제하기 */
+	</style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="sidebar" id="left">풋살, 비</div>
+    <div class="sidebar" id="right">비가 오는가...</div>
+    <p>
+      나는 오늘 축구를 할 것이다 아님 풋살을 할 것 이다.
+    </p>    
+		<p>
+            근데 비가 아니라 소나기가 올 것 같은데 덥고 습하면 축구or 풋살을 하기가 싫어진다. 그 느낌을 아니까...
+        </p>
+  </div>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>글꼴 관련 스타일 실습 시트</title>
+</head>
+<style>
+    h1 { font-size: 3em; }    /* 부모 기준 3배 크기 */
+    .accent {
+        font-size: 1. 5em;    /*1.5배 크기 */
+        font-size: 100;       /* 가장 굵게*/
+    }
+    .italic {
+        font-weight: bold;    /* 굵게*/
+        font-weight: italic;  /* 이탤릭체 */
+    }</style>
+
+<h1>레드향</h1>
+<p>껍질에 붉은 빛이 돌아 <span class="accent">레드향</span>이라 불린다.</p>
+<p class="italic">일반 귤보다 2 ~ 3배 크고, 과육이 붉고 통통하다.</p>
+
+<style>
+     /* 1. 구글에서 복사한 외부 폰트 주소 가져오기 */
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,opsz,wght@0,18..144,300..900;1,18..144,300..900&display=swap');
+
+    /* 2. 원하는 요소에 적용하기 */
+  .wfont {
+    font-family: 'Dancing Script', cursive;
+  }</style>
+
+<h1 class="wfont">HTML</h1> <!--웹 폰트 적용됨-->
+<h1>CSS</h1> <!--기본 브라우저 폰트-->

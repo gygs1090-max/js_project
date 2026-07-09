@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <title>배경 이미지 크기 조절하기</title>
+
+<style>
+     .box {
+        idth: 300px;
+        height: 300px;
+        margin: 20px;
+        border: 1px solid #000;
+        background: url(001_healing.png) no-repeat left top;
+     }
+
+        #bg1 { background-size: auto; }
+        #bg2 { background-size: 200px; }
+        #bg3 { background-size: 50%; }
+        #bg4 { background-size: 100% 100%; }
+        #bg5 { background-size: contain; }
+        #bg6 { background-size: cover; }
+    </style>
+</head>
+
+<body>
+
+    <div id="bg1" class="box">auto</div>
+    <div id="bg2" class="box">200px</div>
+    <div id="bg3" class="box">50%</div>
+    <div id="bg4" class="box">100% 100%</div>
+    <div id="bg5" class="box">contain</div>
+    <div id="bg6" class="box">cover</div>
+
+</body>
+
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <location>
+      <city>서울</city>
+      <wf>맑음</wf>
+      <tmn>-2</tmn>
+      <tmx>8</tmx>
+    </location>
+    <location>
+      <city>인천</city>
+      <wf>구름많음</wf>
+      <tmn>-1</tmn>
+      <tmx>7</tmx>
+    </location>
+    <location>
+      <city>수원</city>
+      <wf>흐림</wf>
+      <tmn>0</tmn>
+      <tmx>9</tmx>
+    </location>
+    <location>
+      <city>춘천</city>
+      <wf>눈</wf>
+      <tmn>-5</tmn>
+      <tmx>2</tmx>
+    </location>
+    <location>
+      <city>제주</city>
+      <wf>비</wf>
+      <tmn>5</tmn>
+      <tmx>12</tmx>
+    </location>
+  </body>
+</html>

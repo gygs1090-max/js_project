@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>JS 계산기</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+
+        input,
+        button {
+            font-size: 18px;
+            margin: 5px;
+            padding: 8px;
+        }
+
+        #result {
+            color: blue;
+            font-size: 24px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h1>간단한 계산기</h1>
+
+    <input type="number" id="num1" placeholder="첫 번째 숫자">
+    <input type="number" id="num2" placeholder="두 번째 숫자">
+
+    <br>
+
+    <button onclick="calculate('+')">더하기</button>
+    <button onclick="calculate('-')">빼기</button>
+    <button onclick="calculate('*')">곱하기</button>
+    <button onclick="calculate('/')">나누기</button>
+
+    <p>결과: <span id="result">0</span></p>
+
+    <script>
+        function calculate(operator) {
+            const num1 = Number(document.getElementById("num1").value);
+            const num2 = Number(document.getElementById("num2").value);
+            let answer = 0;
+
+            if (operator === "+") {
+                answer = num1 + num2;
+            } else if (operator === "-") {
+                answer = num1 - num2;
+            } else if (operator === "*") {
+                answer = num1 * num2;
+            } else if (operator === "/") {
+                if (num2 === 0) {
+                    document.getElementById("result").textContent = "0으로 나눌 수 없습니다.";
+                    return;
+                }
+
+                answer = num1 / num2;
+            }
+
+            document.getElementById("result").textContent = answer;
+        }
+    </script>
+</body>
+</html>

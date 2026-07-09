@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+  <meta charset="UTF-8">
+  <title>CSS 그리드 레이아웃 종합 실습</title>
+  <style>
+    .grid-container {
+      display: grid;
+      /* 3열 격자 구조 생성 */
+      grid-template-columns: repeat(3, 1fr);
+      /* 3행의 높이 자동 및 고정 설정 */
+      grid-template-rows: 100px 200px 150px;
+      gap: 15px;
+      max-width: 900px;
+      margin: 20px auto;
+    }
+
+    .card {
+      color: white;
+      padding: 20px;
+      font-weight: bold;
+      border-radius: 8px;
+    }
+
+    /* Box 1: 첫 번째 줄 전체(1번~4번 라인)를 독점하는 상단바 */
+    .box1 {
+      background-color: #ff3f3f;
+      grid-column: 1 / -1;
+      grid-row: 1 / 2;
+    }
+
+    /* Box 2: 1열에 위치하며 2행부터 4행 직전까지(세로로 2칸) 차지하는 긴 세로 카드 */
+    .box2 {
+      background-color: #05a35b;
+      grid-column: 1 / 2;
+      grid-row: 2 / 4;
+    }
+
+    /* Box 3: 2열부터 끝까지(가로 2칸), 2행 영역을 차지하는 가로 카드 */
+    .box3 {
+      background-color: #ff9019;
+      grid-column: 2 / -1;
+      grid-row: 2 / 3;
+    }
+
+    /* Box 4: 2열의 3행에 배치되는 일반 카드 */
+    .box4 {
+      background-color: #ffd000;
+      grid-column: 2 / 3;
+      grid-row: 3 / 4;
+      color: #333;
+    }
+
+    /* Box 5: 3열의 3행에 배치되는 일반 카드 */
+    .box5 {
+      background-color: #00bcd4;
+      grid-column: 3 / 4;
+      grid-row: 3 / 4;
+    }</style>
+</head>
+<body>
+<div class="grid-container">
+    <div class="grid box1">Box 1 (열 : 1/-1, 행 : 1/2)</div>
+    <div class="card box2">Box 2 (열: 1/2, 행: 2/4)</div>
+    <div class="card box3">Box 3 (열: 2/-1, 행: 2/3)</div>
+    <div class="card box4">Box 3 (열: 2/3, 행: 3/4)</div>
+    <div class="card box5">Box 5 (열: 3/4, 행: 3/4)</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,13 @@
+/* 정석대로 나열 */
+div {
+  background-image: url('C:\01. 파이썬\11_healimg.png');
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-attachment: fixed;
+}
+
+/* 한 번에 줄여 쓰기 */
+div {
+  background: url('C:\01. 파이썬\11_healimg.png') no-repeat center top fixed;
+}
+

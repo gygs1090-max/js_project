@@ -1,0 +1,51 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 폼 만들기</title>
+</head>
+<form>
+    <fieldset>
+        <legend>배송 정보</legend>
+        <ul id="shipping">
+            <li>
+                <label for="prod">주문 상품</label>
+                <input type="text" id="prod" value="상품용 3kg">
+            </li>
+            <li>
+                <label for="user_name">이름</label>
+                <input type="text" id="user_name" autofocus readonly>
+            </li>
+            <li>
+                <label for="addr">배송 주소</label>
+                <input type="email" id="addr" required>
+            </li>
+            <li>
+                <label for="mail">이메일</label>
+                <input type="tel" id="mail">
+            </li>
+            <li>
+                <label for="phone">연락처</label>
+                <input type="tel" id="phone" placeholder="하이픈 빼고 입력해 주세요.(01090523032)" required>
+            </li>
+            <li>
+                <label for="d-day">배송 지정</label>
+                <input type="date" id="d-day"> <small>(주문일로부터 최소 3일 이후)</small>
+            </li>
+        </ul>
+    </fieldset>
+    <div>
+        <input type="submit" value="주문하기">
+        <input type="reset" value="취소하기">
+    </div>
+</form>
+<ul>
+    <li>
+        <label for="uid">아이디</label>
+        <input type="text" id="uid" autofocus placeholder="4자 ~ 10자 사이, 공백 없이" required>
+    </li>
+    <li>
+        <label for="umail">이메일</label>
+        <input type="email" id="umail" required>
+    </li>
+    
+</ul>

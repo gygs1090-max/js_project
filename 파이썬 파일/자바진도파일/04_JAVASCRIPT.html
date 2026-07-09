@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>return문 값 반환하기</title>
+</head>
+<body>
+<script>
+    // 과목 점수를 받아 평균을 구해 변수 바깥으로 던져주는 함수
+    function getAverage(kor, eng){
+        var avg = (kor + eng) / 2;
+        return avg; // avg 변수에 담긴 평균값을 함수 외부로 반환합니다.
+    }
+
+    // 함수가 반환한 결과를 변수 result에 저장
+    var result = getAverage(80, 90);
+
+    document.write("두 과목의 평균 점수는 " + result + "점입니다.");
+    // 출력: 두 과목의 평균 점수는 85점입니다.</script>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>absolute와 relative의 관계</title>
+</head>
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+        <meta charset="UTF-8">
+        <title>포지셔닝 실습</title>
+        <style>
+            /* 부모 박스: 자식 absolute의 기준점이 되도록 relative 설정 */
+            .parent-box {
+                position: relative;
+                width: 400px;
+                height: 300px;
+                border: 2px solid #333;
+                margin: 20px auto;
+                background-color: #f9f9f9;
+            }
+
+            /* 자식 박스 1: 부모의 왼쪽 위 꼭지점에 밀착 */
+            .child-top-left {
+                position: absolute;
+                top: 10px;
+                left: 10px;
+                width: 80px;
+                height: 80px;
+                background-color: red;
+                color: white;
+            }
+            /* 자식 박스 2: 부모의 오른쪽 아래 꼭지점에 밀착 */
+            .child-top-left {
+                position: absolute;
+                bottom: 10px;
+                left: 10px;
+                width: 80px;
+                height: 80px;
+                background-color: blue;
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="parent-box">
+            <div class="child-top-left">좌상단</div>
+            <div class="child-bottom-right">우상단</div>
+        </div>
+    </body>
+</html>

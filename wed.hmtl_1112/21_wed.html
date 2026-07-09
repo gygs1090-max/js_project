@@ -1,0 +1,30 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>내부 스타일 시트 사용하기</title>
+</head>
+
+<!DOCTYPE html>
+<html lang="ko">
+    <head>
+    <meta charset="UTF-8">
+    <title>상품 소개 페이지</title>
+    <style>
+           /* 1. 타입 스타일 */
+    p { color: black; }
+
+    /* 4. 순서에 따라 위의 black을 덮어씀 */
+    p { color: blue; }
+
+    /* 2. !important 가 붙어 우선순위 최상위로 상승 */
+    h1 { color: brown !important; }</style>
+</head>
+<body>
+    <h1 style="color:green">레드향</h1>
+
+    <p style="color:red;">껍질에 붉은 빛이 돌아 레드향이라 불린다.</p>
+
+    <p>레드향은 한라봉과 귤을 교배한 것으로</p>
+    <p>일반 귤보다 2 ~ 3배 크고, 과육이 붉고 통통하다.</p>
+</body>
+</html>

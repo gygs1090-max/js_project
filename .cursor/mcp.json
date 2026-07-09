@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "weather": {
+      "command": "D:\\dsadas2\\weather\\.venv\\Scripts\\python.exe",
+      "args": [
+        "D:\\dsadas2\\weather\\weather.py"
+      ]
+    }
+  }
+}

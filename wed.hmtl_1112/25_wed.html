@@ -1,0 +1,64 @@
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>이미지와 그러데이션 효과로 배경 꾸미기</title>
+</head>
+
+<style>
+    .box { width: 300px; padding: 20px; border: 10px dashed #333; background-color: red; }
+
+    #clip-border { background-clip: border-box; }
+    #clip-padding { background-clip: padding-box; }
+    #clip-content { background-clip: content-box; }</style>
+
+    <div class="box" id="cild-border">테두리까지 배경 채우기</div>
+    <div class="box" id="cild-padding">패딩까지만 배경 채우기</div>
+    <div class="box" id="cild-content">콘텐츠만 배경 채우기</div>
+
+    <link rel="stylesheet" href="C:\01. 파이썬\02. CSS\03_wed.css">
+
+    <style>
+  /* 오른쪽 위 대각선으로 향하는 선형 그러데이션 */
+  .linear-box {
+    width: 100%;
+    height: 200px;
+    background: linear-gradient(to top right, #aaff5f, #0044ff);
+  }</style>
+<div class="linear-box"></div>
+
+<style>
+  /* 중심이 왼쪽 위(at 30% 30%)에 위치한 완전한 원형 그러데이션 */
+  .radial-box {
+    width: 300px;
+    height: 300px;
+    border-radius: 50%; /* 박스 자체도 원형으로 깎음 */
+    background: radial-gradient(circle at 30% 30%, #ffffff, #3a7bd5);
+  }</style>
+<div class="radial-box"></div>
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+    /* 고정형 레이아웃을 백분율을 사용하는 가변 레이아웃으로 변경 */
+    #wrapper {
+        width: 96%; /* 화면 좌우 여백을 위해 100% 대신 96%로 유연하게 설정 */
+        margin: 0 auto;
+    }
+    header {
+        width: 100%; /* wrapper 너비의 100% 사용 */
+    }
+    .content {
+        width: 62.5%; /* 계산된 상대 값 사용 */
+        float: left;
+    }
+    .sideber {
+        width: 31.25%; /* 계산된 상대 값 사용 (300px / 960px * 100) */
+        float: left;
+    }
+</style>
+
+<img src="C:\01. 파이썬\11_healimg.png" alt="예시 이미지">
+
+<div class="image-box">
+  <img src="C:\01. 파이썬\11_healing.jpg" alt="첼시 왜 유로파 못가냐고~">
+</div>

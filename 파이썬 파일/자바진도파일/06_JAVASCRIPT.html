@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>전역 함수와 지역 함수</title>
+</head>
+<body>
+<script>
+    // 1. 전역 함수 정의
+    function outerFnc(){
+        document.write("outerFnc(전역 함수)가 실행되었습니다.<br>");
+
+        // 2. 지역 함수 정의 (outerFnc 내부에서 선언됨)
+        function innerFnc(){
+            document.write("innerFnc(지역 함수)가 실행되었습니다.<br>");
+        }
+
+        innerFnc(); // 안전하게 호출 성공 (부모 함수 내부이므로 가능)
+    }
+
+    // 전역 공간에서 호출 시도
+    outerFnc(); // 정상 실행 가능
+
+    // innerFnc();
+    // 에러 발생! 지역 함수는 밖에서 직접 단독으로 호출할 수 없습니다.</script>
+</body>
+</html>

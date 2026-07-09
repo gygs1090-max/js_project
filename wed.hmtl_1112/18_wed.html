@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입 예시</title>
+</head>
+<body>
+    <h2>회원가입을 환영 합니다.</h2>
+
+<form>
+    <ul>
+        <li>
+            <label for="uid">아이디</label>
+            <input type="text" id="uid"
+                   placeholder="4자 ~ 10자 사이, 공백 없이"
+                   autofocus required>
+        </li>
+
+        <li>
+            <label for="umail">이메일</label>
+            <input type="email" id="umail" required>
+        </li>
+
+        <li>
+            <label for="pwd1">비밀번호</label>
+            <input type="password" id="pwd1"
+                   placeholder="문자와 숫자, 특수 기호 포함"
+                   required>
+        </li>
+
+        <li>
+            <label for="pwd2">비밀번호 확인</label>
+            <input type="password" id="pwd2" required>
+        </li>
+
+        <li>
+            <label for="path">가입 경로</label>
+            <select id="path">
+                <option value="blog">블로그</option>
+                <option value="search">검색</option>
+                <option value="sns">SNS</option>
+                <option value="etc">기타</option>
+            </select>
+        </li>
+    </ul>
+
+    <fieldset>
+        <legend>이벤트와 새로운 소식</legend>
+
+        <input type="radio" name="mailing" id="mailing_y"
+               value="mailing_yes">
+        <label for="mailing_y">메일 수신</label>
+
+        <input type="radio" name="mailing" id="mailing_n"
+               value="mailing_no" checked>
+        <label for="mailing_n">메일 수신 안 함</label>
+    </fieldset>
+
+    <button type="submit">가입하기</button>
+    <button type="reset">취소하기</button>
+
+</form>
+
+</body>
+</html>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f2f4f7;
+        margin: 0;
+        padding: 40px;
+        text-align: center;
+    }
+
+    h2 {
+        margin-bottom: 20px;
+        color: #333;
+    }
+
+    form {
+        width: 420px;
+        margin: 0 auto;
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        text-align: left;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    li {
+        margin-bottom: 15px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold;
+        color: #444;
+    }
+
+    input, select {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        box-sizing: border-box;
+    }
+
+    fieldset {
+        margin-top: 15px;
+        padding: 10px;
+        border-radius: 6px;
+    }
+
+    button {
+        width: 48%;
+        padding: 10px;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        margin-top: 15px;
+        font-size: 14px;
+    }
+
+    button[type="submit"] {
+        background-color: #4CAF50;
+        color: white;
+    }
+
+    button[type="reset"] {
+        background-color: #f44336;
+        color: white;
+    }
+
+    button:hover {
+        opacity: 0.9;
+    }
+</style>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>DOM 실습 1</title>
+    <style>
+        .box { padding: 20px; margin: 10px; background: #3498db; color: white; }
+    </style>
+</head>
+<body>
+    <h1 id="main-title">DOM 조작 실습</h1>
+    <button id="changeBtn">제목 바꾸기</button>
+    <button id="addBtn">박스 추가하기</button>
+
+    <script>
+        // 1. 요소 선택
+        const title = document.querySelector('#main-title');
+        const changeBtn = document.querySelector('#changeBtn');
+        const addBtn = document.querySelector('#addBtn');
+
+        // 2. 이벤트 등록 및 DOM 조작
+        changeBtn.addEventListener('click', () => {
+            title.textContent = "제목이 바뀌었습니다!";
+            title.style.color = "#e74c3c";
+        });
+
+        addBtn.addEventListener('click', () => {
+            const newBox = document.createElement('div');
+            newBox.classList.add('box');
+            newBox.textContent = "새로 추가된 박스";
+            document.body.appendChild(newBox);
+        });
+    </script>
+    <h2>현재 숫자: <span id="count">0</span></h2>
+    <button id="increase">증가</button>
+    <button id="decrease">감소</button>
+    <button id="reset">초기화</button>
+
+    <script>
+        let count = 0;
+        const countEl = document.getElementById('count');
+        const increaseBtn = document.getElementById('increase');
+        const decreaseBtn = document.getElementById('decrease');
+        const resetBtn = document.getElementById('reset');
+
+        increaseBtn.addEventListener('click', () => {
+            count++;
+            countEl.textContent = count;
+        });
+
+        decreaseBtn.addEventListener('click', () => {
+            count--;
+            countEl.textContent = count;
+        });
+
+        resetBtn.addEventListener('click', () => {
+            count = 0;
+            countEl.textContent = count;
+        });
+    </script>
+</body>
+</html>

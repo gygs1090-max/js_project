@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>객체 생성자 함수 활용</title>
+</head>
+<body>
+<script>
+    // 1. 객체 생성자 함수 선언 (첫 글자는 대문자 C)
+    function CheckWeight(name, height, weight) {
+        // 생성할 객체의 속성(Property)들을 등록합니다.
+        this.userName = name;
+        this.userHeight = height;
+        this.userWeight = weight;
+        this.minWeight; // 정상 몸무게 최솟값을 담을 변수
+        this.maxWeight; // 정상 몸무게 최댓값을 담을 변수
+
+        // 사용자의 정보를 문자열로 리턴하는 메서드(함수) 등록
+        this.getInfo = function() {
+            var str = "";
+            str += "이름: " + this.userName + ", ";
+            str += "키: " + this.userHeight + ", ";
+            str += "몸무게: " + this.userWeight + "<br>";
+            return str;
+        }
+
+        // 표준 체중을 계산하고 결과를 판단하여 리턴하는 메서드 등록
+        this.getResult = function() {
+            // 표준 체중 계산법을 활용하여 최솟값과 최댓값 구하기
+            this.minWeight = (this.userHeight - 100) * 0.9 - 5;
+            this.maxWeight = (this.userHeight - 100) * 0.9 + 5;
+
+            // 몸무게 비교 조건문 실행 후 알맞은 문자열 반환
+            if (this.userWeight >= this.minWeight && this.userWeight <= this.maxWeight) {
+                return "정상 몸무게입니다.";
+            } else if (this.userWeight < this.minWeight) {
+                return "정상 몸무게보다 미달입니다.";
+            } else {
+                return "정상 몸무게보다 초과입니다.";
+            }
+        }
+    }
+
+    // 2. 생성자 함수를 호출하여 실제 독립된 객체(인스턴스) 생성
+    var jang = new CheckWeight("장보리", 168, 62);
+    var park = new CheckWeight("박달재", 180, 88);
+
+    // 3. 웹브라우저 화면에 메서드 호출 결과 출력하기
+    document.write(jang.getInfo());
+    document.write(jang.getResult(), "<br><br>");
+
+    document.write(park.getInfo());
+    document.write(park.getResult());
+</script>
+</body>
+</html>
