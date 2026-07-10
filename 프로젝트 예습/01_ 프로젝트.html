@@ -2824,7 +2824,7 @@
         ].join("");
       }).join("");
 
-      const checkoutHtml = JSON.stringify(buildWonilCheckoutPageHtml(items));
+      sessionStorage.setItem("wonilCartCheckoutHtml", buildWonilCheckoutPageHtml(items));
 
       return [
         "<!DOCTYPE html><html lang=\"ko\"><head><meta charset=\"UTF-8\">",
@@ -2884,7 +2884,7 @@
         "</aside></div>",
         "<scr" + "ipt>",
         "function openHtmlInline(pageHtml){var w=null;try{var b=new Blob([pageHtml],{type:'text/html;charset=utf-8'});var u=URL.createObjectURL(b);w=window.open(u,'_blank');setTimeout(function(){URL.revokeObjectURL(u);},2000);}catch(e){w=null;}if(w&&!w.closed){try{w.focus();}catch(e){}return w;}w=window.open('about:blank','_blank');if(w&&!w.closed){w.document.open();w.document.write(pageHtml);w.document.close();w.focus();return w;}if(confirm('새 탭을 열 수 없습니다. 현재 탭에서 결제 페이지를 열까요?')){document.open();document.write(pageHtml);document.close();return window;}alert('브라우저에서 팝업(새 탭) 허용 후 다시 시도해 주세요.');return null;}",
-        "document.getElementById('cartCheckoutBtn').addEventListener('click',function(){openHtmlInline(" + checkoutHtml + ");});",
+        "document.getElementById('cartCheckoutBtn').addEventListener('click',function(){var pageHtml=sessionStorage.getItem('wonilCartCheckoutHtml');if(!pageHtml){alert('결제 정보를 불러올 수 없습니다.');return;}openHtmlInline(pageHtml);});",
         "<" + "/script></body></html>"
       ].join("");
     }
