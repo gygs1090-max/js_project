@@ -312,6 +312,50 @@
       gap: 6px;
     }
 
+    .search-input-wrap {
+      position: relative;
+    }
+
+    .search-suggestions {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      z-index: 40;
+      overflow: hidden;
+      width: 240px;
+      border: 1px solid #dddddd;
+      background: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .search-suggestions[hidden] {
+      display: none;
+    }
+
+    .search-suggestion-item {
+      display: block;
+      width: 100%;
+      padding: 8px 10px;
+      border: 0;
+      border-bottom: 1px solid #eeeeee;
+      background: #ffffff;
+      color: #333333;
+      font-size: 11px;
+      line-height: 1.45;
+      text-align: left;
+      cursor: pointer;
+    }
+
+    .search-suggestion-item:last-child {
+      border-bottom: 0;
+    }
+
+    .search-suggestion-item:hover,
+    .search-suggestion-item:focus-visible {
+      background: #f5fff8;
+      outline: none;
+    }
+
     select,
     input {
       height: 24px;
@@ -368,6 +412,7 @@
     }
 
     .book-list {
+      min-height: 120px;
       border-top: 2px solid #333333;
     }
 
@@ -840,7 +885,10 @@
             </select>
           </div>
           <div class="search-area">
-            <input id="bookSearchInput" type="search" placeholder="검색어 입력">
+            <div class="search-input-wrap">
+              <input id="bookSearchInput" type="search" placeholder="책 제목 검색" autocomplete="off">
+              <div id="searchSuggestions" class="search-suggestions" hidden></div>
+            </div>
             <button class="small-btn" id="bookSearchButton" type="button">검색</button>
           </div>
           <div class="view-buttons" aria-label="보기 방식">
@@ -910,6 +958,7 @@
     </aside>
   </div>
 
+  <script src="book-covers.js"></script>
   <script>
     const books = [
       {
@@ -920,7 +969,20 @@
         originalPrice: 18000,
         imageNumber: 1,
         badges: ["오늘의책", "무료배송", "소득공제"],
-        tags: ["주식기초", "재테크", "투자전략"]
+        tags: ["주린이", "입문", "기초"],
+        desc: "초보 투자자가 계좌 개설부터 종목 선택까지 차근차근 익힐 수 있는 입문서입니다.",
+        isbn: "979-11-2301-01",
+        pages: 288,
+        category: "경제/경영(12위) > 주식/증권 입문",
+        intro: "주식(株式)은 세상을 살아가는 데 필수적이다. 하지만 대부분의 사람들은 주식을 '도박'이라 부르며 멀리한다. 이 책은 주린이를 위한 친절한 안내서로, 복잡한 시장 용어를 쉬운 말로 풀어내며 계좌 개설부터 첫 매수까지의 여정을 함께 걷는다.",
+        introExtra: "주식 시장에 처음 발을 디디는 독자를 위해 기초 개념, 차트 읽기, 종목 선정의 기본 원칙을 단계별로 안내합니다. 실전 예시와 Q&A를 통해 혼자 공부하는 독자도 부담 없이 따라올 수 있습니다.",
+        recommendReason: "주식 용어가 낯선 초보 투자자에게 가장 친절한 입문서입니다. 계좌 개설부터 첫 매수까지 차근차근 안내합니다.",
+        recommendTags: ["#주린이", "#입문서", "#기초공부"],
+        endorsement: "주식을 처음 시작하는 독자에게 꼭 필요한 기초를 빠짐없이 담았습니다. 어려운 용어 대신 실생활 비유로 설명해 누구나 이해할 수 있습니다.",
+        publisherReview: "이 책은 주식을 '어렵다'고 느끼는 독자의 심리적 장벽을 낮추는 데 초점을 맞췄습니다. 각 장은 핵심 개념, 실전 예시, 복습 포인트로 구성되어 혼자 공부하는 독자도 부담 없이 따라올 수 있습니다.",
+        authorBio: "곽성빈은 개인 투자자 교육과 금융 콘텐츠 제작에 오랜 기간 몸담아 온 저자입니다. 복잡한 시장 개념을 쉬운 언어로 전달하며, 초보 투자자가 흔히 겪는 시행착오를 줄이는 데 초점을 맞춥니다.",
+        authorWorks: [2, 3, 6, 7],
+        toc: ["주식 투자, 왜 시작해야 할까", "증권 계좌 개설과 기본 용어", "호가창과 체결의 원리", "차트 보는 첫걸음", "좋은 기업을 찾는 기준", "첫 매수 전 체크리스트", "손실을 줄이는 원칙", "나만의 투자 일지 만들기", "작가의 말"]
       },
       {
         title: "할 수 있다 AI 주식 투자 - 4대 AI로 만드는 막강 1인 투자 하우스",
@@ -929,8 +991,21 @@
         price: 20000,
         originalPrice: 22500,
         imageNumber: 2,
-        badges: ["베스트", "무료배송", "소득공제"],
-        tags: ["초보투자", "차트분석", "경제공부"]
+        badges: ["베스트", "무료배송", "이벤트"],
+        tags: ["AI", "데이터", "투자"],
+        desc: "AI 도구를 활용해 투자 아이디어를 정리하고 시장 흐름을 읽는 방법을 소개합니다.",
+        isbn: "979-11-2302-02",
+        pages: 312,
+        category: "경제/경영(8위) > 주식/증권",
+        intro: "AI(人工知能)는 투자의 새로운 도구가 되었다. 데이터 분석, 뉴스 요약, 종목 스크리닝까지 AI가 할 수 있는 일은 점점 늘어나고 있다. 이 책은 AI 도구를 활용해 투자 아이디어를 정리하고 시장 흐름을 읽는 실전 방법을 소개한다.",
+        introExtra: "ChatGPT, Perplexity 등 다양한 AI 도구를 투자에 활용하는 법을 단계별로 안내합니다. AI가 대신 판단해 주는 것이 아니라, 투자자의 의사결정을 돕는 도구로 쓰는 방법을 배웁니다.",
+        recommendReason: "AI 시대의 투자자를 위한 실전 가이드. 데이터 분석과 아이디어 정리에 AI를 활용하는 방법을 알려줍니다.",
+        recommendTags: ["#AI투자", "#데이터분석", "#실전"],
+        endorsement: "AI 도구를 투자에 접목하려는 독자에게 실용적인 로드맵을 제공합니다. 기술과 투자를 연결하는 새로운 시도입니다.",
+        publisherReview: "AI가 투자 판단을 대신하지 않습니다. 대신 투자자가 더 넓은 시야로 시장을 바라볼 수 있도록 돕습니다. 이 책은 그 균형점을 찾는 방법을 제시합니다.",
+        authorBio: "머신러너는 AI와 금융 데이터 분석 분야에서 활동하는 저자입니다. 복잡한 기술을 투자자 눈높이에 맞게 설명하는 것을 전문으로 합니다.",
+        authorWorks: [1, 4, 5, 8],
+        toc: ["AI 투자 시대의 시작", "투자에 쓰는 AI 도구 소개", "뉴스와 공시 AI 요약법", "종목 스크리닝 자동화", "재무 데이터 AI 분석", "AI 프롬프트 작성법", "AI와 함께하는 포트폴리오", "주의해야 할 AI 투자 함정", "작가의 말"]
       },
       {
         title: "저는 주식투자가 처음인데요 (2026년 완전개정판) - 제대로 시작하고 처음부터 돈 버는 주식 공부 교과서",
@@ -940,7 +1015,20 @@
         originalPrice: 19800,
         imageNumber: 3,
         badges: ["신간", "무료배송", "소득공제"],
-        tags: ["시장흐름", "실전투자", "포트폴리오"]
+        tags: ["입문", "재무제표", "교과서"],
+        desc: "주식 용어, 차트, 재무제표의 기본기를 실전 예시로 설명하는 주식 공부 교과서입니다.",
+        isbn: "979-11-2303-03",
+        pages: 336,
+        category: "경제/경영(5위) > 주식/증권 입문",
+        intro: "주식투자가 처음이라면, 무엇부터 공부해야 할지 막막할 것이다. 이 책은 주식 용어, 차트, 재무제표의 기본기를 실전 예시로 설명하는 주식 공부 교과서다. '저는 주식투자가 처음인데요'라고 말하는 모든 이를 위해 쓰였다.",
+        introExtra: "매수와 매도, PER과 PBR, 배당과 성장주까지 핵심 개념을 사례 중심으로 풀어냅니다. 각 장 끝의 복습 문제로 스스로 이해도를 점검할 수 있습니다.",
+        recommendReason: "주식 용어가 하나도 모르는 완전 초보를 위한 교과서. 차트와 재무제표 기초를 실전 예시로 설명합니다.",
+        recommendTags: ["#완전초보", "#교과서", "#재무제표"],
+        endorsement: "주식 공부를 처음 시작하는 독자에게 가장 필요한 기본기를 빠짐없이 담았습니다. 어렵게 느껴지는 재무제표도 쉽게 풀어냅니다.",
+        publisherReview: "이 책은 '처음'이라는 단어에 진심입니다. 전문 용어를 최소화하고, 실제 투자자가 궁금해하는 질문에 답하는 형식으로 구성했습니다.",
+        authorBio: "강병욱은 주식 투자 교육과 금융 입문 콘텐츠를 제작해 온 저자입니다. 초보 투자자의 질문에서 출발해 책을 쓰는 것을 원칙으로 삼습니다.",
+        authorWorks: [1, 2, 6, 7],
+        toc: ["주식이란 무엇인가", "증권사와 계좌", "주문 방법과 호가", "차트의 기본", "PER, PBR, ROE 이해하기", "재무제표 읽기 입문", "배당주와 성장주", "리스크 관리", "작가의 말"]
       },
       {
         title: "처음 배우는 미국 주식 투자 - 계좌 개설부터 첫 수익까지 한 권으로 끝내는 실전 가이드",
@@ -949,8 +1037,21 @@
         price: 30000,
         originalPrice: 34200,
         imageNumber: 4,
-        badges: ["강력추천", "무료배송", "소득공제"],
-        tags: ["입문서", "종목선정", "투자습관"]
+        badges: ["강력추천", "무료배송", "사은품"],
+        tags: ["미국주식", "ETF", "해외투자"],
+        desc: "해외 주식 계좌 개설부터 환율, 세금, ETF 투자 전략까지 한 권에 담았습니다.",
+        isbn: "979-11-2304-04",
+        pages: 384,
+        category: "경제/경영(3위) > 해외주식/ETF",
+        intro: "미국 주식은 이제 선택이 아니라 필수가 되었다. 애플, 엔비디아, 테슬라—우리가 매일 쓰는 기업의 주식을 직접 살 수 있는 시대다. 이 책은 해외 주식 계좌 개설부터 환율, 세금, ETF 투자 전략까지 한 권에 담았다.",
+        introExtra: "달러 환전, 양도소득세, ISA와 연금저축 활용법까지 국내 투자자가 꼭 알아야 할 실무 정보를 정리했습니다.",
+        recommendReason: "미국 주식 투자를 처음 시작하는 독자를 위한 완벽 가이드. 계좌 개설부터 세금까지 한 권에 담았습니다.",
+        recommendTags: ["#미국주식", "#ETF", "#해외투자"],
+        endorsement: "해외 투자의 문턱을 낮추는 실용적인 안내서입니다. 환율과 세금 같은 어려운 주제도 명확하게 설명합니다.",
+        publisherReview: "글로벌 투자 시대, 미국 주식은 더 이상 전문가만의 영역이 아닙니다. 이 책은 일반 투자자가 안전하게 해외 투자를 시작할 수 있도록 돕습니다.",
+        authorBio: "한재승은 해외 주식 투자와 글로벌 ETF 분석 분야의 전문가입니다. 국내 투자자 눈높이에서 해외 시장을 설명하는 것을 전문으로 합니다.",
+        authorWorks: [2, 3, 5, 7],
+        toc: ["미국 주식, 왜 투자해야 할까", "해외 주식 계좌 개설", "달러 환전과 환율 이해", "미국 ETF 투자법", "대표 종목 분석", "양도소득세와 절세", "포트폴리오 구성", "리스크 관리", "작가의 말"]
       },
       {
         title: "코스피 5000 주식의 시대 - 코리아 디스카운트를 넘어 프리미엄으로 가는 길",
@@ -960,17 +1061,43 @@
         originalPrice: 19800,
         imageNumber: 5,
         badges: ["이벤트", "무료배송", "소득공제"],
-        tags: ["배당주", "장기투자", "현금흐름"]
+        tags: ["코스피", "장기투자", "시장전망"],
+        desc: "한국 시장의 구조적 변화와 장기 투자 포인트를 분석한 경제 전망 도서입니다.",
+        isbn: "979-11-2305-05",
+        pages: 296,
+        category: "경제/경영(7위) > 주식/증권",
+        intro: "코스피 5000 시대가 온다. 한국 시장의 구조적 변화, 글로벌 자금 유입, 그리고 장기 투자자가 주목해야 할 섹터를 분석한다. 단기 등락이 아닌 10년 후를 내다보는 투자 관점을 제시한다.",
+        introExtra: "반도체, 2차전지, 바이오 등 성장 섹터와 배당주, 가치주의 균형 잡힌 포트폴리오 전략을 다룹니다.",
+        recommendReason: "한국 시장의 장기 전망을 알고 싶은 투자자를 위한 분석서. 코스피 5000 시대의 투자 포인트를 짚어줍니다.",
+        recommendTags: ["#코스피5000", "#장기투자", "#시장전망"],
+        endorsement: "단기 시황이 아닌 구조적 변화에 주목하는 투자자에게 추천합니다. 데이터 기반 분석이 인상적입니다.",
+        publisherReview: "코스피 5000은 목표가 아니라 과정입니다. 이 책은 그 과정에서 투자자가 알아야 할 핵심 변화를 정리했습니다.",
+        authorBio: "강대원, 이민호는 자산운용과 시장 분석 분야에서 활동하는 전문가들입니다. 라이프자산운용의 리서치 역량을 바탕으로 한국 시장의 중장기 전망을 제시합니다.",
+        authorWorks: [4, 6, 7, 8],
+        toc: ["코스피 5000, 가능한가", "한국 시장의 구조적 변화", "글로벌 자금과 한국", "성장 섹터 분석", "배당과 가치의 균형", "장기 포트폴리오", "리스크 시나리오", "투자자 행동 강령", "작가의 말"]
       },
       {
-        title: "내 인생의 첫 주식공부 - 주식투자를 처음 시작하는 사람들을 위한 쉽고 빠른 주식 입문서`",
+        title: "내 인생의 첫 주식공부 - 주식투자를 처음 시작하는 사람들을 위한 쉽고 빠른 주식 입문서",
         author: "백영",
         publisher: "원일회사",
         price: 14250,
         originalPrice: 15750,
         imageNumber: 6,
         badges: ["베스트", "무료배송", "소득공제"],
-        tags: ["따라하기", "매수매도", "위험관리"]
+        tags: ["입문", "습관", "첫투자"],
+        desc: "금융문맹을 벗어나고, 올바른 투자를 위한 주식 교과서와 같은 주식투자 입문서입니다.",
+        isbn: "979-11-2306-06",
+        pages: 264,
+        category: "경제/경영(4위) > 주식/증권 입문",
+        intro: "인생의 첫 주식공부는 두려움과 설렘이 공존한다. 금융문맹을 벗어나고, 올바른 투자 습관을 만드는 것—그것이 이 책의 목표다. 쉽고 빠르게 핵심만 담아, 바쁜 직장인도 부담 없이 읽을 수 있다.",
+        introExtra: "투자 전 마음가짐, 월급의 몇 퍼센트를 투자할지, 손실을 견디는 법까지 실전 심리학을 함께 다룹니다.",
+        recommendReason: "바쁜 직장인을 위한 빠른 입문서. 핵심만 담아 첫 투자까지의 여정을 안내합니다.",
+        recommendTags: ["#첫투자", "#직장인", "#습관"],
+        endorsement: "짧지만 알찬 내용으로 첫 투자의 문턱을 낮춥니다. 투자 심리에 대한 조언이 특히 유용합니다.",
+        publisherReview: "이 책은 '빠르다'는 말에 거짓이 없습니다. 핵심 개념만 추려 2주 안에 첫 투자를 준비할 수 있도록 구성했습니다.",
+        authorBio: "백영은 직장인 대상 금융 교육과 투자 입문 콘텐츠를 제작해 온 저자입니다. 바쁜 독자를 위해 핵심만 추려 설명하는 것을 원칙으로 합니다.",
+        authorWorks: [1, 3, 5, 7],
+        toc: ["투자, 왜 해야 할까", "월급의 몇 퍼센트를", "계좌 개설 실전", "첫 종목 고르기", "매수와 매도 타이밍", "손실 견디기", "투자 일지", "작가의 말"]
       },
       {
         title: "한눈에 오를 주식만 골라내는 현금흐름표 읽는 법 - 대한민국 주식투자자를 위한 4주 완성 주식 특강",
@@ -980,7 +1107,20 @@
         originalPrice: 18900,
         imageNumber: 7,
         badges: ["추천", "무료배송", "소득공제"],
-        tags: ["경제교육", "장기투자", "ETF"]
+        tags: ["현금흐름", "재무제표", "가치투자"],
+        desc: "기업의 현금 창출 능력을 읽고 좋은 회사를 고르는 재무제표 독해법을 알려줍니다.",
+        isbn: "979-11-3122-07",
+        pages: 424,
+        category: "경제/경영(1위) > 재테크/투자 > 주식/증권",
+        intro: "현금흐름(現金流)은 기업의 진짜 체력을 보여주는 지표이다. 이익은 회계처리에 따라 달라질 수 있지만, 현금은 거짓말을 하지 않는다. 우리는 이익보다 현금을 본다! 이 책은 기업의 현금 창출 능력을 읽고 좋은 회사를 고르는 재무제표 독해법을 알려준다.",
+        introExtra: "한 권으로 끝내는 현금흐름표 읽기. 영업활동, 투자활동, 재무활동 현금흐름의 의미를 실제 기업 사례로 풀어내며, 40년 기업 분석 경험을 바탕으로 한 실전 노하우를 담았다. 대한민국 주식투자자를 위한 4주 완성 주식 특강의 핵심 내용을 수록했다.",
+        recommendReason: "이익보다 현금을 본다! 재무제표 중 현금흐름표만 제대로 읽어도 좋은 기업을 고를 수 있습니다.",
+        recommendTags: ["#현금흐름", "#재무제표", "#가치투자"],
+        endorsement: "현금흐름표를 모르면 재무제표를 읽었다고 할 수 없습니다. 이 책은 투자자가 꼭 알아야 할 핵심을 명확하게 짚어줍니다.",
+        publisherReview: "무엇이 내면의 가치인가—현금흐름표가 답한다. 인생의 한가운데서 투자를 시작하는 독자에게, 영원히 남을 투자 원칙을 전하는 책입니다. 복잡한 회계 개념을 투자자 눈높이로 풀어냈습니다.",
+        authorBio: "이강연은 40년 기업 분석 경험을 보유한 재무제표 분석 전문가입니다. '우리는 이익보다 현금을 본다'는 투자 철학으로 개인 투자자 교육과 강연을 이어오고 있으며, 네이버 파워블로거 'Pokari'로도 활동합니다.",
+        authorWorks: [1, 3, 5, 8],
+        toc: ["시작과 끝—현금흐름이란 무엇인가", "기구한 운명—왜 이익과 현금이 다른가", "영업활동 현금흐름 읽기", "투자활동 현금흐름의 신호", "재무활동 현금흐름과 부채", "FCF와 기업 가치", "현금흐름으로 종목 고르기", "적자 기업의 현금흐름", "배당과 현금창출", "분기별 현금흐름 추적법", "실전 사례 10선", "나만의 현금흐름 체크리스트", "작가의 말", "연표"]
       },
       {
         title: "독하게 돈 공부 - 10년 뒤 미래를 바꾸는 유일한 방법",
@@ -989,14 +1129,64 @@
         price: 18000,
         originalPrice: 20700,
         imageNumber: 8,
-        badges: ["MD추천", "무료배송", "소득공제"],
-        tags: ["직장인투자", "실전노트", "분산투자"]
+        badges: ["MD추천", "무료배송", "쿠폰"],
+        tags: ["재테크", "저축", "습관"],
+        desc: "직장인과 사회초년생을 위한 저축, 소비 관리, 장기 투자 습관 만들기 안내서입니다.",
+        isbn: "979-11-2308-08",
+        pages: 320,
+        category: "경제/경영(6위) > 재테크/투자",
+        intro: "독하게 공부해야 돈이 남는다. 직장인과 사회초년생을 위한 저축, 소비 관리, 장기 투자 습관 만들기. 돈 공부는 하고 싶은데 어디서부터 시작해야 할지 모르겠다면, 이 책이 길잡이가 되어줄 것이다.",
+        introExtra: "가계부 작성, 고정 지출 줄이기, 비상금 만들기, 첫 투자까지 돈의 흐름을 바꾸는 실전 방법을 담았습니다.",
+        recommendReason: "돈 관리가 서툰 2030을 위한 실전 재테크서. 저축부터 투자까지 습관을 만드는 방법을 알려줍니다.",
+        recommendTags: ["#재테크", "#저축", "#2030"],
+        endorsement: "돈 공부를 미루고 있다면 이 책부터 시작하세요. 실용적이고 자극적인 문체가 인상적입니다.",
+        publisherReview: "독하게—그 단어가 이 책의 정체성입니다. 부드러운 위로보다 뼈를 때리는 조언으로 독자의 행동 변화를 이끌어냅니다.",
+        authorBio: "박소연은 직장인·사회초년생 대상 재테크 교육과 금융 칼럼을 연재해 온 저자입니다. 실용적이고 직설적인 조언으로 독자들의 재테크 습관 형성을 돕습니다.",
+        authorWorks: [2, 4, 6, 7],
+        toc: ["돈 공부, 왜 독하게", "가계부와 소비 분석", "고정 지출 줄이기", "비상금 6개월", "저축 자동화", "첫 투자 준비", "부업과 수입 늘리기", "작가의 말"]
       }
     ];
+
+    function getBookReviews(bookIndex) {
+      const names = ["투자초보", "장기투자자", "직장인A", "대학생B", "주식공부중", "재테크러"];
+      return names.map((name, index) => ({
+        name,
+        date: `2026.0${(index % 6) + 1}.${10 + index}`,
+        rating: index < 4 ? 5 : 4,
+        text: [
+          "처음 주식을 공부하는데 정말 도움이 됐어요. 설명이 친절하고 예시가 많아요.",
+          "재무제표 읽는 법을 처음 배웠는데, 이 책 덕분에 현금흐름표의 중요성을 알게 됐습니다.",
+          "직장인이라 시간이 없는데 핵심만 담아서 2주 만에 다 읽었어요. 추천합니다.",
+          "기초부터 차근차근 알려줘서 주린이에게 딱 맞는 책입니다.",
+          "내용은 좋은데 조금 더 실전 사례가 많았으면 좋겠어요.",
+          "투자 입문서로 여러 권 읽었는데 이 책이 가장 이해하기 쉬웠습니다."
+        ][index]
+      }));
+    }
+
+    function getRotatedBooks(bookIndex, count = 4) {
+      const others = books
+        .map((relatedBook, relatedIndex) => ({ relatedBook, relatedIndex }))
+        .filter(({ relatedIndex }) => relatedIndex !== bookIndex);
+
+      if (!others.length) {
+        return [];
+      }
+
+      const start = bookIndex % others.length;
+      const result = [];
+
+      for (let index = 0; index < count; index += 1) {
+        result.push(others[(start + index) % others.length]);
+      }
+
+      return result;
+    }
 
     const bookList = document.querySelector("#bookList");
     const bookSearchInput = document.querySelector("#bookSearchInput");
     const bookSearchButton = document.querySelector("#bookSearchButton");
+    const searchSuggestions = document.querySelector("#searchSuggestions");
     const bookResultCount = document.querySelector("#bookResultCount");
     const viewButtons = document.querySelectorAll("[data-view-mode]");
     const cartList = document.querySelector("#cartList");
@@ -1011,9 +1201,41 @@
     const cartItems = [];
     const wishItems = [];
     const KAKAO_BOOK_API_URL = `${location.protocol === "file:" ? "http://localhost:8000" : ""}/api/kakao-books`;
+    const WONIL_HOME_PAGE = "01_ 프로젝트.html";
+    const CART_STORAGE_KEY = "wonilBookstoreCart";
+    const WISH_STORAGE_KEY = "wonilBookstoreWish";
     let searchKeyword = "";
     let currentViewMode = "list";
     const formatPrice = (price) => price.toLocaleString("ko-KR") + "원";
+
+    function loadCartFromStorage() {
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(CART_STORAGE_KEY) || "[]");
+        cartItems.length = 0;
+        stored.forEach((item) => cartItems.push(item));
+      } catch (error) {
+        cartItems.length = 0;
+      }
+    }
+
+    function persistCartToStorage() {
+      sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(cartItems));
+      sessionStorage.setItem("wonilCartSnapshot", JSON.stringify(getCartSnapshot()));
+    }
+
+    function loadWishFromStorage() {
+      try {
+        const stored = JSON.parse(sessionStorage.getItem(WISH_STORAGE_KEY) || "[]");
+        wishItems.length = 0;
+        stored.forEach((item) => wishItems.push(item));
+      } catch (error) {
+        wishItems.length = 0;
+      }
+    }
+
+    function persistWishToStorage() {
+      sessionStorage.setItem(WISH_STORAGE_KEY, JSON.stringify(wishItems));
+    }
 
     function escapeHtml(value) {
       return String(value ?? "")
@@ -1024,8 +1246,98 @@
         .replaceAll("'", "&#039;");
     }
 
+    function jsonForInlineScript(value) {
+      return JSON.stringify(value)
+        .replace(/</g, "\\u003c")
+        .replace(/\u2028/g, "\\u2028")
+        .replace(/\u2029/g, "\\u2029");
+    }
+
+    function getPageBaseUrl() {
+      const href = location.href.split("#")[0].split("?")[0];
+      const lastSlash = Math.max(href.lastIndexOf("/"), href.lastIndexOf("\\"));
+      return lastSlash >= 0 ? href.slice(0, lastSlash + 1) : href;
+    }
+
+    function getPageBaseTag() {
+      return `<base href="${escapeHtml(getPageBaseUrl())}">`;
+    }
+
+    function toAssetUrl(relativePath) {
+      return getPageBaseUrl() + String(relativePath || "").replace(/^\.?\//, "");
+    }
+
+    const bookCoverDataUrls = {};
+
+    function loadBookCoverAsDataUrl(imageNumber) {
+      const embedded = window.BOOK_COVER_EMBEDS?.[imageNumber] || window.BOOK_COVER_EMBEDS?.[String(imageNumber)];
+      if (embedded) {
+        bookCoverDataUrls[imageNumber] = embedded;
+        return Promise.resolve(embedded);
+      }
+
+      if (bookCoverDataUrls[imageNumber]) {
+        return Promise.resolve(bookCoverDataUrls[imageNumber]);
+      }
+
+      return new Promise((resolve) => {
+        const img = new Image();
+        img.onload = () => {
+          try {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.naturalWidth || img.width;
+            canvas.height = img.naturalHeight || img.height;
+            canvas.getContext("2d").drawImage(img, 0, 0);
+            bookCoverDataUrls[imageNumber] = canvas.toDataURL("image/png");
+          } catch (error) {
+            bookCoverDataUrls[imageNumber] = `book/${imageNumber}.png`;
+          }
+          resolve(bookCoverDataUrls[imageNumber]);
+        };
+        img.onerror = () => {
+          bookCoverDataUrls[imageNumber] = `book/${imageNumber}.png`;
+          resolve(bookCoverDataUrls[imageNumber]);
+        };
+        img.src = `book/${imageNumber}.png`;
+      });
+    }
+
+    function getBookCoverSrc(imageNumber) {
+      const embedded = window.BOOK_COVER_EMBEDS?.[imageNumber] || window.BOOK_COVER_EMBEDS?.[String(imageNumber)];
+      if (embedded) {
+        return embedded;
+      }
+      return bookCoverDataUrls[imageNumber] || `book/${imageNumber}.png`;
+    }
+
+    function getBookCoverDataUrlMap() {
+      const map = {};
+      books.forEach((book) => {
+        map[book.imageNumber] = getBookCoverSrc(book.imageNumber);
+      });
+      return map;
+    }
+
+    function preloadAllBookCovers() {
+      if (window.BOOK_COVER_EMBEDS) {
+        books.forEach((book) => {
+          const embedded = window.BOOK_COVER_EMBEDS[book.imageNumber] || window.BOOK_COVER_EMBEDS[String(book.imageNumber)];
+          if (embedded) {
+            bookCoverDataUrls[book.imageNumber] = embedded;
+          }
+        });
+        return Promise.resolve();
+      }
+
+      return Promise.all(books.map((book) => loadBookCoverAsDataUrl(book.imageNumber)));
+    }
+
     function cleanKakaoText(value) {
       return escapeHtml(String(value ?? "").replace(/<[^>]*>/g, ""));
+    }
+
+    function getPlainKakaoText(value) {
+      return String(value ?? "").replace(/<[^>]*>/g, "").trim();
     }
 
     function createWindowPage(title, content) {
@@ -1176,6 +1488,1057 @@
               ${content}
             </section>
           </div>
+        </body>
+        </html>
+      `;
+    }
+
+    function createDetailPage(title, content) {
+      return `
+        <!DOCTYPE html>
+        <html lang="ko">
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          ${getPageBaseTag()}
+          <title>${title}</title>
+          <style>
+            * {
+              box-sizing: border-box;
+              margin: 0;
+              padding: 0;
+            }
+
+            body {
+              background: #ffffff;
+              color: #222222;
+              font-family: Arial, "Malgun Gothic", sans-serif;
+              font-size: 12px;
+            }
+
+            a {
+              color: inherit;
+              text-decoration: none;
+            }
+
+            button {
+              border: 0;
+              background: none;
+              font-family: inherit;
+              cursor: pointer;
+            }
+
+            .detail-top {
+              border-bottom: 1px solid #eeeeee;
+              background: #ffffff;
+            }
+
+            .detail-top-inner,
+            .detail-wrap,
+            .detail-footer-inner {
+              width: 980px;
+              margin: 0 auto;
+            }
+
+            .detail-top-inner {
+              display: flex;
+              align-items: center;
+              gap: 28px;
+              height: 74px;
+            }
+
+            .detail-logo {
+              color: #e60012;
+              font-size: 22px;
+              font-weight: 900;
+              letter-spacing: -1px;
+            }
+
+            .detail-search {
+              display: flex;
+              width: 360px;
+              height: 32px;
+              border: 2px solid #dddddd;
+              background: #ffffff;
+            }
+
+            .detail-search-wrap {
+              position: relative;
+            }
+
+            .detail-search-suggestions {
+              position: absolute;
+              top: calc(100% + 4px);
+              left: 0;
+              z-index: 40;
+              overflow: hidden;
+              width: 360px;
+              border: 1px solid #dddddd;
+              background: #ffffff;
+              box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            }
+
+            .detail-search-suggestions[hidden] {
+              display: none;
+            }
+
+            .detail-search-suggestion {
+              display: block;
+              width: 100%;
+              padding: 10px 12px;
+              border: 0;
+              border-bottom: 1px solid #eeeeee;
+              background: #ffffff;
+              color: #333333;
+              font-size: 12px;
+              line-height: 1.45;
+              text-align: left;
+              cursor: pointer;
+            }
+
+            .detail-search-suggestion:last-child {
+              border-bottom: 0;
+            }
+
+            .detail-search-suggestion:hover,
+            .detail-search-suggestion:focus-visible {
+              background: #f5fff8;
+              outline: none;
+            }
+
+            .detail-search input {
+              flex: 1;
+              border: 0;
+              padding: 0 10px;
+              color: #777777;
+              font-size: 12px;
+            }
+
+            .detail-search button {
+              width: 42px;
+              border-left: 1px solid #dddddd;
+              color: #666666;
+              font-weight: 900;
+            }
+
+            .detail-nav {
+              border-top: 2px solid #e60012;
+              border-bottom: 1px solid #dddddd;
+              background: #ffffff;
+            }
+
+            .detail-nav-inner {
+              display: flex;
+              width: 980px;
+              margin: 0 auto;
+            }
+
+            .detail-nav a,
+            .detail-nav .detail-tab-btn {
+              min-width: 112px;
+              padding: 12px 0;
+              color: #333333;
+              font-weight: 800;
+              text-align: center;
+            }
+
+            .detail-nav a.active,
+            .detail-nav .detail-tab-btn.active {
+              background: #2f9e55;
+              color: #ffffff;
+            }
+
+            .detail-wrap {
+              display: grid;
+              grid-template-columns: 1fr 210px 94px;
+              gap: 24px;
+              padding: 24px 0 54px;
+            }
+
+            .detail-main {
+              min-width: 0;
+            }
+
+            .breadcrumb {
+              margin-bottom: 18px;
+              color: #888888;
+              font-size: 11px;
+            }
+
+            .product-hero {
+              display: grid;
+              grid-template-columns: 260px 1fr;
+              gap: 26px;
+              padding-bottom: 28px;
+              border-bottom: 1px solid #dddddd;
+            }
+
+            .detail-cover-box {
+              text-align: center;
+            }
+
+            .detail-cover {
+              width: 210px;
+              min-height: 300px;
+              border: 1px solid #d8d8d8;
+              object-fit: cover;
+              box-shadow: 0 4px 10px rgba(0, 0, 0, 0.16);
+              cursor: pointer;
+            }
+
+            .cover-buttons {
+              display: flex;
+              justify-content: center;
+              gap: 6px;
+              margin-top: 14px;
+            }
+
+            .cover-buttons span,
+            .cover-buttons button,
+            .small-line-button {
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              min-width: 70px;
+              height: 26px;
+              border: 1px solid #dddddd;
+              background: #ffffff;
+              color: #666666;
+              font-family: inherit;
+              font-size: 11px;
+              cursor: pointer;
+            }
+
+            .product-title-area h1 {
+              margin: 10px 0 12px;
+              color: #111111;
+              font-size: 24px;
+              font-weight: 900;
+              line-height: 1.35;
+              letter-spacing: -1px;
+            }
+
+            .detail-badges {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 4px;
+            }
+
+            .detail-badge {
+              padding: 3px 7px;
+              border: 1px solid #cccccc;
+              color: #555555;
+              font-size: 11px;
+            }
+
+            .detail-badge.green {
+              border-color: #2f9e55;
+              background: #2f9e55;
+              color: #ffffff;
+            }
+
+            .product-title-area .desc,
+            .product-title-area .review {
+              margin-bottom: 8px;
+              color: #666666;
+              line-height: 1.55;
+            }
+
+            .product-title-area .stars {
+              color: #e60012;
+              letter-spacing: -1px;
+            }
+
+            .product-price {
+              margin: 18px 0;
+              padding: 16px 0;
+              border-top: 2px solid #333333;
+              border-bottom: 1px solid #dddddd;
+            }
+
+            .price-row {
+              display: flex;
+              align-items: center;
+              margin-bottom: 8px;
+            }
+
+            .price-row span:first-child {
+              width: 86px;
+              color: #777777;
+            }
+
+            .price-row del {
+              color: #999999;
+            }
+
+            .price-row strong {
+              color: #e60012;
+              font-size: 20px;
+            }
+
+            .benefit-box {
+              margin-top: 12px;
+              border: 1px solid #d8eadf;
+              padding: 12px;
+              background: #fbfffc;
+              color: #4f7d61;
+              line-height: 1.6;
+            }
+
+            .side-buy-box {
+              position: sticky;
+              top: 18px;
+              align-self: start;
+              z-index: 20;
+              border: 1px solid #d8d8d8;
+              background: #ffffff;
+              box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            }
+
+            .side-cover {
+              display: block;
+              width: 88px;
+              height: 126px;
+              margin: 20px auto 12px;
+              border: 1px solid #e0e0e0;
+              object-fit: cover;
+              box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .side-title {
+              padding: 0 16px;
+              color: #222222;
+              font-size: 13px;
+              font-weight: 800;
+              line-height: 1.5;
+              text-align: center;
+              word-break: keep-all;
+            }
+
+            .side-price {
+              padding: 12px 16px 14px;
+              color: #e60012;
+              font-size: 18px;
+              font-weight: 900;
+              text-align: center;
+              letter-spacing: -0.5px;
+            }
+
+            .side-quantity {
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              gap: 0;
+              margin: 0 16px 14px;
+              border: 1px solid #dddddd;
+            }
+
+            .side-quantity button {
+              width: 32px;
+              height: 32px;
+              border: 0;
+              border-right: 1px solid #dddddd;
+              background: #fafafa;
+              color: #555555;
+              font-size: 16px;
+              font-weight: 700;
+              line-height: 1;
+              cursor: pointer;
+            }
+
+            .side-quantity button:last-of-type {
+              border-right: 0;
+              border-left: 1px solid #dddddd;
+            }
+
+            .side-quantity button:hover {
+              background: #f0f0f0;
+            }
+
+            .side-quantity input {
+              width: 42px;
+              height: 32px;
+              border: 0;
+              background: #ffffff;
+              color: #222222;
+              font-size: 13px;
+              font-weight: 700;
+              text-align: center;
+            }
+
+            .side-actions {
+              padding: 0 16px 18px;
+            }
+
+            .side-actions button {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 100%;
+              height: 40px;
+              margin-bottom: 8px;
+              border: 1px solid #cccccc;
+              background: #ffffff;
+              color: #333333;
+              font-family: inherit;
+              font-size: 13px;
+              font-weight: 900;
+              letter-spacing: -0.3px;
+              cursor: pointer;
+              transition: background 0.15s, border-color 0.15s;
+            }
+
+            .side-actions button:last-child {
+              margin-bottom: 0;
+            }
+
+            .side-actions .cart {
+              border-color: #c90010;
+              background: #ffffff;
+              color: #c90010;
+            }
+
+            .side-actions .cart:hover {
+              background: #fff5f5;
+            }
+
+            .side-actions .buy {
+              border-color: #2f9e55;
+              background: #2f9e55;
+              color: #ffffff;
+            }
+
+            .side-actions .buy:hover {
+              background: #278a49;
+              border-color: #278a49;
+            }
+
+            .side-actions .wish {
+              border-color: #0b8f3a;
+              background: #ffffff;
+              color: #0b8f3a;
+            }
+
+            .side-actions .wish:hover {
+              background: #f3fbf6;
+            }
+
+            .detail-tabs {
+              display: flex;
+              margin-top: 28px;
+              border-bottom: 2px solid #2f9e55;
+            }
+
+            .detail-tabs button {
+              flex: 1;
+              padding: 13px 0;
+              border: 1px solid #dddddd;
+              border-bottom: 0;
+              background: #ffffff;
+              color: #555555;
+              font-family: inherit;
+              font-weight: 900;
+              text-align: center;
+              cursor: pointer;
+            }
+
+            .detail-tabs button.active {
+              border-color: #2f9e55;
+              background: #2f9e55;
+              color: #ffffff;
+            }
+
+            .detail-section {
+              padding: 34px 0;
+              border-bottom: 1px solid #e5e5e5;
+            }
+
+            .detail-section[data-detail-panel] {
+              display: none;
+            }
+
+            .detail-section[data-detail-panel].active {
+              display: block;
+            }
+
+            .detail-section h2 {
+              margin-bottom: 18px;
+              color: #111111;
+              font-size: 18px;
+              font-weight: 900;
+            }
+
+            .info-table {
+              width: 100%;
+              border-collapse: collapse;
+              color: #555555;
+            }
+
+            .info-table th,
+            .info-table td {
+              border: 1px solid #eeeeee;
+              padding: 11px 14px;
+              line-height: 1.6;
+              text-align: left;
+            }
+
+            .info-table th {
+              width: 140px;
+              background: #fafafa;
+              color: #333333;
+            }
+
+            .book-copy,
+            .intro-text,
+            .review-text {
+              color: #555555;
+              font-size: 13px;
+              line-height: 1.9;
+            }
+
+            .description-block {
+              margin-top: 26px;
+              padding-top: 24px;
+              border-top: 1px solid #eeeeee;
+            }
+
+            .description-block h3 {
+              margin-bottom: 12px;
+              color: #111111;
+              font-size: 16px;
+              font-weight: 900;
+            }
+
+            .description-block p {
+              color: #555555;
+              font-size: 13px;
+              line-height: 1.9;
+            }
+
+            .field-tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 8px;
+              margin-top: 10px;
+            }
+
+            .field-tags span {
+              padding: 6px 10px;
+              border: 1px solid #dddddd;
+              background: #fafafa;
+              color: #555555;
+              font-size: 12px;
+            }
+
+            .toc-list {
+              columns: 2;
+              color: #555555;
+              line-height: 1.9;
+              list-style-position: inside;
+            }
+
+            .recommend-grid {
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              gap: 14px;
+            }
+
+            .api-shelf {
+              margin-bottom: 34px;
+            }
+
+            .api-shelf h3 {
+              margin-bottom: 14px;
+              color: #333333;
+              font-size: 15px;
+              font-weight: 900;
+            }
+
+            .api-book-grid {
+              display: grid;
+              grid-template-columns: repeat(4, 1fr);
+              gap: 14px;
+              padding: 16px;
+              border: 1px solid #eeeeee;
+              background: #ffffff;
+            }
+
+            .api-book-card {
+              display: block;
+              min-height: 210px;
+              border: 1px solid transparent;
+              padding: 10px;
+              color: inherit;
+              text-align: center;
+            }
+
+            .api-book-card:hover,
+            .api-book-card:focus-visible {
+              border-color: #2f9e55;
+              box-shadow: 0 0 0 3px rgba(47, 158, 85, 0.12);
+            }
+
+            .api-book-card img,
+            .api-book-cover-empty {
+              display: block;
+              width: 82px;
+              height: 118px;
+              margin: 0 auto 10px;
+              border: 1px solid #dddddd;
+              object-fit: cover;
+            }
+
+            .api-book-cover-empty {
+              display: grid;
+              place-items: center;
+              background: #f5f5f5;
+              color: #999999;
+              font-size: 11px;
+            }
+
+            .api-book-card strong {
+              display: block;
+              color: #111111;
+              font-size: 12px;
+              line-height: 1.45;
+            }
+
+            .api-book-card span {
+              display: block;
+              margin-top: 5px;
+              color: #777777;
+              font-size: 11px;
+              line-height: 1.4;
+            }
+
+            .api-book-card em {
+              display: block;
+              margin-top: 7px;
+              color: #e60012;
+              font-style: normal;
+              font-weight: 900;
+            }
+
+            .recommend-card {
+              display: block;
+              width: 100%;
+              border: 1px solid #eeeeee;
+              padding: 12px;
+              background: #ffffff;
+              color: inherit;
+              font-family: inherit;
+              text-align: center;
+              cursor: pointer;
+            }
+
+            .recommend-card:hover,
+            .recommend-card:focus-visible {
+              border-color: #2f9e55;
+              box-shadow: 0 0 0 3px rgba(47, 158, 85, 0.12);
+            }
+
+            .recommend-card img {
+              width: 78px;
+              height: 112px;
+              border: 1px solid #dddddd;
+              object-fit: cover;
+            }
+
+            .recommend-card strong {
+              display: block;
+              margin-top: 8px;
+              color: #333333;
+              font-size: 11px;
+              line-height: 1.5;
+            }
+
+            .review-score {
+              display: grid;
+              grid-template-columns: 170px 1fr;
+              gap: 18px;
+              align-items: center;
+              border: 1px solid #e2f2e6;
+              padding: 18px;
+              background: #fbfffc;
+            }
+
+            .review-score strong {
+              color: #2f9e55;
+              font-size: 34px;
+            }
+
+            .stars {
+              color: #2f9e55;
+              letter-spacing: 1px;
+            }
+
+            .detail-footer {
+              border-top: 1px solid #eeeeee;
+              background: #fafafa;
+              color: #777777;
+            }
+
+            .detail-footer-inner {
+              padding: 28px 0 40px;
+              line-height: 1.8;
+            }
+
+            .detail-anchor-tabs {
+              display: flex;
+              margin-top: 28px;
+              border-bottom: 2px solid #2f9e55;
+            }
+
+            .detail-anchor-tabs a,
+            .detail-anchor-tabs .detail-tab-btn {
+              flex: 1;
+              padding: 13px 0;
+              border: 1px solid #dddddd;
+              border-bottom: 0;
+              background: #ffffff;
+              color: #555555;
+              font-weight: 900;
+              text-align: center;
+            }
+
+            .detail-anchor-tabs a.active,
+            .detail-anchor-tabs .detail-tab-btn.active {
+              border-color: #2f9e55;
+              background: #2f9e55;
+              color: #ffffff;
+            }
+
+            .content-block {
+              padding: 34px 0;
+              border-bottom: 1px solid #e5e5e5;
+              scroll-margin-top: 72px;
+            }
+
+            .content-block h2 {
+              margin-bottom: 18px;
+              color: #111111;
+              font-size: 18px;
+              font-weight: 900;
+            }
+
+            .event-banners {
+              display: grid;
+              grid-template-columns: 1fr 1fr;
+              gap: 12px;
+              margin-top: 20px;
+            }
+
+            .event-banner {
+              min-height: 72px;
+              padding: 16px;
+              border: 1px solid #e5e5e5;
+              background: linear-gradient(135deg, #fff8f8, #ffffff);
+              color: #555555;
+              line-height: 1.55;
+            }
+
+            .event-banner strong {
+              display: block;
+              margin-bottom: 4px;
+              color: #e60012;
+            }
+
+            .recommend-reason-box {
+              margin-top: 20px;
+              padding: 18px;
+              border: 1px solid #e8dff5;
+              border-radius: 6px;
+              background: #f9f6fc;
+              line-height: 1.75;
+            }
+
+            .recommend-reason-box .reason-tags {
+              display: flex;
+              flex-wrap: wrap;
+              gap: 6px;
+              margin-bottom: 10px;
+            }
+
+            .recommend-reason-box .reason-tags span {
+              color: #7b5ea7;
+              font-weight: 800;
+            }
+
+            .collapsible-text {
+              overflow: hidden;
+              max-height: 120px;
+              transition: max-height 0.35s ease;
+            }
+
+            .collapsible-text.expanded {
+              max-height: none;
+            }
+
+            .more-button {
+              display: inline-flex;
+              align-items: center;
+              gap: 4px;
+              margin-top: 14px;
+              padding: 8px 18px;
+              border: 1px solid #cccccc;
+              background: #ffffff;
+              color: #555555;
+              font-size: 12px;
+              font-weight: 700;
+              cursor: pointer;
+            }
+
+            .author-profile {
+              display: grid;
+              grid-template-columns: 80px 1fr;
+              gap: 18px;
+              align-items: start;
+            }
+
+            .author-avatar {
+              width: 72px;
+              height: 72px;
+              border-radius: 50%;
+              border: 1px solid #dddddd;
+              background: linear-gradient(135deg, #e8f5ec, #f5f5f5);
+              color: #2f9e55;
+              font-size: 28px;
+              font-weight: 900;
+              line-height: 72px;
+              text-align: center;
+            }
+
+            .author-works {
+              display: flex;
+              gap: 12px;
+              margin-top: 18px;
+              overflow-x: auto;
+              padding-bottom: 8px;
+            }
+
+            .author-work-card {
+              flex: 0 0 92px;
+              border: 0;
+              background: none;
+              color: inherit;
+              font-family: inherit;
+              text-align: center;
+              cursor: pointer;
+            }
+
+            .author-work-card img {
+              width: 72px;
+              height: 104px;
+              border: 1px solid #dddddd;
+              object-fit: cover;
+            }
+
+            .author-work-card strong {
+              display: block;
+              margin-top: 6px;
+              color: #333333;
+              font-size: 10px;
+              line-height: 1.4;
+            }
+
+            .review-summary {
+              display: grid;
+              grid-template-columns: 140px 1fr;
+              gap: 24px;
+              margin-bottom: 24px;
+              padding: 20px;
+              border: 1px solid #e2f2e6;
+              background: #fbfffc;
+            }
+
+            .review-summary-score strong {
+              display: block;
+              color: #2f9e55;
+              font-size: 36px;
+            }
+
+            .rating-bars {
+              display: grid;
+              gap: 5px;
+            }
+
+            .rating-bar-row {
+              display: grid;
+              grid-template-columns: 36px 1fr 28px;
+              gap: 8px;
+              align-items: center;
+              color: #777777;
+              font-size: 11px;
+            }
+
+            .rating-bar-track {
+              height: 8px;
+              background: #eeeeee;
+            }
+
+            .rating-bar-fill {
+              height: 100%;
+              background: #2f9e55;
+            }
+
+            .review-item {
+              padding: 16px 0;
+              border-bottom: 1px solid #eeeeee;
+            }
+
+            .review-item-head {
+              display: flex;
+              align-items: center;
+              gap: 10px;
+              margin-bottom: 8px;
+            }
+
+            .review-item-head .review-stars {
+              color: #2f9e55;
+            }
+
+            .review-item-head span {
+              color: #999999;
+              font-size: 11px;
+            }
+
+            .review-item p {
+              color: #555555;
+              font-size: 13px;
+              line-height: 1.75;
+            }
+
+            .detail-recent-box {
+              position: sticky;
+              top: 18px;
+              align-self: start;
+              overflow: hidden;
+              border-radius: 4px;
+              background: #ffffff;
+              text-align: center;
+            }
+
+            .detail-recent-title {
+              padding: 10px 0;
+              background: #636b6b;
+              color: #ffffff;
+              font-size: 12px;
+              font-weight: 900;
+            }
+
+            .detail-recent-list {
+              padding: 7px 0 10px;
+              list-style: none;
+            }
+
+            .detail-recent-list li {
+              margin-bottom: 6px;
+            }
+
+            .detail-recent-list img {
+              width: 72px;
+              height: 82px;
+              border-radius: 4px;
+              border: 1px solid #dddddd;
+              object-fit: cover;
+              cursor: pointer;
+            }
+
+            .scroll-top-btn {
+              display: block;
+              width: 72px;
+              margin: 6px auto 10px;
+              padding: 6px 0;
+              border: 1px solid #dddddd;
+              background: #ffffff;
+              color: #555555;
+              font-size: 11px;
+              font-weight: 700;
+              cursor: pointer;
+            }
+
+            .exchange-info {
+              color: #555555;
+              font-size: 13px;
+              line-height: 1.85;
+            }
+
+            .exchange-info h3 {
+              margin: 16px 0 8px;
+              color: #111111;
+              font-size: 14px;
+            }
+
+            .clickable-title {
+              cursor: pointer;
+            }
+
+            .clickable-title:hover {
+              color: #0b8f3a;
+            }
+
+            @media (max-width: 1020px) {
+              .detail-top-inner,
+              .detail-wrap,
+              .detail-footer-inner,
+              .detail-nav-inner {
+                width: auto;
+                margin: 0 18px;
+              }
+
+              .detail-wrap {
+                grid-template-columns: 1fr;
+              }
+
+              .detail-recent-box {
+                display: none;
+              }
+
+              .side-buy-box {
+                position: static;
+              }
+            }
+
+            @media (max-width: 720px) {
+              .detail-top-inner {
+                display: block;
+                height: auto;
+                padding: 16px 0;
+              }
+
+              .detail-search {
+                width: 100%;
+                margin-top: 12px;
+              }
+
+              .product-hero {
+                grid-template-columns: 1fr;
+              }
+
+              .toc-list {
+                columns: 1;
+              }
+
+              .recommend-grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+
+              .api-book-grid {
+                grid-template-columns: repeat(2, 1fr);
+              }
+
+              .event-banners {
+                grid-template-columns: 1fr;
+              }
+
+              .review-summary {
+                grid-template-columns: 1fr;
+              }
+            }
+          </style>
+        </head>
+        <body>
+          ${content}
         </body>
         </html>
       `;
@@ -1356,46 +2719,1420 @@
       serviceWindow.focus();
     }
 
-    function createKakaoBookResultContent(book, documents) {
-      const resultItems = documents.length
-        ? documents.map((item) => {
-          const title = cleanKakaoText(item.title);
-          const authors = cleanKakaoText((item.authors || []).join(", "));
-          const publisher = cleanKakaoText(item.publisher);
-          const price = item.sale_price > 0 ? formatPrice(item.sale_price) : "가격 정보 없음";
-          const thumbnail = item.thumbnail
-            ? `<img src="${escapeHtml(item.thumbnail)}" alt="${title} 표지" style="width:82px;height:118px;border:1px solid #ddd;object-fit:cover;">`
-            : `<div style="display:grid;place-items:center;width:82px;height:118px;border:1px solid #ddd;background:#f5f5f5;color:#999;font-size:12px;">이미지 없음</div>`;
-          const link = item.url && item.url.startsWith("https://")
-            ? `<a class="line-button" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">카카오에서 보기</a>`
-            : "";
+    function writeToChildWindow(targetWindow, pageHtml) {
+      if (!targetWindow || targetWindow.closed) {
+        return false;
+      }
 
-          return `
-            <li style="display:grid;grid-template-columns:82px 1fr;gap:14px;margin-bottom:14px;padding-bottom:14px;border-bottom:1px solid #eee;">
-              ${thumbnail}
-              <div>
-                <strong style="display:block;margin-bottom:7px;color:#111;font-size:16px;">${title}</strong>
-                <p style="margin-bottom:5px;color:#666;line-height:1.6;">저자: ${authors || "정보 없음"}</p>
-                <p style="margin-bottom:5px;color:#666;line-height:1.6;">출판사: ${publisher || "정보 없음"}</p>
-                <p style="margin-bottom:10px;color:#e60012;font-weight:900;">${price}</p>
-                ${link}
-              </div>
-            </li>
-          `;
-        }).join("")
-        : `<li class="notice-box">카카오 책 검색 결과가 없습니다.</li>`;
+      targetWindow.document.open();
+      targetWindow.document.write(pageHtml);
+      targetWindow.document.close();
+      targetWindow.focus();
+      return true;
+    }
+
+    function openHtmlPage(pageHtml) {
+      let newWindow = window.open("about:blank", "_blank");
+
+      if (newWindow && !newWindow.closed && writeToChildWindow(newWindow, pageHtml)) {
+        return newWindow;
+      }
+
+      try {
+        const blob = new Blob([pageHtml], { type: "text/html;charset=utf-8" });
+        const blobUrl = URL.createObjectURL(blob);
+        newWindow = window.open(blobUrl, "_blank");
+        window.setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+      } catch (error) {
+        newWindow = null;
+      }
+
+      if (newWindow && !newWindow.closed) {
+        try {
+          newWindow.focus();
+        } catch (error) {
+          // ignore
+        }
+
+        return newWindow;
+      }
+
+      if (window.confirm("새 탭을 열 수 없습니다. 현재 탭에서 페이지를 열까요?")) {
+        document.open();
+        document.write(pageHtml);
+        document.close();
+        return window;
+      }
+
+      alert("브라우저 주소창의 팝업 차단 아이콘에서 이 사이트의 팝업(새 탭)을 허용한 뒤 다시 시도해 주세요.");
+      return null;
+    }
+
+    function openNamedWindow(pageHtml) {
+      return openHtmlPage(pageHtml);
+    }
+
+    function getCartSnapshot() {
+      return cartItems.map((item) => {
+        const book = books[item.bookIndex];
+        return {
+          bookIndex: item.bookIndex,
+          quantity: item.quantity,
+          title: book.title,
+          author: book.author,
+          price: book.price,
+          originalPrice: book.originalPrice,
+          cover: getBookCoverSrc(book.imageNumber)
+        };
+      });
+    }
+
+    function buildWonilCartPageHtml(items) {
+      const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
+      const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const originalTotal = items.reduce((sum, item) => sum + item.originalPrice * item.quantity, 0);
+      const discount = Math.max(0, originalTotal - subtotal);
+      const shipping = subtotal >= 15000 ? 0 : 2500;
+      const total = subtotal + shipping;
+
+      const itemRows = items.map((item) => {
+        const linePrice = item.price * item.quantity;
+        const discountRate = Math.round((1 - item.price / item.originalPrice) * 100);
+        return [
+          "<article class=\"cart-item\">",
+          "<label class=\"cart-check\"><input type=\"checkbox\" checked aria-label=\"상품 선택\"></label>",
+          "<img src=\"" + escapeHtml(item.cover) + "\" alt=\"" + escapeHtml(item.title) + " 표지\">",
+          "<div class=\"cart-item-body\">",
+          "<div class=\"cart-item-top\">",
+          "<a class=\"cart-item-title\" href=\"#\">" + escapeHtml(item.title) + "</a>",
+          "<button class=\"cart-remove\" type=\"button\">삭제</button>",
+          "</div>",
+          "<p class=\"cart-item-meta\">" + escapeHtml(item.author) + " · 원일회사</p>",
+          "<p class=\"cart-delivery\">내일(토) 도착 · 무료배송</p>",
+          "<div class=\"cart-price-row\">",
+          "<span class=\"cart-origin\">" + formatPrice(item.originalPrice * item.quantity) + "</span>",
+          "<span class=\"cart-rate\">" + discountRate + "%</span>",
+          "<strong class=\"cart-price\">" + formatPrice(linePrice) + "</strong>",
+          "</div>",
+          "<div class=\"cart-qty\">",
+          "<button type=\"button\">-</button>",
+          "<span>" + item.quantity + "</span>",
+          "<button type=\"button\">+</button>",
+          "</div>",
+          "</div>",
+          "</article>"
+        ].join("");
+      }).join("");
+
+      const checkoutHtml = JSON.stringify(buildWonilCheckoutPageHtml(items));
+
+      return [
+        "<!DOCTYPE html><html lang=\"ko\"><head><meta charset=\"UTF-8\">",
+        "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">",
+        getPageBaseTag(),
+        "<title>원일문고 장바구니</title><style>",
+        "*{box-sizing:border-box;margin:0;padding:0}",
+        "body{background:#f2f2f2;color:#111;font-family:Arial,'Malgun Gothic',sans-serif;font-size:13px}",
+        ".top-bar{background:#fff;border-bottom:1px solid #ddd;padding:18px 24px}",
+        ".top-bar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}",
+        ".top-bar h1{font-size:22px;font-weight:900}",
+        ".steps{color:#888;font-size:12px}",
+        ".steps strong{color:#0074e9}",
+        ".layout{max-width:1080px;margin:0 auto;padding:20px 24px 40px;display:grid;grid-template-columns:1fr 280px;gap:20px;align-items:start}",
+        ".cart-panel{background:#fff;border:1px solid #ddd}",
+        ".cart-panel-head{display:flex;align-items:center;gap:10px;padding:14px 18px;border-bottom:1px solid #eee;font-weight:800}",
+        ".cart-item{display:grid;grid-template-columns:28px 92px 1fr;gap:14px;padding:18px;border-bottom:1px solid #eee}",
+        ".cart-item img{width:92px;height:132px;border:1px solid #ddd;object-fit:cover}",
+        ".cart-item-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px}",
+        ".cart-item-title{color:#0074e9;font-size:14px;font-weight:800;line-height:1.45;text-decoration:none}",
+        ".cart-remove{border:0;background:none;color:#888;font-size:12px;cursor:pointer}",
+        ".cart-item-meta,.cart-delivery{color:#666;margin-bottom:6px;line-height:1.5}",
+        ".cart-delivery{color:#00891a;font-weight:700}",
+        ".cart-price-row{display:flex;align-items:center;gap:8px;margin:10px 0}",
+        ".cart-origin{color:#999;text-decoration:line-through;font-size:12px}",
+        ".cart-rate{display:inline-block;padding:2px 6px;background:#e60012;color:#fff;font-size:11px;font-weight:900}",
+        ".cart-price{font-size:18px;font-weight:900}",
+        ".cart-qty{display:inline-flex;border:1px solid #ddd}",
+        ".cart-qty button,.cart-qty span{width:28px;height:28px;border:0;background:#fafafa;font-weight:700;cursor:pointer}",
+        ".cart-qty span{display:grid;place-items:center;background:#fff}",
+        ".summary{background:#fff;border:1px solid #ddd;padding:18px;position:sticky;top:16px}",
+        ".summary h2{font-size:16px;font-weight:900;margin-bottom:14px}",
+        ".summary-row{display:flex;justify-content:space-between;margin-bottom:8px;color:#555;line-height:1.6}",
+        ".summary-row.discount{color:#e60012}",
+        ".summary-total{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:2px solid #333;font-size:18px;font-weight:900}",
+        ".summary-total strong{color:#111;font-size:24px}",
+        ".buy-all{width:100%;height:48px;margin-top:16px;border:0;background:#0074e9;color:#fff;font-size:15px;font-weight:900;cursor:pointer}",
+        ".buy-all:hover{background:#0062c4}",
+        "@media(max-width:900px){.layout{grid-template-columns:1fr}}",
+        "</style></head><body>",
+        "<header class=\"top-bar\"><div class=\"top-bar-inner\">",
+        "<h1>장바구니(" + totalQty + ")</h1>",
+        "<p class=\"steps\">01 옵션선택 &gt; <strong>02 장바구니</strong> &gt; 03 주문/결제 &gt; 04 주문완료</p>",
+        "</div></header>",
+        "<div class=\"layout\">",
+        "<section class=\"cart-panel\">",
+        "<div class=\"cart-panel-head\"><label><input type=\"checkbox\" checked> 전체선택</label></div>",
+        itemRows || "<p style=\"padding:24px;color:#777;text-align:center\">장바구니가 비어 있습니다.</p>",
+        "</section>",
+        "<aside class=\"summary\">",
+        "<h2>주문 예상 금액</h2>",
+        "<div class=\"summary-row\"><span>총 상품 가격</span><span>" + formatPrice(subtotal) + "</span></div>",
+        "<div class=\"summary-row discount\"><span>총 즉시할인</span><span>-" + formatPrice(discount) + "</span></div>",
+        "<div class=\"summary-row\"><span>총 배송비</span><span>+" + formatPrice(shipping) + "</span></div>",
+        "<div class=\"summary-total\"><span>결제 예정 금액</span><strong>" + formatPrice(total) + "</strong></div>",
+        "<button class=\"buy-all\" type=\"button\" id=\"cartCheckoutBtn\">총 " + totalQty + "개 상품 구매하기</button>",
+        "</aside></div>",
+        "<scr" + "ipt>",
+        "function openHtmlInline(pageHtml){var w=null;try{var b=new Blob([pageHtml],{type:'text/html;charset=utf-8'});var u=URL.createObjectURL(b);w=window.open(u,'_blank');setTimeout(function(){URL.revokeObjectURL(u);},2000);}catch(e){w=null;}if(w&&!w.closed){try{w.focus();}catch(e){}return w;}w=window.open('about:blank','_blank');if(w&&!w.closed){w.document.open();w.document.write(pageHtml);w.document.close();w.focus();return w;}if(confirm('새 탭을 열 수 없습니다. 현재 탭에서 결제 페이지를 열까요?')){document.open();document.write(pageHtml);document.close();return window;}alert('브라우저에서 팝업(새 탭) 허용 후 다시 시도해 주세요.');return null;}",
+        "document.getElementById('cartCheckoutBtn').addEventListener('click',function(){openHtmlInline(" + checkoutHtml + ");});",
+        "<" + "/script></body></html>"
+      ].join("");
+    }
+
+    function buildWonilCheckoutPageHtml(items) {
+      const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      const couponDiscount = Math.min(2030, Math.round(subtotal * 0.03));
+      const memberDiscount = Math.min(1450, Math.round(subtotal * 0.02));
+      const shipping = subtotal >= 15000 ? 0 : 2500;
+      const total = subtotal - couponDiscount - memberDiscount + shipping;
+      const totalQty = items.reduce((sum, item) => sum + item.quantity, 0);
+      const firstItem = items[0] || { title: "도서", cover: "book/1.png", quantity: 1, price: 0, author: "" };
+
+      return [
+        "<!DOCTYPE html><html lang=\"ko\"><head><meta charset=\"UTF-8\">",
+        "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">",
+        getPageBaseTag(),
+        "<title>원일문고 주문/결제</title><style>",
+        "*{box-sizing:border-box;margin:0;padding:0}",
+        "body{background:#f2f2f2;color:#111;font-family:Arial,'Malgun Gothic',sans-serif;font-size:13px}",
+        ".top-bar{background:#fff;border-bottom:1px solid #ddd;padding:18px 24px}",
+        ".top-bar-inner{max-width:1080px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}",
+        ".top-bar h1{font-size:22px;font-weight:900}",
+        ".steps{color:#888;font-size:12px}",
+        ".steps strong{color:#0074e9}",
+        ".layout{max-width:1080px;margin:0 auto;padding:20px 24px 40px;display:grid;grid-template-columns:1fr 300px;gap:20px;align-items:start}",
+        ".panel{background:#fff;border:1px solid #ddd;margin-bottom:14px}",
+        ".panel-head{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid #eee;font-size:15px;font-weight:900}",
+        ".panel-head button{border:1px solid #ccc;background:#fff;padding:6px 10px;font-size:12px;cursor:pointer}",
+        ".panel-body{padding:18px;line-height:1.7;color:#444}",
+        ".tag-row{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}",
+        ".tag{padding:4px 8px;border:1px solid #ddd;border-radius:999px;font-size:11px;color:#666}",
+        ".tag.green{border-color:#00891a;color:#00891a}",
+        ".tag.blue{border-color:#0074e9;color:#0074e9}",
+        ".pay-option{display:flex;align-items:center;gap:8px;margin-bottom:10px;font-weight:800}",
+        ".product-row{display:grid;grid-template-columns:64px 1fr auto;gap:12px;align-items:center}",
+        ".product-row img{width:64px;height:92px;border:1px solid #ddd;object-fit:cover}",
+        ".product-row strong{font-size:14px;line-height:1.45}",
+        ".product-row span{color:#666;font-size:12px}",
+        ".summary{background:#fff;border:1px solid #ddd;padding:18px;position:sticky;top:16px}",
+        ".summary h2{font-size:16px;font-weight:900;margin-bottom:14px}",
+        ".summary-row{display:flex;justify-content:space-between;margin-bottom:8px;color:#555}",
+        ".summary-row.discount{color:#e60012}",
+        ".member-box{margin:12px 0;padding:12px;border:1px solid #dbeafe;background:#f5f9ff}",
+        ".member-box strong{color:#0074e9}",
+        ".summary-total{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:14px;border-top:2px solid #333}",
+        ".summary-total strong{font-size:24px;font-weight:900}",
+        ".pay-btn{width:100%;height:50px;margin-top:16px;border:0;background:#0074e9;color:#fff;font-size:16px;font-weight:900;cursor:pointer}",
+        ".notice{margin-top:10px;color:#888;font-size:11px;line-height:1.6}",
+        "@media(max-width:900px){.layout{grid-template-columns:1fr}}",
+        "</style></head><body>",
+        "<header class=\"top-bar\"><div class=\"top-bar-inner\">",
+        "<h1>주문/결제</h1>",
+        "<p class=\"steps\">장바구니 &gt; <strong>주문/결제</strong> &gt; 주문완료</p>",
+        "</div></header>",
+        "<div class=\"layout\">",
+        "<div>",
+        "<section class=\"panel\"><div class=\"panel-head\"><span>배송지</span><button type=\"button\">배송지 변경</button></div>",
+        "<div class=\"panel-body\"><strong>김원일</strong><div class=\"tag-row\">",
+        "<span class=\"tag\">기본배송지</span><span class=\"tag green\">무료배송</span><span class=\"tag blue\">당일출고</span>",
+        "</div><p>서울특별시 강남구 테헤란로 123, 10층</p><p>010-9052-3032</p></div></section>",
+        "<section class=\"panel\"><div class=\"panel-head\"><span>배송 요청사항</span><button type=\"button\">변경</button></div>",
+        "<div class=\"panel-body\"><p>일반배송: 문 앞 · 새벽배송: 문 앞</p></div></section>",
+        "<section class=\"panel\"><div class=\"panel-head\"><span>결제수단</span></div>",
+        "<div class=\"panel-body\">",
+        "<label class=\"pay-option\"><input type=\"radio\" name=\"pay\" checked> 계좌이체</label>",
+        "<label class=\"pay-option\"><input type=\"radio\" name=\"pay\"> 신용/체크카드</label>",
+        "<label class=\"pay-option\"><input type=\"radio\" name=\"pay\"> 간편결제</label>",
+        "</div></section>",
+        "<section class=\"panel\"><div class=\"panel-head\"><span>주문 상품</span></div>",
+        "<div class=\"panel-body product-row\">",
+        "<img src=\"" + escapeHtml(firstItem.cover) + "\" alt=\"\">",
+        "<div><strong>" + escapeHtml(firstItem.title) + "</strong><br><span>" + escapeHtml(firstItem.author) + " · 수량 " + totalQty + "권 · 무료배송</span></div>",
+        "<strong>" + formatPrice(subtotal) + "</strong>",
+        "</div></section>",
+        "</div>",
+        "<aside class=\"summary\">",
+        "<h2>최종 결제 금액</h2>",
+        "<div class=\"summary-row\"><span>총 상품 가격</span><span>" + formatPrice(subtotal) + "</span></div>",
+        "<div class=\"summary-row discount\"><span>쿠폰할인</span><span>-" + formatPrice(couponDiscount) + "</span></div>",
+        "<div class=\"member-box\"><strong>회원 혜택</strong><div class=\"summary-row discount\" style=\"margin-top:8px\"><span>즉시할인</span><span>-" + formatPrice(memberDiscount) + "</span></div></div>",
+        "<div class=\"summary-row\"><span>배송비</span><span>+" + formatPrice(shipping) + "</span></div>",
+        "<div class=\"summary-total\"><span>결제금액</span><strong>" + formatPrice(total) + "</strong></div>",
+        "<p class=\"notice\">결제하기 버튼을 클릭하면 개인정보 제공 및 판매 약관에 동의하게 됩니다.</p>",
+        "<button class=\"pay-btn\" type=\"button\" id=\"paySubmitBtn\">결제하기</button>",
+        "</aside></div>",
+        "<scr" + "ipt>",
+        "document.getElementById('paySubmitBtn').addEventListener('click',function(){alert('결제가 완료되었습니다.\\n총 " + formatPrice(total) + "');});",
+        "<" + "/script></body></html>"
+      ].join("");
+    }
+
+    function buildWonilGiftPageHtml(item) {
+      const total = item.price * item.quantity;
+      return [
+        "<!DOCTYPE html><html lang=\"ko\"><head><meta charset=\"UTF-8\">",
+        "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1.0\">",
+        getPageBaseTag(),
+        "<title>원일문고 선물하기</title><style>",
+        "*{box-sizing:border-box;margin:0;padding:0}",
+        "body{background:#f2f2f2;font-family:Arial,'Malgun Gothic',sans-serif;color:#222}",
+        ".gift-page{min-height:100vh;background:#fff;max-width:720px;margin:0 auto;border-left:1px solid #eee;border-right:1px solid #eee}",
+        ".kakao-head{background:#2f9e55;padding:16px 24px;display:flex;align-items:center;justify-content:space-between}",
+        ".kakao-head strong{font-size:18px;font-weight:900;color:#ffffff}",
+        ".kakao-head span{font-size:13px;color:#e8f8ee}",
+        ".gift-body{padding:24px}",
+        ".gift-card{border:1px solid #eee;border-radius:12px;overflow:hidden;background:#fafafa;margin-bottom:22px}",
+        ".gift-card-top{background:linear-gradient(135deg,#f0faf4,#fff);padding:24px;text-align:center}",
+        ".gift-card-top p{font-size:13px;color:#888;margin-bottom:10px}",
+        ".gift-card-top img{width:110px;height:158px;border:1px solid #ddd;object-fit:cover;box-shadow:0 4px 10px rgba(0,0,0,.12)}",
+        ".gift-card-top h2{margin-top:14px;font-size:17px;line-height:1.45}",
+        ".gift-card-top .price{margin-top:8px;color:#e60012;font-size:20px;font-weight:900}",
+        ".field{margin-bottom:16px}",
+        ".field label{display:block;margin-bottom:7px;font-size:14px;font-weight:800}",
+        ".field input,.field textarea,.field select{width:100%;border:1px solid #ddd;border-radius:8px;padding:12px;font-family:inherit;font-size:14px}",
+        ".field textarea{min-height:96px;resize:vertical}",
+        ".friend-box{display:flex;gap:12px;align-items:center;padding:14px;border:1px dashed #ccc;border-radius:10px;background:#fff}",
+        ".friend-avatar{width:48px;height:48px;border-radius:50%;background:#2f9e55;color:#fff;display:grid;place-items:center;font-weight:900;font-size:16px}",
+        ".send-btn{width:100%;height:50px;border:0;border-radius:8px;background:#2f9e55;color:#fff;font-size:16px;font-weight:900;cursor:pointer;margin-top:10px}",
+        ".send-btn:hover{background:#278a49}",
+        ".note{margin-top:14px;font-size:12px;color:#777;line-height:1.65}",
+        "</style></head><body>",
+        "<div class=\"gift-page\">",
+        "<header class=\"kakao-head\"><strong>원일문고 선물하기</strong><span>원일문고</span></header>",
+        "<div class=\"gift-body\">",
+        "<div class=\"gift-card\">",
+        "<div class=\"gift-card-top\">",
+        "<p>보낼 선물</p>",
+        "<img src=\"" + escapeHtml(item.cover) + "\" alt=\"" + escapeHtml(item.title) + "\">",
+        "<h2>" + escapeHtml(item.title) + "</h2>",
+        "<p class=\"price\">" + formatPrice(total) + " · " + item.quantity + "권</p>",
+        "</div></div>",
+        "<div class=\"field\"><label>받는 친구</label>",
+        "<div class=\"friend-box\"><div class=\"friend-avatar\">친</div><div><strong>친구 선택하기</strong><p style=\"font-size:12px;color:#777;margin-top:4px\">카카오톡 친구 목록에서 선택</p></div></div></div>",
+        "<div class=\"field\"><label>받는 분 이름</label><input type=\"text\" placeholder=\"이름 입력\"></div>",
+        "<div class=\"field\"><label>연락처</label><input type=\"tel\" placeholder=\"010-0000-0000\"></div>",
+        "<div class=\"field\"><label>선물 메시지</label><textarea placeholder=\"고마운 마음을 전해보세요.\"></textarea></div>",
+        "<button class=\"send-btn\" type=\"button\" id=\"giftSendBtn\">" + formatPrice(total) + " 선물하기</button>",
+        "<p class=\"note\">선물은 결제 후 카카오톡으로 발송되며, 30일 이내 수령하지 않으면 자동 환불됩니다.</p>",
+        "</div></div>",
+        "<scr" + "ipt>",
+        "document.getElementById('giftSendBtn').addEventListener('click',function(){alert('원일문고 선물하기가 완료되었습니다.');});",
+        "<" + "/script></body></html>"
+      ].join("");
+    }
+
+    function openWonilCartIntoWindow(targetWindow, bookIndex, quantity) {
+      addToCart(bookIndex, quantity || 1);
+      const snapshot = getCartSnapshot();
+
+      if (!snapshot.length) {
+        if (targetWindow && !targetWindow.closed) {
+          targetWindow.close();
+        }
+
+        alert("장바구니에 담을 상품이 없습니다.");
+        return false;
+      }
+
+      const html = buildWonilCartPageHtml(snapshot);
+
+      if (targetWindow && !targetWindow.closed) {
+        return writeToChildWindow(targetWindow, html);
+      }
+
+      return openHtmlPage(html);
+    }
+
+    function getCheckoutItems(bookIndex, quantity) {
+      if (typeof bookIndex === "number" && bookIndex >= 0 && quantity > 0) {
+        const book = books[bookIndex];
+        return [{
+          bookIndex,
+          quantity,
+          title: book.title,
+          author: book.author,
+          price: book.price,
+          originalPrice: book.originalPrice,
+          cover: getBookCoverSrc(book.imageNumber)
+        }];
+      }
+
+      return getCartSnapshot();
+    }
+
+    function openWonilCheckoutIntoWindow(targetWindow, bookIndex, quantity) {
+      const items = getCheckoutItems(bookIndex, quantity);
+
+      if (!items.length) {
+        if (targetWindow && !targetWindow.closed) {
+          targetWindow.close();
+        }
+
+        alert("결제할 상품이 없습니다.");
+        return false;
+      }
+
+      const html = buildWonilCheckoutPageHtml(items);
+
+      if (targetWindow && !targetWindow.closed) {
+        return writeToChildWindow(targetWindow, html);
+      }
+
+      return openHtmlPage(html);
+    }
+
+    function openWonilGiftIntoWindow(targetWindow, bookIndex, quantity) {
+      const book = books[bookIndex];
+
+      if (!book) {
+        if (targetWindow && !targetWindow.closed) {
+          targetWindow.close();
+        }
+
+        return false;
+      }
+
+      const item = {
+        title: book.title,
+        cover: getBookCoverSrc(book.imageNumber),
+        price: book.price,
+        quantity: quantity || 1
+      };
+
+      const html = buildWonilGiftPageHtml(item);
+
+      if (targetWindow && !targetWindow.closed) {
+        return writeToChildWindow(targetWindow, html);
+      }
+
+      return openHtmlPage(html);
+    }
+
+    function openWonilCartPopup(bookIndex, quantity) {
+      openWonilCartIntoWindow(null, bookIndex, quantity);
+    }
+
+    function openWonilCheckoutPopup(bookIndex, quantity) {
+      openWonilCheckoutIntoWindow(null, bookIndex, quantity);
+    }
+
+    function openWonilGiftPopup(bookIndex, quantity) {
+      openWonilGiftIntoWindow(null, bookIndex, quantity);
+    }
+
+    window.openWonilCartIntoWindow = openWonilCartIntoWindow;
+    window.openWonilCheckoutIntoWindow = openWonilCheckoutIntoWindow;
+    window.openWonilGiftIntoWindow = openWonilGiftIntoWindow;
+
+    window.openWonilCartPopup = openWonilCartPopup;
+    window.openWonilCheckoutPopup = openWonilCheckoutPopup;
+    window.openWonilGiftPopup = openWonilGiftPopup;
+    window.buildWonilCartPageHtml = buildWonilCartPageHtml;
+    window.buildWonilCheckoutPageHtml = buildWonilCheckoutPageHtml;
+    window.loadCartFromStorage = loadCartFromStorage;
+    window.renderCommerceLists = renderCommerceLists;
+
+    function getBestKakaoDocument(book, documents) {
+      if (!documents.length) {
+        return null;
+      }
+
+      const authorName = book.author.split(",")[0].trim();
+
+      return documents.find((item) => {
+        const title = getPlainKakaoText(item.title);
+        const authors = (item.authors || []).join(" ");
+        return title.includes(book.title.slice(0, 8)) || authors.includes(authorName);
+      }) || documents[0];
+    }
+
+    function getBookCoverAssetPath(imageNumber) {
+      return `book/${imageNumber}.png`;
+    }
+
+    function createDetailStandaloneCommerceScript(booksCatalog) {
+      const booksPayload = booksCatalog.map((book, index) => ({
+        bookIndex: index,
+        title: book.title,
+        author: book.author,
+        price: book.price,
+        originalPrice: book.originalPrice,
+        cover: getBookCoverAssetPath(book.imageNumber)
+      }));
 
       return `
-        <div class="window-head">
-          <h1>카카오 책 검색 결과</h1>
-          <p>"${escapeHtml(book.title)}" 제목으로 카카오 책 API를 검색했습니다.</p>
-        </div>
-        <div class="window-body">
-          <ul style="list-style:none;">
-            ${resultItems}
-          </ul>
-        </div>
+          const PAGE_BASE_URL = ${jsonForInlineScript(getPageBaseUrl())};
+          function getPageBaseUrl() { return PAGE_BASE_URL; }
+          function getPageBaseTag() {
+            return '<base href="' + PAGE_BASE_URL.replace(/&/g, "&amp;").replace(/"/g, "&quot;") + '">';
+          }
+          function toAssetUrl(relativePath) {
+            return PAGE_BASE_URL + String(relativePath || "").replace(/^\\.?\\//, "");
+          }
+          function getBookCoverSrc(imageNumber) {
+            return toAssetUrl("book/" + imageNumber + ".png");
+          }
+          const CART_STORAGE_KEY = "wonilBookstoreCart";
+          const WISH_STORAGE_KEY = "wonilBookstoreWish";
+          const DETAIL_BOOKS = ${jsonForInlineScript(booksPayload)};
+          function formatPrice(price) {
+            return price.toLocaleString("ko-KR") + "원";
+          }
+          function escapeHtml(value) {
+            return String(value ?? "")
+              .replace(/&/g, "&amp;")
+              .replace(/</g, "&lt;")
+              .replace(/>/g, "&gt;")
+              .replace(/"/g, "&quot;")
+              .replace(/'/g, "&#039;");
+          }
+          function openHtmlPage(pageHtml) {
+            let newWindow = window.open("about:blank", "_blank");
+
+            if (newWindow && !newWindow.closed) {
+              newWindow.document.open();
+              newWindow.document.write(pageHtml);
+              newWindow.document.close();
+              newWindow.focus();
+              return newWindow;
+            }
+
+            try {
+              const blob = new Blob([pageHtml], { type: "text/html;charset=utf-8" });
+              const blobUrl = URL.createObjectURL(blob);
+              newWindow = window.open(blobUrl, "_blank");
+              window.setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+            } catch (error) {
+              newWindow = null;
+            }
+
+            if (newWindow && !newWindow.closed) {
+              try {
+                newWindow.focus();
+              } catch (error) {
+                // ignore
+              }
+
+              return newWindow;
+            }
+
+            if (window.confirm("새 탭을 열 수 없습니다. 현재 탭에서 페이지를 열까요?")) {
+              document.open();
+              document.write(pageHtml);
+              document.close();
+              return window;
+            }
+
+            alert("브라우저에서 팝업(새 탭) 허용 후 다시 시도해 주세요.");
+            return null;
+          }
+
+          function syncOpenerCart() {
+            if (window.opener && !window.opener.closed) {
+              try {
+                if (window.opener.loadCartFromStorage) {
+                  window.opener.loadCartFromStorage();
+                }
+
+                if (window.opener.renderCommerceLists) {
+                  window.opener.renderCommerceLists();
+                }
+              } catch (error) {
+                // ignore
+              }
+            }
+          }
+
+          function loadDetailCartItems() {
+            try {
+              return JSON.parse(sessionStorage.getItem(CART_STORAGE_KEY) || "[]");
+            } catch (error) {
+              return [];
+            }
+          }
+
+          function saveDetailCartItems(items) {
+            sessionStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+            const snapshot = items.map((item) => {
+              const book = DETAIL_BOOKS[item.bookIndex];
+              if (!book) {
+                return null;
+              }
+
+              return {
+                bookIndex: item.bookIndex,
+                quantity: item.quantity,
+                title: book.title,
+                author: book.author,
+                price: book.price,
+                originalPrice: book.originalPrice,
+                cover: book.cover
+              };
+            }).filter(Boolean);
+            sessionStorage.setItem("wonilCartSnapshot", JSON.stringify(snapshot));
+          }
+
+          function loadDetailWishItems() {
+            try {
+              return JSON.parse(sessionStorage.getItem(WISH_STORAGE_KEY) || "[]");
+            } catch (error) {
+              return [];
+            }
+          }
+
+          function saveDetailWishItems(items) {
+            sessionStorage.setItem(WISH_STORAGE_KEY, JSON.stringify(items));
+          }
+
+          function addDetailWishItem(bookIndex, quantity) {
+            const items = loadDetailWishItems();
+            const found = items.find((item) => item.bookIndex === bookIndex);
+
+            if (found) {
+              found.quantity = quantity;
+            } else {
+              items.push({ bookIndex, quantity });
+            }
+
+            saveDetailWishItems(items);
+            return items;
+          }
+
+          function syncOpenerWish() {
+            if (window.opener && !window.opener.closed) {
+              try {
+                if (window.opener.addToWishlistFromDetail) {
+                  window.opener.addToWishlistFromDetail(currentBookIndex, getDetailQuantity());
+                }
+              } catch (error) {
+                // ignore
+              }
+            }
+          }
+
+          function addDetailCartItem(bookIndex, quantity) {
+            const items = loadDetailCartItems();
+            const found = items.find((item) => item.bookIndex === bookIndex);
+
+            if (found) {
+              found.quantity += quantity;
+            } else {
+              items.push({ bookIndex, quantity });
+            }
+
+            saveDetailCartItems(items);
+            return items;
+          }
+
+          function getDetailCartSnapshot() {
+            return loadDetailCartItems().map((item) => {
+              const book = DETAIL_BOOKS[item.bookIndex];
+
+              if (!book) {
+                return null;
+              }
+
+              return {
+                bookIndex: item.bookIndex,
+                quantity: item.quantity,
+                title: book.title,
+                author: book.author,
+                price: book.price,
+                originalPrice: book.originalPrice,
+                cover: book.cover
+              };
+            }).filter(Boolean);
+          }
+
+          function getDetailCheckoutItems(bookIndex, quantity) {
+            if (typeof bookIndex === "number" && bookIndex >= 0 && quantity > 0) {
+              const book = DETAIL_BOOKS[bookIndex];
+
+              if (!book) {
+                return [];
+              }
+
+              return [{
+                bookIndex,
+                quantity,
+                title: book.title,
+                author: book.author,
+                price: book.price,
+                originalPrice: book.originalPrice,
+                cover: book.cover
+              }];
+            }
+
+            return getDetailCartSnapshot();
+          }
+
+          function openCartWindow() {
+            const quantity = getDetailQuantity();
+
+            if (window.opener && !window.opener.closed) {
+              try {
+                if (window.opener.openWonilCartPopup) {
+                  window.opener.openWonilCartPopup(currentBookIndex, quantity);
+                  return;
+                }
+              } catch (error) {
+                // opener 접근 제한 시 현재 창에서 장바구니 페이지 열기
+              }
+            }
+
+            addDetailCartItem(currentBookIndex, quantity);
+            syncOpenerCart();
+            const snapshot = getDetailCartSnapshot();
+
+            if (!snapshot.length) {
+              alert("장바구니에 담을 상품이 없습니다.");
+              return;
+            }
+
+            if (window.opener && !window.opener.closed) {
+              try {
+                if (window.opener.buildWonilCartPageHtml) {
+                  openHtmlPage(window.opener.buildWonilCartPageHtml(snapshot));
+                  return;
+                }
+              } catch (error) {
+                // ignore
+              }
+            }
+
+            alert("장바구니에 담았습니다. 메인 페이지에서 확인해 주세요.");
+          }
+
+          function openPaymentWindow() {
+            const quantity = getDetailQuantity();
+
+            if (window.opener && !window.opener.closed) {
+              try {
+                if (window.opener.openWonilCheckoutPopup) {
+                  window.opener.openWonilCheckoutPopup(currentBookIndex, quantity);
+                  return;
+                }
+
+                if (window.opener.buildWonilCheckoutPageHtml) {
+                  const items = getDetailCheckoutItems(currentBookIndex, quantity);
+
+                  if (items.length) {
+                    openHtmlPage(window.opener.buildWonilCheckoutPageHtml(items));
+                    return;
+                  }
+                }
+              } catch (error) {
+                // opener 접근 제한 시 현재 창에서 결제 페이지 열기
+              }
+            }
+
+            alert("결제 페이지를 열 수 없습니다. 메인 페이지에서 다시 시도해 주세요.");
+          }
+
+          function openWishlistWindow() {
+            const quantity = getDetailQuantity();
+
+            if (window.opener && !window.opener.closed) {
+              try {
+                if (window.opener.addToWishlistFromDetail) {
+                  window.opener.addToWishlistFromDetail(currentBookIndex, quantity);
+
+                  if (window.opener.focusWishlistSection) {
+                    window.opener.focusWishlistSection();
+                  }
+
+                  alert('"' + paymentBookTitle + '" 도서가 위시리스트에 담겼습니다.');
+                  return;
+                }
+              } catch (error) {
+                // opener 접근 제한 시 sessionStorage에 저장
+              }
+            }
+
+            addDetailWishItem(currentBookIndex, quantity);
+            alert('"' + paymentBookTitle + '" 도서가 위시리스트에 담겼습니다.');
+          }
+
+          window.openCartWindow = openCartWindow;
+          window.openPaymentWindow = openPaymentWindow;
+          window.openWishlistWindow = openWishlistWindow;
+          window.triggerDetailPayment = openPaymentWindow;
       `;
+    }
+
+    function createKakaoBookDetailContent(book, bookIndex, documents) {
+      const kakaoBook = getBestKakaoDocument(book, documents);
+      const title = escapeHtml(book.title);
+      const orderTitle = book.title;
+      const plainTitle = escapeHtml(book.title);
+      const authors = escapeHtml(book.author);
+      const publisher = escapeHtml(book.publisher);
+      const price = book.price;
+      const originalPrice = book.originalPrice;
+      const coverImage = getBookCoverSrc(book.imageNumber);
+      const detailCoverPath = getBookCoverAssetPath(book.imageNumber);
+      const mainPageUrl = WONIL_HOME_PAGE;
+      const isbn = book.isbn || `979-11-${(2300 + bookIndex * 137).toString().padStart(4, "0")}-0${bookIndex + 1}`;
+      const pages = book.pages || 280 + bookIndex * 24;
+      const category = escapeHtml(book.category || "경제/경영 > 재테크/투자 > 주식/증권");
+      const intro = escapeHtml(book.intro || book.desc);
+      const introExtra = escapeHtml(book.introExtra || "");
+      const recommendReason = escapeHtml(book.recommendReason || book.desc);
+      const recommendTags = (book.recommendTags || book.tags || book.badges).map((tag) => `<span>${escapeHtml(tag)}</span>`).join("");
+      const endorsement = escapeHtml(book.endorsement || "");
+      const publisherReview = escapeHtml(book.publisherReview || "");
+      const authorBio = escapeHtml(book.authorBio || `${book.author} 저`);
+      const reviewScore = (9 + bookIndex * 0.1).toFixed(1);
+      const reviewCount = 28 + bookIndex * 6;
+      const salesIndex = (12000 - bookIndex * 830).toLocaleString("ko-KR");
+      const bookReviews = getBookReviews(bookIndex);
+      const ratingBars = [5, 4, 3, 2, 1].map((star) => {
+        const percent = star === 5 ? 72 : star === 4 ? 18 : star === 3 ? 6 : 2;
+        return `<div class="rating-bar-row"><span>${star}점</span><div class="rating-bar-track"><div class="rating-bar-fill" style="width:${percent}%"></div></div><span>${percent}%</span></div>`;
+      }).join("");
+      const tocItems = (book.toc || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+      const authorInitial = escapeHtml(book.author.charAt(0));
+      const authorWorks = (book.authorWorks || [])
+        .map((imageNumber) => {
+          const workIndex = books.findIndex((item) => item.imageNumber === imageNumber);
+          const work = workIndex >= 0 ? books[workIndex] : null;
+          if (!work) {
+            return "";
+          }
+          return `<button class="author-work-card" type="button" data-related-book-index="${workIndex}"><img src="${escapeHtml(getBookCoverSrc(work.imageNumber))}" alt="${escapeHtml(work.title)}"><strong>${escapeHtml(work.title)}</strong></button>`;
+        })
+        .join("");
+      const recentBooks = [bookIndex, (bookIndex + 1) % books.length, (bookIndex + 2) % books.length, (bookIndex + 3) % books.length]
+        .filter((value, index, array) => array.indexOf(value) === index)
+        .slice(0, 4);
+      const shelfTitles = [
+        "이 책과 함께 구매한 책",
+        "이 분야에서 요즘 뜨는 책",
+        "이 분야의 화제의 신간",
+        "이 분야의 주간 베스트셀러",
+        "이 분야의 새로 나온 도서"
+      ];
+      const createLocalBookCard = ({ relatedBook, relatedIndex }) => `
+        <button class="recommend-card" type="button" data-related-book-index="${relatedIndex}">
+          <img src="${escapeHtml(getBookCoverSrc(relatedBook.imageNumber))}" alt="${escapeHtml(relatedBook.title)} 표지">
+          <strong>${escapeHtml(relatedBook.title)}</strong>
+        </button>
+      `;
+      const createLocalShelf = (shelfTitle, offset = 0) => {
+        const shelfBooks = getRotatedBooks(bookIndex + offset, 4);
+        return `
+          <div class="api-shelf">
+            <h3>${shelfTitle}</h3>
+            <div class="api-book-grid">
+              ${shelfBooks.map(createLocalBookCard).join("")}
+            </div>
+          </div>
+        `;
+      };
+      const reviewListHtml = bookReviews.map((review) => `
+        <article class="review-item">
+          <div class="review-item-head">
+            <span class="review-stars">${"★".repeat(review.rating)}${"☆".repeat(5 - review.rating)}</span>
+            <strong>${escapeHtml(review.name)}</strong>
+            <span>${escapeHtml(review.date)}</span>
+          </div>
+          <p>${escapeHtml(review.text)}</p>
+        </article>
+      `).join("");
+
+      return `
+        <header class="detail-top">
+          <div class="detail-top-inner">
+            <a class="detail-logo" href="${WONIL_HOME_PAGE}" data-home-link onclick="goToMainListPage(event)">원일문고</a>
+            <div class="detail-search-wrap">
+              <form class="detail-search" id="detailSearchForm">
+                <input id="detailSearchInput" type="search" placeholder="책 제목 검색" autocomplete="off" aria-label="도서 검색어">
+                <button type="submit">검색</button>
+              </form>
+              <div id="detailSearchSuggestions" class="detail-search-suggestions" hidden></div>
+            </div>
+          </div>
+        </header>
+
+        <nav class="detail-nav" aria-label="상세 페이지 메뉴">
+          <div class="detail-nav-inner">
+            <button type="button" class="detail-tab-btn active" data-detail-target="bookInfo">도서정보</button>
+            <button type="button" class="detail-tab-btn" data-detail-target="bookReview">리뷰(${reviewCount})</button>
+            <button type="button" class="detail-tab-btn" data-detail-target="recommend">추천</button>
+            <button type="button" class="detail-tab-btn" data-detail-target="exchange">교환/반품/품절</button>
+          </div>
+        </nav>
+
+        <div class="detail-wrap">
+          <main class="detail-main">
+            <p class="breadcrumb">국내도서 &gt; 경제/경영 &gt; 재테크/투자 &gt; 주식/증권</p>
+
+            <section class="product-hero" id="productInfo">
+              <div class="detail-cover-box">
+                <img class="detail-cover" src="${escapeHtml(coverImage)}" data-cover-preview alt="${title} 표지">
+                <div class="cover-buttons">
+                  <button type="button" data-cover-preview-button>미리보기</button>
+                  <button type="button" data-cover-preview-button>새창보기</button>
+                </div>
+              </div>
+
+              <div class="product-title-area">
+                <div class="detail-badges">
+                  ${book.badges.map((badge, badgeIndex) => `<span class="detail-badge ${badgeIndex === 0 ? "green" : ""}">${escapeHtml(badge)}</span>`).join("")}
+                </div>
+                <h1>${title}</h1>
+                <div class="product-meta">
+                  <p>${authors} 저 | ${publisher} | 2026년 07월 출간</p>
+                  <p>ISBN ${isbn} | 쪽수 ${pages.toLocaleString("ko-KR")}쪽</p>
+                </div>
+
+                <div class="product-price">
+                  <div class="price-row">
+                    <span>정가</span>
+                    <del>${formatPrice(originalPrice)}</del>
+                  </div>
+                  <div class="price-row">
+                    <span>판매가</span>
+                    <strong>${formatPrice(price)}</strong>
+                  </div>
+                  <div class="price-row">
+                    <span>적립금</span>
+                    <em>${Math.round(price * 0.05).toLocaleString("ko-KR")}원</em>
+                  </div>
+                </div>
+
+                <p class="review"><span class="stars">★★★★★</span> 회원리뷰 ${reviewScore}점 | 판매지수 ${salesIndex}</p>
+                <p class="desc">${escapeHtml(book.desc)}</p>
+
+                <div class="benefit-box">
+                  오늘 출고 가능 · 무료배송 · 쿠폰/적립 혜택 제공<br>
+                  원일문고 회원 구매 시 구매금액의 5%가 적립되며, 배송 일정은 재고 상황에 따라 달라질 수 있습니다.
+                </div>
+              </div>
+            </section>
+
+            <div class="detail-anchor-tabs" aria-label="상세 탭">
+              <button type="button" class="detail-tab-btn active" data-detail-target="bookInfo">도서정보</button>
+              <button type="button" class="detail-tab-btn" data-detail-target="bookReview">리뷰(${reviewCount})</button>
+              <button type="button" class="detail-tab-btn" data-detail-target="recommend">추천</button>
+              <button type="button" class="detail-tab-btn" data-detail-target="exchange">교환/반품/품절</button>
+            </div>
+
+            <section class="content-block" id="bookInfo">
+              <h2>상품 규격 정보</h2>
+              <table class="info-table">
+                <tbody>
+                  <tr><th>도서명</th><td>${title}</td></tr>
+                  <tr><th>저자/출판사</th><td>${authors} / ${publisher}</td></tr>
+                  <tr><th>ISBN</th><td>${isbn}</td></tr>
+                  <tr><th>쪽수/크기</th><td>${pages.toLocaleString("ko-KR")}쪽 · 145×210mm</td></tr>
+                  <tr><th>분야</th><td>${category}</td></tr>
+                  <tr><th>키워드</th><td>${(book.tags || book.badges).map((tag) => `#${escapeHtml(tag)}`).join(" ")}</td></tr>
+                </tbody>
+              </table>
+
+              <div class="event-banners">
+                <div class="event-banner"><strong>원일문고 이벤트</strong>주식 투자 도서 3만원 이상 구매 시 북마크 증정</div>
+                <div class="event-banner"><strong>무료배송</strong>국내도서 1만5천원 이상 구매 시 배송비 무료</div>
+              </div>
+
+              <div class="recommend-reason-box">
+                <div class="reason-tags">${recommendTags}</div>
+                <p>${recommendReason}</p>
+              </div>
+            </section>
+
+            <section class="content-block" id="bookIntro">
+              <h2>책 소개</h2>
+              <div class="collapsible-text" data-collapsible>
+                <p class="book-copy">${intro}</p>
+                ${introExtra ? `<p class="intro-text">${introExtra}</p>` : ""}
+              </div>
+              <button class="more-button" type="button" data-more-toggle>더보기 &gt;</button>
+
+              <div class="description-block">
+                <h3>추천사</h3>
+                <div class="collapsible-text" data-collapsible>
+                  <p>${endorsement}</p>
+                </div>
+                <button class="more-button" type="button" data-more-toggle>더보기 &gt;</button>
+              </div>
+
+              <div class="description-block">
+                <h3>이 책이 속한 분야</h3>
+                <p>${category}</p>
+                <div class="field-tags">
+                  ${(book.tags || book.badges).map((tag) => `<span>#${escapeHtml(tag)}</span>`).join("")}
+                  <span>#주식투자</span>
+                  <span>#재테크</span>
+                </div>
+              </div>
+
+              <div class="description-block">
+                <h3>출판사 서평</h3>
+                <div class="collapsible-text" data-collapsible>
+                  <p>${publisherReview}</p>
+                </div>
+                <button class="more-button" type="button" data-more-toggle>더보기 &gt;</button>
+              </div>
+            </section>
+
+            <section class="content-block" id="bookToc">
+              <h2>목차</h2>
+              <ol class="toc-list">${tocItems}</ol>
+            </section>
+
+            <section class="content-block" id="authorIntro">
+              <h2>저자 소개</h2>
+              <div class="author-profile">
+                <div class="author-avatar" aria-hidden="true">${authorInitial}</div>
+                <div>
+                  <p><strong>저자 : ${authors}</strong></p>
+                  <p class="intro-text">${authorBio}</p>
+                </div>
+              </div>
+              <div class="author-works">${authorWorks}</div>
+            </section>
+
+            <section class="content-block" id="bookReview">
+              <h2>도서리뷰 (${reviewCount})</h2>
+              <div class="review-summary">
+                <div class="review-summary-score">
+                  <strong>${reviewScore}</strong>
+                  <span>/ 5</span>
+                  <p class="stars">★★★★★</p>
+                </div>
+                <div class="rating-bars">${ratingBars}</div>
+              </div>
+              ${reviewListHtml}
+              <button class="more-button" type="button" data-more-toggle>더보기 &gt;</button>
+            </section>
+
+            <section class="content-block" id="recommend">
+              <h2>추천 도서</h2>
+              ${shelfTitles.map((shelfTitle, shelfIndex) => createLocalShelf(shelfTitle, shelfIndex)).join("")}
+            </section>
+
+            <section class="content-block" id="exchange">
+              <h2>교환/반품/품절 안내</h2>
+              <div class="exchange-info">
+                <h3>교환 및 반품</h3>
+                <p>도서를 수령하신 날로부터 7일 이내에 교환 및 반품이 가능합니다. 단, 도서의 포장을 개봉하여 사용감이 발생한 경우 교환/반품이 제한될 수 있습니다.</p>
+                <h3>품절 안내</h3>
+                <p>재고 소진 시 품절 처리되며, 입고 예정일은 상품 상세 페이지 또는 주문 내역에서 확인하실 수 있습니다. 품절 도서는 자동으로 주문 취소 및 환불 처리됩니다.</p>
+                <h3>배송 안내</h3>
+                <p>평일 오후 2시 이전 결제 완료 건은 당일 출고를 원칙으로 하며, 도서 재고 상황에 따라 1~3일 지연될 수 있습니다.</p>
+              </div>
+            </section>
+          </main>
+
+          <aside class="side-buy-box" data-book-index="${bookIndex}" data-book-title=${JSON.stringify(orderTitle)}>
+            <img class="side-cover" src="${escapeHtml(coverImage)}" alt="${title} 표지">
+            <p class="side-title">${title}</p>
+            <p class="side-price">${formatPrice(price)}</p>
+            <div class="side-quantity">
+              <button type="button" data-quantity-action="decrease">-</button>
+              <input id="detailQuantity" type="text" value="1" aria-label="${plainTitle} 수량">
+              <button type="button" data-quantity-action="increase">+</button>
+            </div>
+            <div class="side-actions">
+              <button class="cart" type="button" data-commerce-action="cart">장바구니</button>
+              <button class="buy" type="button" data-commerce-action="buy">바로구매</button>
+              <button class="wish" type="button" data-commerce-action="wish">위시리스트</button>
+            </div>
+          </aside>
+
+          <aside class="detail-recent-box" aria-label="최근 본 상품">
+            <h2 class="detail-recent-title">최근 본 상품</h2>
+            <ul class="detail-recent-list">
+              ${recentBooks.map((recentIndex) => {
+                const recentBook = books[recentIndex];
+                return `<li><img src="${escapeHtml(getBookCoverSrc(recentBook.imageNumber))}" data-recent-book-index="${recentIndex}" alt="${escapeHtml(recentBook.title)}"></li>`;
+              }).join("")}
+            </ul>
+            <button class="scroll-top-btn" type="button" data-scroll-top>맨위로</button>
+          </aside>
+        </div>
+
+        <footer class="detail-footer">
+          <div class="detail-footer-inner">
+            <strong>원일문고</strong><br>
+            고객센터 1544-9020 · 평일 09:00 ~ 18:00 · 점심시간 12:00 ~ 13:00<br>
+            원일문고는 정확한 도서 정보와 안전한 결제, 빠른 배송 서비스를 제공합니다.
+          </div>
+        </footer>
+        <scr${"ipt"}>
+          function scrollToDetailSection(targetId) {
+            const target = document.getElementById(targetId);
+
+            if (!target) {
+              return;
+            }
+
+            target.scrollIntoView({ behavior: "smooth", block: "start" });
+            document.querySelectorAll(".detail-anchor-tabs .detail-tab-btn, .detail-nav-inner .detail-tab-btn").forEach((item) => {
+              item.classList.toggle("active", item.dataset.detailTarget === targetId);
+            });
+          }
+
+          document.addEventListener("click", (event) => {
+            const tabBtn = event.target.closest(".detail-tab-btn");
+
+            if (tabBtn && tabBtn.dataset.detailTarget) {
+              event.preventDefault();
+              scrollToDetailSection(tabBtn.dataset.detailTarget);
+              return;
+            }
+
+            const sideBuyBox = document.querySelector(".side-buy-box");
+            const quantityInput = document.getElementById("detailQuantity");
+
+            if (!sideBuyBox || !quantityInput || !sideBuyBox.contains(event.target)) {
+              return;
+            }
+
+            const qtyBtn = event.target.closest("[data-quantity-action]");
+
+            if (qtyBtn) {
+              event.preventDefault();
+              let quantity = Number.parseInt(quantityInput.value, 10);
+
+              if (Number.isNaN(quantity) || quantity < 1) {
+                quantity = 1;
+              }
+
+              quantityInput.value = String(
+                qtyBtn.dataset.quantityAction === "increase"
+                  ? quantity + 1
+                  : Math.max(1, quantity - 1)
+              );
+              return;
+            }
+
+            const commerceBtn = event.target.closest("[data-commerce-action]");
+
+            if (!commerceBtn) {
+              return;
+            }
+
+            event.preventDefault();
+
+            const bookIndex = Number(sideBuyBox.dataset.bookIndex || 0);
+            const bookTitle = sideBuyBox.dataset.bookTitle || "";
+            const quantity = Number.parseInt(quantityInput.value, 10) || 1;
+            const action = commerceBtn.dataset.commerceAction;
+
+            if (action === "cart" && typeof window.openCartWindow === "function") {
+              window.openCartWindow();
+              return;
+            }
+
+            if (action === "buy" && typeof window.openPaymentWindow === "function") {
+              window.openPaymentWindow();
+              return;
+            }
+
+            if (action === "wish" && typeof window.openWishlistWindow === "function") {
+              window.openWishlistWindow();
+              return;
+            }
+
+            if (window.opener && !window.opener.closed) {
+              try {
+                if (action === "cart" && window.opener.openWonilCartPopup) {
+                  window.opener.openWonilCartPopup(bookIndex, quantity);
+                  return;
+                }
+
+                if (action === "buy" && window.opener.openWonilCheckoutPopup) {
+                  window.opener.openWonilCheckoutPopup(bookIndex, quantity);
+                  return;
+                }
+
+                if (action === "wish" && window.opener.addToWishlistFromDetail) {
+                  window.opener.addToWishlistFromDetail(bookIndex, quantity);
+
+                  if (window.opener.focusWishlistSection) {
+                    window.opener.focusWishlistSection();
+                  }
+
+                  alert('"' + bookTitle + '" 도서가 위시리스트에 담겼습니다.');
+                  return;
+                }
+              } catch (error) {
+                // ignore
+              }
+            }
+          });
+        <\/script>
+        <scr${"ipt"}>
+          const quantityInput = document.querySelector("#detailQuantity");
+          const bookPrice = ${price};
+          const paymentBookTitle = ${jsonForInlineScript(orderTitle)};
+          const paymentCoverImage = ${jsonForInlineScript(detailCoverPath)};
+          const coverPreviewImage = ${jsonForInlineScript(detailCoverPath)};
+          const mainPageUrl = ${jsonForInlineScript(mainPageUrl)};
+          const searchableBooks = ${jsonForInlineScript(books.map((item, index) => ({ index, title: item.title })))};
+          const currentBookIndex = ${bookIndex};
+
+          function escapeSuggestionText(value) {
+            return String(value ?? "")
+              .replaceAll("&", "&amp;")
+              .replaceAll("<", "&lt;")
+              .replaceAll(">", "&gt;")
+              .replaceAll('"', "&quot;")
+              .replaceAll("'", "&#039;");
+          }
+
+          function getDetailSearchMatches(keyword) {
+            const normalizedKeyword = keyword.trim().toLowerCase();
+
+            if (!normalizedKeyword) {
+              return [];
+            }
+
+            return searchableBooks.filter((item) => item.title.toLowerCase().includes(normalizedKeyword));
+          }
+
+          function hideDetailSearchSuggestions() {
+            const detailSearchSuggestions = document.querySelector("#detailSearchSuggestions");
+            detailSearchSuggestions.hidden = true;
+            detailSearchSuggestions.innerHTML = "";
+          }
+
+          function renderDetailSearchSuggestions() {
+            const detailSearchInput = document.querySelector("#detailSearchInput");
+            const detailSearchSuggestions = document.querySelector("#detailSearchSuggestions");
+            const matches = getDetailSearchMatches(detailSearchInput.value).slice(0, 6);
+
+            if (!matches.length) {
+              hideDetailSearchSuggestions();
+              return;
+            }
+
+            detailSearchSuggestions.hidden = false;
+            detailSearchSuggestions.innerHTML = matches.map((item) =>
+              '<button class="detail-search-suggestion" type="button" data-detail-suggestion-index="' + item.index + '">' +
+                escapeSuggestionText(item.title) +
+              '</button>'
+            ).join("");
+          }
+
+          function navigateToBook(bookIndex) {
+            if (window.opener && !window.opener.closed && window.opener.renderBookDetailInWindow) {
+              window.opener.renderBookDetailInWindow(window, bookIndex);
+              return;
+            }
+
+            if (window.opener && !window.opener.closed && window.opener.openKakaoBookSearch) {
+              window.opener.openKakaoBookSearch(bookIndex);
+            }
+          }
+
+          function openDetailSearchResult(bookIndex) {
+            navigateToBook(bookIndex);
+          }
+
+          function getDetailQuantity() {
+            const quantity = Number.parseInt(quantityInput.value, 10);
+            return Number.isNaN(quantity) || quantity < 1 ? 1 : quantity;
+          }
+
+          function formatPaymentPrice(price) {
+            return price.toLocaleString("ko-KR") + "원";
+          }
+
+          function escapePaymentHtml(value) {
+            return String(value ?? "")
+              .replaceAll("&", "&amp;")
+              .replaceAll("<", "&lt;")
+              .replaceAll(">", "&gt;")
+              .replaceAll('"', "&quot;")
+              .replaceAll("'", "&#039;");
+          }
+
+          function openCoverPreviewWindow() {
+            const previewWindow = window.open("about:blank", "_blank");
+
+            if (!previewWindow) {
+              alert("새 창을 열 수 없습니다. 브라우저에서 새 창(탭) 열기를 허용해 주세요.");
+              return;
+            }
+
+            const safeTitle = escapePaymentHtml(paymentBookTitle);
+            const safeCover = escapePaymentHtml(coverPreviewImage);
+
+            previewWindow.document.open();
+            previewWindow.document.write([
+              "<!DOCTYPE html>",
+              "<html lang=\"ko\">",
+              "<head>",
+              "<meta charset=\"UTF-8\">",
+              "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">",
+              "<title>" + safeTitle + " 표지 보기</title>",
+              "<style>",
+              "*{box-sizing:border-box;margin:0;padding:0}",
+              "body{display:grid;place-items:center;min-height:100vh;background:#f5f5f5;font-family:Arial,'Malgun Gothic',sans-serif}",
+              ".preview{width:min(520px,92vw);padding:26px;border:1px solid #ddd;background:#fff;text-align:center;box-shadow:0 10px 28px rgba(0,0,0,.12)}",
+              ".preview h1{margin-bottom:18px;font-size:20px;line-height:1.45}",
+              ".preview img{max-width:100%;max-height:72vh;border:1px solid #ddd;object-fit:contain}",
+              ".preview button{margin-top:18px;width:120px;height:36px;border:1px solid #2f9e55;background:#2f9e55;color:#fff;font-weight:900;cursor:pointer}",
+              "</style>",
+              "</head>",
+              "<body>",
+              "<section class=\"preview\">",
+              "<h1>" + safeTitle + "</h1>",
+              "<img src=\"" + safeCover + "\" alt=\"" + safeTitle + " 표지\">",
+              "<button type=\"button\" onclick=\"window.close()\">닫기</button>",
+              "</section>",
+              "</body>",
+              "</html>"
+            ].join(""));
+            previewWindow.document.close();
+            previewWindow.focus();
+          }
+
+          ${createDetailStandaloneCommerceScript(books)}
+
+          document.querySelectorAll("[data-more-toggle]").forEach((button) => {
+            button.addEventListener("click", () => {
+              const collapsible = button.previousElementSibling;
+
+              if (collapsible && collapsible.matches("[data-collapsible]")) {
+                collapsible.classList.toggle("expanded");
+                button.textContent = collapsible.classList.contains("expanded") ? "접기 ∧" : "더보기 >";
+              }
+            });
+          });
+
+          document.querySelector("[data-scroll-top]")?.addEventListener("click", () => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          });
+
+          document.querySelectorAll("[data-recent-book-index]").forEach((image) => {
+            image.addEventListener("click", () => {
+              navigateToBook(Number.parseInt(image.dataset.recentBookIndex, 10));
+            });
+          });
+
+          document.querySelectorAll("[data-related-book-index]").forEach((button) => {
+            button.addEventListener("click", () => {
+              navigateToBook(Number.parseInt(button.dataset.relatedBookIndex, 10));
+            });
+          });
+
+          document.querySelector("[data-cover-preview]")?.addEventListener("click", openCoverPreviewWindow);
+          document.querySelectorAll("[data-cover-preview-button]").forEach((button) => {
+            button.addEventListener("click", openCoverPreviewWindow);
+          });
+
+          function goToMainListPage(event) {
+            event.preventDefault();
+
+            if (window.opener && !window.opener.closed) {
+              try {
+                const openerHref = window.opener.location.href;
+
+                if (openerHref.includes("01_") && window.opener.document.getElementById("bookList")) {
+                  window.opener.focus();
+                  window.opener.scrollTo({ top: 0, behavior: "smooth" });
+                  window.close();
+                  return;
+                }
+              } catch (error) {
+                // opener 접근 제한 시 현재 탭에서 목록 페이지로 이동
+              }
+            }
+
+            window.location.href = mainPageUrl;
+          }
+
+          window.goToMainListPage = goToMainListPage;
+
+          document.querySelector("[data-home-link]")?.addEventListener("click", goToMainListPage);
+
+          const detailSearchInput = document.querySelector("#detailSearchInput");
+          const detailSearchForm = document.querySelector("#detailSearchForm");
+          const detailSearchSuggestions = document.querySelector("#detailSearchSuggestions");
+
+          detailSearchInput?.addEventListener("input", () => {
+            renderDetailSearchSuggestions();
+
+            if (window.opener && !window.opener.closed) {
+              if (!detailSearchInput.value.trim() && window.opener.clearBookSearch) {
+                window.opener.clearBookSearch();
+              } else if (window.opener.applyBookSearch) {
+                window.opener.applyBookSearch(detailSearchInput.value);
+              }
+            }
+          });
+
+          detailSearchInput?.addEventListener("compositionend", renderDetailSearchSuggestions);
+
+          detailSearchForm?.addEventListener("submit", (event) => {
+            event.preventDefault();
+            const matches = getDetailSearchMatches(detailSearchInput.value);
+
+            if (matches.length) {
+              openDetailSearchResult(matches[0].index);
+              return;
+            }
+
+            if (window.opener && !window.opener.closed && window.opener.applyBookSearch) {
+              window.opener.applyBookSearch(detailSearchInput.value);
+              window.location.href = mainPageUrl;
+              return;
+            }
+
+            window.location.href = mainPageUrl;
+          });
+
+          detailSearchSuggestions?.addEventListener("click", (event) => {
+            const suggestion = event.target.closest("[data-detail-suggestion-index]");
+
+            if (!suggestion) {
+              return;
+            }
+
+            openDetailSearchResult(Number.parseInt(suggestion.dataset.detailSuggestionIndex, 10));
+            hideDetailSearchSuggestions();
+          });
+
+          document.addEventListener("click", (event) => {
+            if (!event.target.closest(".detail-search-wrap")) {
+              hideDetailSearchSuggestions();
+            }
+          });
+        <\/script>
+      `;
+    }
+
+    async function renderBookDetailInWindow(targetWindow, bookIndex) {
+      const book = books[bookIndex];
+
+      if (!book || !targetWindow || targetWindow.closed) {
+        return;
+      }
+
+      await preloadAllBookCovers();
+
+      targetWindow.document.open();
+      targetWindow.document.write(createDetailPage(
+        `${book.title} - 도서 상세`,
+        createKakaoBookDetailContent(book, bookIndex, [])
+      ));
+      targetWindow.document.close();
+      targetWindow.focus();
     }
 
     async function openKakaoBookSearch(bookIndex) {
@@ -1405,61 +4142,32 @@
         return;
       }
 
-      const kakaoWindow = window.open(
-        "",
-        `kakao-book-${bookIndex}`,
-        "width=760,height=720,left=140,top=70,scrollbars=yes,resizable=yes"
+      await preloadAllBookCovers();
+
+      const pageHtml = createDetailPage(
+        `${book.title} - 도서 상세`,
+        createKakaoBookDetailContent(book, bookIndex, [])
       );
 
-      if (!kakaoWindow) {
-        alert("팝업이 차단되었습니다. 브라우저의 팝업 차단을 해제해 주세요.");
+      openHtmlPage(pageHtml);
+    }
+
+    window.openKakaoBookSearch = openKakaoBookSearch;
+    window.renderBookDetailInWindow = renderBookDetailInWindow;
+
+    function addToCartFromDetail(bookIndex, quantity) {
+      if (typeof bookIndex !== "number" || bookIndex < 0) {
         return;
       }
 
-      kakaoWindow.document.open();
-      kakaoWindow.document.write(createWindowPage("카카오 책 검색 중", `
-        <div class="window-head">
-          <h1>카카오 책 검색 중</h1>
-          <p>"${escapeHtml(book.title)}" 정보를 카카오 API에서 불러오고 있습니다.</p>
-        </div>
-        <div class="window-body">
-          <div class="notice-box">잠시만 기다려 주세요.</div>
-        </div>
-      `));
-      kakaoWindow.document.close();
-      kakaoWindow.focus();
-
-      try {
-        const response = await fetch(
-          `${KAKAO_BOOK_API_URL}?query=${encodeURIComponent(book.title)}&author=${encodeURIComponent(book.author)}&size=5`
-        );
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.error || `카카오 API 요청 실패: ${response.status}`);
-        }
-
-        const data = await response.json();
-        kakaoWindow.document.open();
-        kakaoWindow.document.write(createWindowPage(
-          "카카오 책 검색 결과",
-          createKakaoBookResultContent(book, data.documents || [])
-        ));
-        kakaoWindow.document.close();
-      } catch (error) {
-        kakaoWindow.document.open();
-        kakaoWindow.document.write(createWindowPage("카카오 API 오류", `
-          <div class="window-head">
-            <h1>카카오 API 오류</h1>
-            <p>책 정보를 불러오지 못했습니다.</p>
-          </div>
-          <div class="window-body">
-            <div class="notice-box">${escapeHtml(error.message)}</div>
-          </div>
-        `));
-        kakaoWindow.document.close();
-      }
+      addToCart(bookIndex, quantity || 1);
     }
+
+    window.addToCartFromDetail = addToCartFromDetail;
+    window.addToWishlistFromDetail = addToWishlistFromDetail;
+    window.focusWishlistSection = focusWishlistSection;
+    window.applyBookSearch = applySearch;
+    window.clearBookSearch = clearSearch;
 
     document.querySelectorAll("[data-service-window]").forEach((menu) => {
       menu.addEventListener("click", (event) => {
@@ -1549,15 +4257,42 @@
         cartItems.push({ bookIndex, quantity });
       }
 
+      persistCartToStorage();
       renderCommerceLists();
     }
 
-    function addToWishlist(bookIndex) {
-      if (!findItem(wishItems, bookIndex)) {
-        wishItems.push({ bookIndex, quantity: 1 });
+    function addToWishlist(bookIndex, quantity = 1) {
+      const found = findItem(wishItems, bookIndex);
+
+      if (found) {
+        found.quantity = quantity;
+      } else {
+        wishItems.push({ bookIndex, quantity });
       }
 
+      persistWishToStorage();
       renderCommerceLists();
+    }
+
+    function addToWishlistFromDetail(bookIndex, quantity) {
+      if (typeof bookIndex !== "number" || bookIndex < 0) {
+        return;
+      }
+
+      addToWishlist(bookIndex, quantity || 1);
+    }
+
+    function focusWishlistSection() {
+      const wishPanel = document.querySelector("#cartSection .shop-panel:last-child");
+
+      document.querySelector("#cartSection")?.scrollIntoView({ behavior: "smooth", block: "start" });
+
+      if (wishPanel) {
+        wishPanel.classList.add("focused");
+        window.setTimeout(() => {
+          wishPanel.classList.remove("focused");
+        }, 1200);
+      }
     }
 
     function createShopItem(item) {
@@ -1591,10 +4326,10 @@
       cartTotal.textContent = formatPrice(totalPrice);
     }
 
-    function getFilteredBooks() {
-      const keyword = searchKeyword.trim().toLowerCase();
+    function getFilteredBooks(keyword = searchKeyword) {
+      const normalizedKeyword = keyword.trim().toLowerCase();
 
-      if (!keyword) {
+      if (!normalizedKeyword) {
         return books.map((book, bookIndex) => ({ book, bookIndex }));
       }
 
@@ -1607,11 +4342,75 @@
             book.publisher,
             ...book.tags,
             ...book.badges
-          ].some((text) => text.toLowerCase().includes(keyword));
+          ].some((text) => text.toLowerCase().includes(normalizedKeyword));
         });
     }
 
+    function hideSearchSuggestions() {
+      if (!searchSuggestions) {
+        return;
+      }
+
+      searchSuggestions.hidden = true;
+      searchSuggestions.innerHTML = "";
+    }
+
+    function renderSearchSuggestions() {
+      const keyword = bookSearchInput.value.trim();
+
+      if (!keyword) {
+        hideSearchSuggestions();
+        return;
+      }
+
+      const matches = getFilteredBooks(keyword).slice(0, 6);
+
+      if (!matches.length) {
+        hideSearchSuggestions();
+        return;
+      }
+
+      searchSuggestions.hidden = false;
+      searchSuggestions.innerHTML = matches.map(({ book, bookIndex }) => `
+        <button class="search-suggestion-item" type="button" data-suggestion-index="${bookIndex}">
+          ${escapeHtml(book.title)}
+        </button>
+      `).join("");
+    }
+
+    function applySearch(keyword) {
+      searchKeyword = keyword;
+      bookSearchInput.value = keyword;
+      renderBooks();
+      renderSearchSuggestions();
+
+      if (!keyword.trim()) {
+        bookList.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    function clearSearch() {
+      applySearch("");
+      hideSearchSuggestions();
+      bookSearchInput.focus();
+    }
+
+    function updateSearchResults() {
+      searchKeyword = bookSearchInput.value;
+      renderBooks();
+      renderSearchSuggestions();
+
+      if (!searchKeyword.trim()) {
+        hideSearchSuggestions();
+        bookList.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
     function renderBooks() {
+      if (!bookList) {
+        return;
+      }
+
       const filteredBooks = getFilteredBooks();
       bookResultCount.textContent = filteredBooks.length;
       bookList.classList.toggle("grid-view", currentViewMode === "grid");
@@ -1630,7 +4429,7 @@
       bookList.innerHTML = filteredBooks.map(({ book, bookIndex }) => `
         <article class="book-card">
           <div class="cover-wrap">
-            <img class="cover js-book-image" src="book/${book.imageNumber}.png" data-book-number="${book.imageNumber}" data-kakao-book-index="${bookIndex}" tabindex="0" role="button" alt="${book.title} 표지">
+            <img class="cover js-book-image" src="book/${book.imageNumber}.png" data-book-number="${book.imageNumber}" data-kakao-book-index="${bookIndex}" tabindex="0" role="button" alt="${escapeHtml(book.title)} 표지">
             <div class="cover-links">
               <span>미리보기</span>
               <span>|</span>
@@ -1644,7 +4443,7 @@
                 <span class="badge ${badgeIndex === 0 ? "red" : badgeIndex === 2 ? "black" : ""}">${badge}</span>
               `).join("")}
             </div>
-            <h2 class="title">${bookIndex + 1}. ${book.title}</h2>
+            <h2 class="title">${bookIndex + 1}. ${escapeHtml(book.title)}</h2>
             <p class="meta">${book.author} 저 | ${book.publisher} | 2026년 07월</p>
             <p class="price"><del>${formatPrice(book.originalPrice)}</del>${formatPrice(book.price)} <span>10% 할인</span></p>
             <p class="review"><span class="stars">★★★★★</span> 회원리뷰 <strong>9.${bookIndex}</strong>점 | 판매지수 ${(9800 - bookIndex * 720).toLocaleString("ko-KR")}</p>
@@ -1670,11 +4469,6 @@
       applyImageFallbacks();
     }
 
-    function updateSearchResults() {
-      searchKeyword = bookSearchInput.value;
-      renderBooks();
-    }
-
     function changeViewMode(viewMode) {
       currentViewMode = viewMode;
       viewButtons.forEach((button) => {
@@ -1683,108 +4477,182 @@
       renderBooks();
     }
 
-    bookList.addEventListener("click", (event) => {
-      const kakaoImage = event.target.closest("[data-kakao-book-index]");
-
-      if (kakaoImage) {
-        openKakaoBookSearch(Number.parseInt(kakaoImage.dataset.kakaoBookIndex, 10));
+    function bindPageEvents() {
+      if (!bookList) {
         return;
       }
 
-      const button = event.target.closest("[data-action]");
+      bookList.addEventListener("click", (event) => {
+        const kakaoImage = event.target.closest("[data-kakao-book-index]");
 
-      if (!button) {
-        return;
-      }
+        if (kakaoImage) {
+          openKakaoBookSearch(Number.parseInt(kakaoImage.dataset.kakaoBookIndex, 10));
+          return;
+        }
 
-      const bookIndex = Number.parseInt(button.dataset.bookIndex, 10);
-      const book = books[bookIndex];
+        const button = event.target.closest("[data-action]");
 
-      if (!book) {
-        return;
-      }
+        if (!button) {
+          return;
+        }
 
-      const quantity = getBookQuantity(bookIndex);
+        const bookIndex = Number.parseInt(button.dataset.bookIndex, 10);
+        const book = books[bookIndex];
 
-      if (button.dataset.action === "increase") {
-        setBookQuantity(bookIndex, quantity + 1);
-        return;
-      }
+        if (!book) {
+          return;
+        }
 
-      if (button.dataset.action === "decrease") {
-        setBookQuantity(bookIndex, quantity - 1);
-        return;
-      }
+        const quantity = getBookQuantity(bookIndex);
 
-      if (button.dataset.action === "cart") {
-        addToCart(bookIndex, quantity);
-        alert(`"${book.title}" ${quantity}권이 장바구니에 담겼습니다.`);
-        return;
-      }
+        if (button.dataset.action === "increase") {
+          setBookQuantity(bookIndex, quantity + 1);
+          return;
+        }
 
-      if (button.dataset.action === "buy") {
-        addToCart(bookIndex, quantity);
-        alert(`"${book.title}" ${quantity}권 바로구매 화면으로 이동합니다.\n장바구니 주문 예상 금액을 확인하세요.`);
-        return;
-      }
+        if (button.dataset.action === "decrease") {
+          setBookQuantity(bookIndex, quantity - 1);
+          return;
+        }
 
-      if (button.dataset.action === "wish") {
-        addToWishlist(bookIndex);
-        alert(`"${book.title}" 도서가 위시리스트에 담겼습니다.`);
-        return;
-      }
-    });
+        if (button.dataset.action === "cart") {
+          openWonilCartPopup(bookIndex, quantity);
+          return;
+        }
 
-    bookList.addEventListener("keydown", (event) => {
-      const kakaoImage = event.target.closest("[data-kakao-book-index]");
+        if (button.dataset.action === "buy") {
+          openWonilCheckoutPopup(bookIndex, quantity);
+          return;
+        }
 
-      if (!kakaoImage || !["Enter", " "].includes(event.key)) {
-        return;
-      }
-
-      event.preventDefault();
-      openKakaoBookSearch(Number.parseInt(kakaoImage.dataset.kakaoBookIndex, 10));
-    });
-
-    cartOrderButton.addEventListener("click", () => {
-      if (!cartItems.length) {
-        alert("장바구니에 담긴 도서가 없습니다.");
-        return;
-      }
-
-      alert(`총 ${cartCount.textContent}, ${cartTotal.textContent} 바로구매를 진행합니다.`);
-    });
-
-    cartClearButton.addEventListener("click", () => {
-      cartItems.length = 0;
-      renderCommerceLists();
-    });
-
-    wishCartButton.addEventListener("click", () => {
-      if (!wishItems.length) {
-        alert("위시리스트에 담긴 도서가 없습니다.");
-        return;
-      }
-
-      wishItems.forEach((item) => addToCart(item.bookIndex, item.quantity));
-      alert("위시리스트 도서를 장바구니에 담았습니다.");
-    });
-
-    wishClearButton.addEventListener("click", () => {
-      wishItems.length = 0;
-      renderCommerceLists();
-    });
-
-    bookSearchInput.addEventListener("input", updateSearchResults);
-    bookSearchButton.addEventListener("click", updateSearchResults);
-    viewButtons.forEach((button) => {
-      button.addEventListener("click", () => {
-        changeViewMode(button.dataset.viewMode);
+        if (button.dataset.action === "wish") {
+          addToWishlist(bookIndex, quantity);
+          focusWishlistSection();
+          alert(`"${book.title}" 도서가 위시리스트에 담겼습니다.`);
+        }
       });
-    });
 
-    renderBooks();
-    renderCommerceLists();
+      bookList.addEventListener("keydown", (event) => {
+        const kakaoImage = event.target.closest("[data-kakao-book-index]");
+
+        if (!kakaoImage || !["Enter", " "].includes(event.key)) {
+          return;
+        }
+
+        event.preventDefault();
+        openKakaoBookSearch(Number.parseInt(kakaoImage.dataset.kakaoBookIndex, 10));
+      });
+    }
+
+    function bindCommerceEvents() {
+      cartOrderButton?.addEventListener("click", () => {
+        if (!cartItems.length) {
+          alert("장바구니에 담긴 도서가 없습니다.");
+          return;
+        }
+
+        openWonilCheckoutPopup(null, 0);
+      });
+
+      cartClearButton?.addEventListener("click", () => {
+        cartItems.length = 0;
+        persistCartToStorage();
+        renderCommerceLists();
+      });
+
+      wishCartButton?.addEventListener("click", () => {
+        if (!wishItems.length) {
+          alert("위시리스트에 담긴 도서가 없습니다.");
+          return;
+        }
+
+        wishItems.forEach((item) => addToCart(item.bookIndex, item.quantity));
+        alert("위시리스트 도서를 장바구니에 담았습니다.");
+      });
+
+      wishClearButton?.addEventListener("click", () => {
+        wishItems.length = 0;
+        persistWishToStorage();
+        renderCommerceLists();
+      });
+    }
+
+    function bindSearchEvents() {
+      if (!bookSearchInput) {
+        return;
+      }
+
+      bookSearchInput.addEventListener("input", updateSearchResults);
+      bookSearchInput.addEventListener("search", updateSearchResults);
+      bookSearchInput.addEventListener("compositionend", updateSearchResults);
+      bookSearchInput.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          clearSearch();
+        }
+      });
+      bookSearchButton?.addEventListener("click", updateSearchResults);
+
+      searchSuggestions?.addEventListener("click", (event) => {
+        const suggestion = event.target.closest("[data-suggestion-index]");
+
+        if (!suggestion) {
+          return;
+        }
+
+        const bookIndex = Number.parseInt(suggestion.dataset.suggestionIndex, 10);
+        const book = books[bookIndex];
+
+        if (!book) {
+          return;
+        }
+
+        applySearch(book.title);
+        hideSearchSuggestions();
+        bookList?.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".search-input-wrap")) {
+          hideSearchSuggestions();
+        }
+      });
+    }
+
+    function initBookstorePage() {
+      searchKeyword = "";
+      if (bookSearchInput) {
+        bookSearchInput.value = "";
+      }
+
+      loadCartFromStorage();
+      loadWishFromStorage();
+      renderBooks();
+      renderCommerceLists();
+      bindPageEvents();
+      bindCommerceEvents();
+      bindSearchEvents();
+      preloadAllBookCovers();
+
+      window.addEventListener("storage", (event) => {
+        if (event.key === CART_STORAGE_KEY) {
+          loadCartFromStorage();
+          renderCommerceLists();
+        }
+
+        if (event.key === WISH_STORAGE_KEY) {
+          loadWishFromStorage();
+          renderCommerceLists();
+        }
+      });
+
+      viewButtons.forEach((button) => {
+        button.addEventListener("click", () => {
+          changeViewMode(button.dataset.viewMode);
+        });
+      });
+    }
+
+    initBookstorePage();
   </script>
 </body>
 </html>
