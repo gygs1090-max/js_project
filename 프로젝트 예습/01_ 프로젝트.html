@@ -2795,17 +2795,20 @@
       const shipping = subtotal >= 15000 ? 0 : 2500;
       const total = subtotal + shipping;
 
+      sessionStorage.setItem("wonilCartSnapshot", JSON.stringify(items));
+      sessionStorage.setItem("wonilCartCheckoutHtml", buildWonilCheckoutPageHtml(items));
+
       const itemRows = items.map((item) => {
         const linePrice = item.price * item.quantity;
         const discountRate = Math.round((1 - item.price / item.originalPrice) * 100);
         return [
-          "<article class=\"cart-item\">",
+          "<article class=\"cart-item\" data-book-index=\"" + item.bookIndex + "\" data-price=\"" + item.price + "\" data-original-price=\"" + item.originalPrice + "\" data-quantity=\"" + item.quantity + "\">",
           "<label class=\"cart-check\"><input type=\"checkbox\" checked aria-label=\"상품 선택\"></label>",
           "<img src=\"" + escapeHtml(item.cover) + "\" alt=\"" + escapeHtml(item.title) + " 표지\">",
           "<div class=\"cart-item-body\">",
           "<div class=\"cart-item-top\">",
           "<a class=\"cart-item-title\" href=\"#\">" + escapeHtml(item.title) + "</a>",
-          "<button class=\"cart-remove\" type=\"button\">삭제</button>",
+          "<button class=\"cart-remove\" type=\"button\" data-cart-remove>삭제</button>",
           "</div>",
           "<p class=\"cart-item-meta\">" + escapeHtml(item.author) + " · 원일회사</p>",
           "<p class=\"cart-delivery\">내일(토) 도착 · 무료배송</p>",
@@ -2823,8 +2826,6 @@
           "</article>"
         ].join("");
       }).join("");
-
-      sessionStorage.setItem("wonilCartCheckoutHtml", buildWonilCheckoutPageHtml(items));
 
       return [
         "<!DOCTYPE html><html lang=\"ko\"><head><meta charset=\"UTF-8\">",
@@ -2845,7 +2846,8 @@
         ".cart-item img{width:92px;height:132px;border:1px solid #ddd;object-fit:cover}",
         ".cart-item-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:6px}",
         ".cart-item-title{color:#0074e9;font-size:14px;font-weight:800;line-height:1.45;text-decoration:none}",
-        ".cart-remove{border:0;background:none;color:#888;font-size:12px;cursor:pointer}",
+        ".cart-remove{padding:5px 12px;border:1px solid #cccccc;border-radius:4px;background:#ffffff;color:#666666;font-size:12px;font-weight:700;cursor:pointer;white-space:nowrap}",
+        ".cart-remove:hover{border-color:#e60012;color:#e60012;background:#fff5f5}",
         ".cart-item-meta,.cart-delivery{color:#666;margin-bottom:6px;line-height:1.5}",
         ".cart-delivery{color:#00891a;font-weight:700}",
         ".cart-price-row{display:flex;align-items:center;gap:8px;margin:10px 0}",
@@ -2884,7 +2886,12 @@
         "</aside></div>",
         "<scr" + "ipt>",
         "function openHtmlInline(pageHtml){var w=null;try{var b=new Blob([pageHtml],{type:'text/html;charset=utf-8'});var u=URL.createObjectURL(b);w=window.open(u,'_blank');setTimeout(function(){URL.revokeObjectURL(u);},2000);}catch(e){w=null;}if(w&&!w.closed){try{w.focus();}catch(e){}return w;}w=window.open('about:blank','_blank');if(w&&!w.closed){w.document.open();w.document.write(pageHtml);w.document.close();w.focus();return w;}if(confirm('새 탭을 열 수 없습니다. 현재 탭에서 결제 페이지를 열까요?')){document.open();document.write(pageHtml);document.close();return window;}alert('브라우저에서 팝업(새 탭) 허용 후 다시 시도해 주세요.');return null;}",
+        "function formatCartPrice(price){return price.toLocaleString('ko-KR')+'원';}",
+        "function syncCartSnapshot(snapshot){sessionStorage.setItem('wonilBookstoreCart',JSON.stringify(snapshot.map(function(item){return{bookIndex:item.bookIndex,quantity:item.quantity};})));sessionStorage.setItem('wonilCartSnapshot',JSON.stringify(snapshot));if(window.opener&&!window.opener.closed&&window.opener.buildWonilCheckoutPageHtml){try{sessionStorage.setItem('wonilCartCheckoutHtml',window.opener.buildWonilCheckoutPageHtml(snapshot));}catch(e){}}}",
+        "function refreshCartPage(snapshot){if(window.opener&&!window.opener.closed&&window.opener.buildWonilCartPageHtml){document.open();document.write(window.opener.buildWonilCartPageHtml(snapshot));document.close();return true;}return false;}",
+        "function updateCartSummaryFromDom(){var items=Array.from(document.querySelectorAll('.cart-item'));var subtotal=0;var originalTotal=0;var totalQty=0;items.forEach(function(item){var price=Number(item.dataset.price)||0;var originalPrice=Number(item.dataset.originalPrice)||0;var quantity=Number(item.dataset.quantity)||0;subtotal+=price*quantity;originalTotal+=originalPrice*quantity;totalQty+=quantity;});var discount=Math.max(0,originalTotal-subtotal);var shipping=subtotal>=15000?0:2500;var total=subtotal+shipping;var rows=document.querySelectorAll('.summary-row span:last-child');if(rows[0])rows[0].textContent=formatCartPrice(subtotal);if(rows[1])rows[1].textContent='-'+formatCartPrice(discount);if(rows[2])rows[2].textContent='+'+formatCartPrice(shipping);var totalEl=document.querySelector('.summary-total strong');if(totalEl)totalEl.textContent=formatCartPrice(total);var titleEl=document.querySelector('.top-bar h1');if(titleEl)titleEl.textContent='장바구니('+totalQty+')';var checkoutBtn=document.getElementById('cartCheckoutBtn');if(checkoutBtn){checkoutBtn.textContent='총 '+totalQty+'개 상품 구매하기';checkoutBtn.disabled=totalQty<1;}}",
         "document.getElementById('cartCheckoutBtn').addEventListener('click',function(){var pageHtml=sessionStorage.getItem('wonilCartCheckoutHtml');if(!pageHtml){alert('결제 정보를 불러올 수 없습니다.');return;}openHtmlInline(pageHtml);});",
+        "document.querySelector('.cart-panel').addEventListener('click',function(event){var removeBtn=event.target.closest('[data-cart-remove]');if(!removeBtn)return;event.preventDefault();if(!confirm('이 상품을 장바구니에서 삭제할까요?'))return;var cartItem=removeBtn.closest('.cart-item');if(!cartItem)return;var bookIndex=Number(cartItem.dataset.bookIndex);var snapshot=JSON.parse(sessionStorage.getItem('wonilCartSnapshot')||'[]');var nextSnapshot=snapshot.filter(function(item){return item.bookIndex!==bookIndex;});syncCartSnapshot(nextSnapshot);if(window.opener&&!window.opener.closed){try{if(window.opener.loadCartFromStorage)window.opener.loadCartFromStorage();if(window.opener.renderCommerceLists)window.opener.renderCommerceLists();}catch(e){}}if(refreshCartPage(nextSnapshot))return;if(!nextSnapshot.length){document.querySelector('.cart-panel').innerHTML='<p style=\"padding:24px;color:#777;text-align:center\">장바구니가 비어 있습니다.</p>';updateCartSummaryFromDom();return;}cartItem.remove();updateCartSummaryFromDom();});",
         "<" + "/script></body></html>"
       ].join("");
     }
