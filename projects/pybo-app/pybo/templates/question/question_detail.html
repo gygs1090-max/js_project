@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+    <h2>{{ question.subject }}</h2>
+    <div class="actions">
+        <a href="{{ url_for('question.modify', question_id=question.id) }}" class="btn btn-secondary">수정</a>
+        <a href="{{ url_for('question.delete', question_id=question.id) }}"
+           class="btn btn-danger"
+           onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+    </div>
+</div>
+<span class="meta">{{ question.create_date.strftime('%Y-%m-%d %H:%M') }}</span>
+<div class="card">
+    {{ question.content }}
+</div>
+
+<h3>{{ question.answer_set|length }}개의 답변</h3>
+{% for answer in question.answer_set %}
+<div class="card answer-card">
+    <div class="answer-header">
+        <span class="meta">{{ answer.create_date.strftime('%Y-%m-%d %H:%M') }}</span>
+        <div class="actions">
+            <a href="{{ url_for('answer.modify', answer_id=answer.id) }}" class="btn btn-sm btn-secondary">수정</a>
+            <a href="{{ url_for('answer.delete', answer_id=answer.id) }}"
+               class="btn btn-sm btn-danger"
+               onclick="return confirm('정말 삭제하시겠습니까?');">삭제</a>
+        </div>
+    </div>
+    <div>{{ answer.content }}</div>
+</div>
+{% else %}
+<p class="empty">등록된 답변이 없습니다.</p>
+{% endfor %}
+
+<form method="post" action="{{ url_for('answer.create', question_id=question.id) }}" class="my-3">
+    {{ form.csrf_token }}
+    <div class="form-group">
+        <label for="content">답변 등록</label>
+        {{ form.content(class="form-control", rows=4) }}
+    </div>
+    <button type="submit" class="btn btn-primary">답변 등록</button>
+</form>
+{% endblock %}

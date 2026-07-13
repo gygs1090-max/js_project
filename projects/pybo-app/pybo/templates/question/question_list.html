@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="page-header">
+    <h2>
+        {% if keyword %}
+            "{{ keyword }}" 검색 결과
+        {% else %}
+            질문 목록
+        {% endif %}
+    </h2>
+    <a class="btn btn-primary" href="{{ url_for('question.create') }}">질문 등록</a>
+</div>
+
+{% if keyword %}
+<div class="search-info">
+    <span>{{ pagination.total }}건의 결과</span>
+    <a href="{{ url_for('question._list') }}">전체 목록 보기</a>
+</div>
+{% endif %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>번호</th>
+            <th>제목</th>
+            <th>작성일시</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% if question_list %}
+            {% for question in question_list %}
+            <tr>
+                <td>{{ pagination.total - ((page - 1) * pagination.per_page + loop.index) + 1 }}</td>
+                <td>
+                    <a href="{{ url_for('question.detail', question_id=question.id) }}">
+                        {{ question.subject }}
+                    </a>
+                </td>
+                <td>{{ question.create_date.strftime('%Y-%m-%d %H:%M') }}</td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr>
+                <td colspan="3" class="empty">
+                    {% if keyword %}
+                        "{{ keyword }}"에 해당하는 질문이 없습니다.
+                    {% else %}
+                        등록된 질문이 없습니다.
+                    {% endif %}
+                </td>
+            </tr>
+        {% endif %}
+    </tbody>
+</table>
+<ul class="pagination">
+    {% if pagination.has_prev %}
+    <li>
+        {% if keyword %}
+        <a href="{{ url_for('question.search', page=pagination.prev_num, kw=keyword) }}">이전</a>
+        {% else %}
+        <a href="{{ url_for('question._list', page=pagination.prev_num) }}">이전</a>
+        {% endif %}
+    </li>
+    {% else %}
+    <li class="disabled"><span>이전</span></li>
+    {% endif %}
+    {% for page_num in pagination.iter_pages() %}
+        {% if page_num %}
+            {% if page_num != pagination.page %}
+            <li>
+                {% if keyword %}
+                <a href="{{ url_for('question.search', page=page_num, kw=keyword) }}">{{ page_num }}</a>
+                {% else %}
+                <a href="{{ url_for('question._list', page=page_num) }}">{{ page_num }}</a>
+                {% endif %}
+            </li>
+            {% else %}
+            <li class="active"><span>{{ page_num }}</span></li>
+            {% endif %}
+        {% else %}
+        <li class="disabled"><span>...</span></li>
+        {% endif %}
+    {% endfor %}
+    {% if pagination.has_next %}
+    <li>
+        {% if keyword %}
+        <a href="{{ url_for('question.search', page=pagination.next_num, kw=keyword) }}">다음</a>
+        {% else %}
+        <a href="{{ url_for('question._list', page=pagination.next_num) }}">다음</a>
+        {% endif %}
+    </li>
+    {% else %}
+    <li class="disabled"><span>다음</span></li>
+    {% endif %}
+</ul>
+{% endblock %}

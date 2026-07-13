@@ -1,0 +1,13 @@
+<nav class="navbar">
+    <a class="navbar-brand" href="{{ url_for('question._list') }}">Pybo</a>
+    <form class="search-form" action="{{ url_for('question.search') }}" method="get">
+        <input type="text" name="kw" class="search-input"
+               placeholder="제목·내용 검색"
+               value="{{ keyword|default('', true) }}">
+        <button type="submit" class="search-btn">검색</button>
+    </form>
+    <div class="navbar-links">
+        <a href="{{ url_for('question._list') }}">질문목록</a>
+        <a href="{{ url_for('question.create') }}">질문등록</a>
+    </div>
+</nav>
