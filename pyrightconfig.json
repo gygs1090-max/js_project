@@ -1,0 +1,10 @@
+{
+  "executionEnvironments": [
+    {
+      "root": "projects/pybo-app",
+      "venv": "vnavy",
+      "venvPath": "projects/pybo-app",
+      "extraPaths": ["projects/pybo-app"]
+    }
+  ]
+}
