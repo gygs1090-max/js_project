@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>프로젝트 예습 모음</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      padding: 48px 24px;
+      background: linear-gradient(135deg, #f0f4ff, #e8f5e9);
+      color: #1a1a2e;
+      font-family: Arial, "Malgun Gothic", sans-serif;
+    }
+
+    .container {
+      max-width: 720px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      margin-bottom: 8px;
+      font-size: 32px;
+    }
+
+    .subtitle {
+      margin-bottom: 36px;
+      color: #555;
+      font-size: 15px;
+    }
+
+    .project-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      list-style: none;
+    }
+
+    .project-card {
+      display: block;
+      padding: 20px 24px;
+      border: 1px solid #dde3f0;
+      border-radius: 16px;
+      background: #ffffff;
+      color: inherit;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .project-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+      border-color: #4caf50;
+    }
+
+    .project-card strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 18px;
+    }
+
+    .project-card span {
+      color: #777;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>프로젝트 예습</h1>
+    <p class="subtitle">HTML/JavaScript 연습 프로젝트 모음입니다. 아래에서 원하는 프로젝트를 선택하세요.</p>
+
+    <ul class="project-list">
+      <li>
+        <a class="project-card" href="./프로젝트%20예습/01_%20프로젝트.html">
+          <strong>01. 주식 투자 도서</strong>
+          <span>원일문고 스타일 도서 목록 페이지</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-card" href="./프로젝트%20예습/04_원일회사_목록.html">
+          <strong>02. 원일도서 목록</strong>
+          <span>원일회사 도서 목록 페이지</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-card" href="./프로젝트%20예습/02_프로젝트.html">
+          <strong>03. 원일가게 키오스크</strong>
+          <span>음식 주문 키오스크 UI</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-card" href="./프로젝트%20예습/03_프로젝트.html">
+          <strong>04. EA SPORTS FC ONLINE</strong>
+          <span>FC 온라인 스타일 랜딩 페이지</span>
+        </a>
+      </li>
+      <li>
+        <a class="project-card" href="./프로젝트%20예습/01_프로젝트자동차.html">
+          <strong>05. 자동차 내비게이션</strong>
+          <span>자동차 내비게이션 UI 프로젝트</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</body>
+</html>
